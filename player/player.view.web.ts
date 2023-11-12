@@ -55,10 +55,10 @@ namespace $.$$ {
 
 			canvas.width = w
 			canvas.height = 30
-			context.font = "normal 30px Exo2"
+			context.font = "italic 28px sans-serif"
 			context.textAlign = "center"
 			context.textBaseline = "middle"
-			context.fillStyle = ( this.colorset == "W" ) ? "#000000" : "#FFFFFF"
+			context.fillStyle = ( this.colorset == "W" ) ? "#000" : "#fff"
 			context.fillText( text, canvas.width / 2, canvas.height / 2 )
 
 			var texture = new THREE.Texture( canvas )
@@ -72,7 +72,7 @@ namespace $.$$ {
 			txt.name = "label"
 			return txt
 		}
-		
+
 		@ $mol_mem
 		atombox() {
 			return new THREE.Object3D()
@@ -90,7 +90,7 @@ namespace $.$$ {
 
 			return scene
 		}
-		
+
 		@ $mol_mem
 		camera() {
 			const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 )
@@ -109,7 +109,7 @@ namespace $.$$ {
 		@ $mol_mem
 		renderer() {
 			const renderer = this.webgl_support() ? new THREE.WebGLRenderer( { antialias: true, alpha: true } ) : new THREE.CanvasRenderer()
-			( this.colorset == "W" ) ? renderer.setClearColor( 0xffffff, 1 ) : renderer.setClearColor( 0x000000, 1 )
+				( this.colorset == "W" ) ? renderer.setClearColor( 0xffffff, 1 ) : renderer.setClearColor( 0x000000, 1 )
 			renderer.setPixelRatio( window.devicePixelRatio )
 			renderer.render( this.scene(), this.camera() )
 			return renderer
@@ -195,25 +195,25 @@ namespace $.$$ {
 		render_loop() {
 			this.renderer().render( this.scene(), this.camera() )
 			this.controls().update()
-			requestAnimationFrame( ()=> this.render_loop() )
+			requestAnimationFrame( () => this.render_loop() )
 		}
-		
+
 		@ $mol_mem
 		size() {
-			if ( !this.view_rect() ) return
+			if( !this.view_rect() ) return
 			const { width, height } = this.view_rect()!
 			return { width, height }
 		}
 
 		@ $mol_mem
 		resize() {
-			if ( !this.size() ) return
+			if( !this.size() ) return
 			const { width, height } = this.size()!
 
 			this.camera().aspect = width / height
 			this.camera().updateProjectionMatrix()
 
-			this.renderer().setSize(width, height)
+			this.renderer().setSize( width, height )
 			this.renderer().render( this.scene(), this.camera() )
 
 			this.controls().handleResize()
