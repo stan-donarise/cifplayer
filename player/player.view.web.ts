@@ -279,13 +279,13 @@ namespace $.$$ {
 			if( !textureCallback ) return
 
 			Object.values( mat )
-				.filter( ( value ) => value instanceof THREE.Texture )
-				.forEach( ( texture ) => textureCallback( texture )
+				.filter( ( value: any ) => value instanceof THREE.Texture )
+				.forEach( ( texture: any ) => textureCallback( texture )
 				)
 
 			if( ( mat as THREE.ShaderMaterial ).uniforms )
 				Object.values( ( mat as THREE.ShaderMaterial ).uniforms )
-					.filter( ( { value } ) => value instanceof THREE.Texture )
+					.filter( ( { value }: any ) => value instanceof THREE.Texture )
 					.forEach( ( { value }: any ) => textureCallback( value ) )
 		}
 
