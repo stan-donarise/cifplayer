@@ -14,3 +14,146 @@
 	pack icon git \https://github.com/nin-jin/mol_icon.git
 \/mol/view
 	include \/mol/view/tree/test
+\/hyoo
+	pack about git \https://github.com/hyoo-ru/about.hyoo.ru.git
+	pack artist git \https://github.com/hyoo-ru/artist.hyoo.ru.git
+	pack apps git \https://github.com/hyoo-ru/apps.hyoo.ru.git
+	pack aura git \https://github.com/hyoo-ru/aura.hyoo.ru.git
+	pack bench git \https://github.com/hyoo-ru/bench.hyoo.ru.git
+	pack board git \https://github.com/hyoo-ru/board.hyoo.ru.git
+	pack calc git \https://github.com/hyoo-ru/calc.hyoo.ru.git
+	pack case git \https://github.com/hyoo-ru/case.hyoo.ru.git
+	pack crowd git \https://github.com/hyoo-ru/crowd.hyoo.ru.git
+	pack draw git \https://github.com/hyoo-ru/draw.hyoo.ru.git
+	pack game git \https://github.com/hyoo-ru/game.hyoo.ru.git
+	pack github git \https://github.com/hyoo-ru/github.hyoo.ru.git
+	pack habhub git \https://github.com/hyoo-ru/habhub.hyoo.ru.git
+	pack harp git \https://github.com/hyoo-ru/harp.hyoo.ru.git
+	pack http git \https://github.com/hyoo-ru/http.hyoo.ru.git
+	pack fallacy git \https://github.com/hyoo-ru/fallacy.hyoo.ru.git
+	pack invest git \https://github.com/hyoo-ru/invest.hyoo.ru.git
+	pack iq git \https://github.com/hyoo-ru/iq.hyoo.ru.git
+	pack js git \https://github.com/hyoo-ru/hyoo_js.git
+	pack lamps git \https://github.com/hyoo-ru/lamps.hyoo.ru.git
+	pack life git \https://github.com/hyoo-ru/life.hyoo.ru.git
+	pack lingua git \https://github.com/hyoo-ru/lingua.hyoo.ru.git
+	pack lupa git \https://github.com/hyoo-ru/lupa.hyoo.ru.git
+	pack mail git \https://github.com/hyoo-ru/mail.hyoo.ru.git
+	pack map git \https://github.com/hyoo-ru/map.hyoo.ru.git
+	pack marked git \https://github.com/hyoo-ru/marked.hyoo.ru.git
+	pack match git \https://github.com/hyoo-ru/match.hyoo.ru.git
+	pack meme git \https://github.com/hyoo-ru/meme.hyoo.ru.git
+	pack meta git \https://github.com/hyoo-ru/hyoo_meta.git
+	pack mill git \https://github.com/hyoo-ru/mill.git
+	pack mol git \https://github.com/hyoo-ru/mol.hyoo.ru.git
+	pack notes git \https://github.com/hyoo-ru/notes.hyoo.ru.git
+	pack offer git \https://github.com/hyoo-ru/offer.hyoo.ru.git
+	pack page git \https://github.com/hyoo-ru/page.hyoo.ru.git
+	pack play git \https://github.com/hyoo-ru/play.hyoo.ru.git
+	pack rdf git \https://github.com/hyoo-ru/rdf.hyoo.ru.git
+	pack realworld git \https://github.com/hyoo-ru/realworld.hyoo.ru.git
+	pack scout git \https://github.com/hyoo-ru/scout.hyoo.ru.git
+	pack search git \https://github.com/hyoo-ru/search.hyoo.ru.git
+	pack shelter git \https://github.com/hyoo-ru/shelter.hyoo.ru.git
+	pack showcase git \https://github.com/hyoo-ru/showcase.hyoo.ru.git
+	pack speculant git \https://github.com/hyoo-ru/speculant.hyoo.ru.git
+	pack sketch git \https://github.com/hyoo-ru/sketch.hyoo.ru.git
+	pack slides git \https://github.com/hyoo-ru/slides.hyoo.ru.git
+	pack studio git \https://github.com/hyoo-ru/studio.hyoo.ru.git
+	pack sporno git \https://github.com/hyoo-ru/hyoo_sporno.git
+	pack static git \https://github.com/hyoo-ru/hyoo_static.git
+	pack talks git \https://github.com/hyoo-ru/talks.hyoo.ru.git
+	pack todomvc git \https://github.com/hyoo-ru/todomvc.hyoo.ru.git
+	pack toys git \https://github.com/hyoo-ru/toys.hyoo.ru.git
+	pack tree git \https://github.com/hyoo-ru/tree.hyoo.ru.git
+	pack webdav git \https://github.com/hyoo-ru/webdav.hyoo.ru.git
+	pack when git \https://github.com/hyoo-ru/when.hyoo.ru.git
+	pack sync git \https://github.com/hyoo-ru/sync.hyoo.ru.git
+	pack home git \https://github.com/hyoo-ru/hyoo.ru.git
+	pack idea git \https://github.com/hyoo-ru/idea.hyoo.ru.git
+	pack intern git \https://github.com/hyoo-ru/intern.hyoo.ru.git
+\/mpds/cifplayer/comparison
+	deploy \/mpds/cifplayer/comparison/cifs/H20.csv
+	deploy \/mpds/cifplayer/comparison/cifs/nasty_cifs.csv
+	deploy \/mpds/cifplayer/comparison/cifs/good/04182.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/1923795.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/1LIN.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/As.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/B.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/brownmillerite_SrFeO3.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/bvparm2009.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/calcite.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Cr_bromides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Cr_chlorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Cr_fluorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Cr_oxides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/CsSnF3.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/FeCr_sigma.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/fevo_2nd_cisst_prec.cryst.out0.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/fullerene_test.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/gold.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/gold2.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/ICSD_162930.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/icsd_181799.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/icsd_641380.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/lg3009.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Li8H8.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/LSCF_alloy.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/maleic.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Mo_bromides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Mo_chlorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Mo_fluorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Mo_oxides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/mp-19261_conventional_sidorenkite.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/N.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Nb.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/pseudo-perovskite.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/quartz-slab.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/quartz.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/quartz4.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Sb.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/sho62.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/sho62_2.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/sho62_3.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/sto140b3pw_dft.cryst.out_-1.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/szo221.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/szo221_5.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/szo221_6.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/szo221_7.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/szo221_8.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Takagi.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/test.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/vasprun.xml_-1.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/wh5004.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/W_bromides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/W_chlorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/W_fluorides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/W_oxides.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/Xe.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_1.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_2.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_3.cif
+	deploy \/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_4.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/000.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/001.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/002.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/003.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/004.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/005.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/006.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/007.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/008.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/009.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/010.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/011.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/012.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/013.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/014.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/015.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/016.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/017.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/018.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/019.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/020.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/021.cif
+	deploy \/mpds/cifplayer/comparison/cifs/bad/022.cif
