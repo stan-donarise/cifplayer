@@ -35,7 +35,7 @@ namespace $.$$ {
 			this.resize()
 		}
 
-		draw_3d_line( box: THREE.Object3D, start_arr: number[], finish_arr: number[], color = 0xDDDDDD ) {
+		draw_3d_line( box: any, start_arr: number[], finish_arr: number[], color = 0xDDDDDD ) {
 			const vector = new THREE.BufferGeometry()
 
 			const vertices = new Float32Array( [
