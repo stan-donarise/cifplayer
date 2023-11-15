@@ -286,7 +286,7 @@ namespace $.$$ {
 			if( ( mat as THREE.ShaderMaterial ).uniforms )
 				Object.values( ( mat as THREE.ShaderMaterial ).uniforms )
 					.filter( ( { value } ) => value instanceof THREE.Texture )
-					.forEach( ( { value } ) => textureCallback( value ) )
+					.forEach( ( { value }: any ) => textureCallback( value ) )
 		}
 
 		if( Array.isArray( material ) ) {
