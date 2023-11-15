@@ -1,22 +1,11 @@
 // @ts-nocheck
 namespace $ {
 
-	const startswith = ( str, prefix ) => {
+	const startswith = ( str: string, prefix: string ) => {
 		return str.indexOf( prefix ) === 0
 	}
-	const endswith = ( str, searchString, position ) => {
-		var subjectString = str.toString()
-		if( position === undefined || position > subjectString.length ) position = subjectString.length
-		position -= searchString.length
-		var lastIndex = subjectString.indexOf( searchString, position )
-		return lastIndex !== -1 && lastIndex === position
-	}
-	const trim = ( str ) => {
+	const trim = ( str: string ) => {
 		return str.replace( /^\s+|\s+$/g, '' )
-	}
-
-	const isnumeric = ( str ) => {
-		return !isNaN( parseFloat( this ) ) && isFinite( this )
 	}
 
 	const chemical_elements = {
@@ -80,25 +69,14 @@ namespace $ {
 				Z = this.unit( ab_norm ),
 				X = this.unit( Mimpl.subtract( a_dir, Mimpl.multiply( Mimpl.dot( a_dir, Z ), Z ) ) ),
 				Y = Mimpl.cross( Z, X )
-			//console.log("X", X);
-			//console.log("Y", Y);
-			//console.log("Z", Z);
 			var va = Mimpl.multiply( a, [ 1, 0, 0 ] )
 			var vb = Mimpl.multiply( b, [ Mimpl.cos( gamma ), Mimpl.sin( gamma ), 0 ] )
 			var cx = Mimpl.cos( beta )
 			var cy = Mimpl.divide( Mimpl.subtract( Mimpl.cos( alpha ), Mimpl.multiply( Mimpl.cos( beta ), Mimpl.cos( gamma ) ) ), Mimpl.sin( gamma ) )
 			var cz = Mimpl.sqrt( Mimpl.subtract( Mimpl.subtract( 1, Mimpl.multiply( cx, cx ) ), Mimpl.multiply( cy, cy ) ) )
 			var vc = Mimpl.multiply( c, [ cx, cy, cz ] )
-			//console.log("va", va);
-			//console.log("vb", vb);
-			//console.log("vc", vc);
-			//console.log("cx", cx);
-			//console.log("cy", cy);
-			//console.log("cz", cz);
 			var abc = [ va, vb, vc ],
 				t = [ X, Y, Z ]
-			//console.log("abc", abc);
-			//console.log("t", t);
 			return Mimpl.multiply( abc, t )
 		}
 
@@ -647,7 +625,7 @@ namespace $ {
 		static to_player( str ) {
 			var structure,
 				format = this.detect_format( str )
-
+			console.log(this.cif2jsobj( str ))
 			switch( format ) {
 				case 'CIF': structure = this.cif2jsobj( str ); break
 				case 'POSCAR': structure = this.poscar2jsobj( str ); break

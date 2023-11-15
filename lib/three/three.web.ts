@@ -4,7 +4,8 @@ namespace $ {
 
 		@ $mol_mem
 		static all() {
-			return require( '../mpds/cifplayer/lib/three/three.custom.js' )
+			// return require( '../mpds/cifplayer/lib/three/index.js' )
+			return require( '../mpds/cifplayer/lib/three/three.js' ) as typeof import( '../three/build/index' )
 		}
 
 	}

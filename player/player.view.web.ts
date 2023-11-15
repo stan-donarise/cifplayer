@@ -1,7 +1,4 @@
-// @ts-nocheck
 namespace $.$$ {
-
-	const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function( cb ) { return setTimeout( cb, 1000 / 60 ) }
 
 	const THREE = $mpds_cifplayer_lib_three.all()
 
@@ -29,29 +26,31 @@ namespace $.$$ {
 
 		@ $mol_mem
 		obj3d() {
-			return $mpds_cifplayer_matinfio.to_player( this.str() )
+			return $mpds_cifplayer_matinfio.to_player( this.str() ) as any
 		}
 
 		auto() {
-			const container = this.dom_node_actual()
-			container.appendChild( this.renderer().domElement )
 			this.render_start()
 			this.resize()
 		}
 
-		draw_3d_line( start_arr, finish_arr, color ) {
-			if( !color ) var color = 0xDDDDDD
-			var vector = new THREE.Geometry()
-			vector.vertices.push( new THREE.Vector3( start_arr[ 0 ], start_arr[ 1 ], start_arr[ 2 ] ) )
-			vector.vertices.push( new THREE.Vector3( finish_arr[ 0 ], finish_arr[ 1 ], finish_arr[ 2 ] ) )
-			var material = new THREE.LineBasicMaterial( { color: color } )
-			this.atombox().add( new THREE.Line( vector, material ) )
+		draw_3d_line( box: THREE.Object3D, start_arr: number[], finish_arr: number[], color = 0xDDDDDD ) {
+			const vector = new THREE.BufferGeometry()
+
+			const vertices = new Float32Array( [
+				start_arr[ 0 ], start_arr[ 1 ], start_arr[ 2 ],
+				finish_arr[ 0 ], finish_arr[ 1 ], finish_arr[ 2 ]
+			] )
+			vector.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) )
+
+			const material = new THREE.LineBasicMaterial( { color: color } )
+			box.add( new THREE.Line( vector, material ) )
 		}
 
-		create_sprite( text ) {
-			var canvas = document.createElement( 'canvas' ),
-				context = canvas.getContext( '2d' ),
-				metrics = context.measureText( text ), w = metrics.width * 3.5
+		create_sprite( text: string ) {
+			const canvas = document.createElement( 'canvas' )
+			const context = canvas.getContext( '2d' )!
+			const metrics = context.measureText( text ), w = metrics.width * 3.5
 
 			canvas.width = w
 			canvas.height = 30
@@ -61,12 +60,12 @@ namespace $.$$ {
 			context.fillStyle = ( this.colorset == "W" ) ? "#000" : "#fff"
 			context.fillText( text, canvas.width / 2, canvas.height / 2 )
 
-			var texture = new THREE.Texture( canvas )
+			const texture = new THREE.Texture( canvas )
 			texture.needsUpdate = true
-			var material = new THREE.SpriteMaterial( { map: texture, depthTest: false } )
-			var sprite = new THREE.Sprite( material )
+			const material = new THREE.SpriteMaterial( { map: texture, depthTest: false } )
+			const sprite = new THREE.Sprite( material )
 			sprite.renderOrder = 1
-			var txt = new THREE.Object3D()
+			const txt = new THREE.Object3D()
 			sprite.scale.set( w, 30, 1 )
 			txt.add( sprite )
 			txt.name = "label"
@@ -75,79 +74,34 @@ namespace $.$$ {
 
 		@ $mol_mem
 		atombox() {
-			return new THREE.Object3D()
-		}
-
-		@ $mol_mem
-		scene() {
-			const scene = new THREE.Scene()
-
-			var AmbientLight = new THREE.AmbientLight( 0x999999 )
-			scene.add( AmbientLight )
-			var PointLight = new THREE.PointLight( 0x666666, 1 )
-			PointLight.position.set( 1500, 1500, 1500 )
-			scene.add( PointLight )
-
-			return scene
-		}
-
-		@ $mol_mem
-		camera() {
-			const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 )
-			camera.position.set( 0, 0, 1800 )
-			return camera
-		}
-
-		@ $mol_mem
-		controls() {
-			const controls = new THREE.TrackballControls( this.camera() )
-			controls.rotateSpeed = 7.5
-			controls.staticMoving = true
-			return controls
-		}
-
-		@ $mol_mem
-		renderer() {
-			const renderer = this.webgl_support() ? new THREE.WebGLRenderer( { antialias: true, alpha: true } ) : new THREE.CanvasRenderer()
-				( this.colorset == "W" ) ? renderer.setClearColor( 0xffffff, 1 ) : renderer.setClearColor( 0x000000, 1 )
-			renderer.setPixelRatio( window.devicePixelRatio )
-			renderer.render( this.scene(), this.camera() )
-			return renderer
-		}
-
-		render_start() {
-			var old = this.scene().getObjectByName( "atombox" )
+			const old = this.scene()?.getObjectByName( "atombox" )
 			if( old ) {
-				this.scene().remove( old )
-				var u = old.children.length - 1
-				for( u; u >= 0; u-- ) {
-					var child = old.children[ u ]
-					if( child.geometry ) child.geometry.dispose()
-					if( child.material ) child.material.dispose()
-					if( child.dispose ) child.dispose()
-				}
-				this.controls().reset()
+				deepDispose( old )
+				this.scene()?.remove( old )
 			}
 
+			const atombox = new THREE.Object3D()
+
 			const current_overlay = this.default_overlay
-			var resolution = this.webgl_support() ? { w: 10, h: 8 } : { w: 8, h: 6 },
-				i = 0,
-				len = this.obj3d().atoms.length
-			for( i; i < len; i++ ) {
-				var x = parseInt( this.obj3d().atoms[ i ].x * 100 ),
-					y = parseInt( this.obj3d().atoms[ i ].y * 100 ),
-					z = parseInt( this.obj3d().atoms[ i ].z * 100 ),
+			const resolution = this.webgl_support() ? { w: 10, h: 8 } : { w: 8, h: 6 }
+			for( let i = 0; i < this.obj3d().atoms.length; i++ ) {
+				var x = Math.floor( this.obj3d().atoms[ i ].x * 100 ),
+					y = Math.floor( this.obj3d().atoms[ i ].y * 100 ),
+					z = Math.floor( this.obj3d().atoms[ i ].z * 100 ),
 					r = this.obj3d().atoms[ i ].r * 65,
-					atom = new THREE.Mesh( new THREE.SphereBufferGeometry( r, resolution.w, resolution.h ), new THREE.MeshLambertMaterial( { color: this.obj3d().atoms[ i ].c, overdraw: 0.75 } ) )
+					atom = new THREE.Mesh(
+						new THREE.SphereGeometry( r, resolution.w, resolution.h ),
+						new THREE.MeshLambertMaterial( { color: this.obj3d().atoms[ i ].c } )
+					)
 				atom.position.set( x, y, z )
 				atom.name = "atom"
-				atom.overlays = this.obj3d().atoms[ i ].overlays
-				this.atombox().add( atom )
+				const overlays = this.obj3d().atoms[ i ].overlays
+				atombox.add( atom )
 
 				if( current_overlay !== 'empty' ) {
-					var label = this.create_sprite( atom.overlays[ current_overlay ] )
+					const label = this.create_sprite( overlays[ current_overlay ] )
 					label.position.set( x, y, z )
-					this.atombox().add( label )
+					atombox.add( label )
 				}
 			}
 
@@ -162,7 +116,10 @@ namespace $.$$ {
 					if( i == 0 ) axcolor = 0x990000
 					else if( i == 1 ) axcolor = 0x009900
 					else if( i == 2 ) axcolor = 0x0099FF
-					this.atombox().add( new THREE.ArrowHelper( new THREE.Vector3( a, b, c ).normalize(), new THREE.Vector3( 0, 0, 0 ), Math.sqrt( a * a + b * b + c * c ), axcolor, 75, 10 ) )
+					atombox.add( new THREE.ArrowHelper(
+						new THREE.Vector3( a, b, c ).normalize(),
+						new THREE.Vector3( 0, 0, 0 ), Math.sqrt( a * a + b * b + c * c ), axcolor, 75, 10 )
+					)
 				}
 
 				var plane_point1 = [ ortes[ 0 ][ 0 ] + ortes[ 1 ][ 0 ], ortes[ 0 ][ 1 ] + ortes[ 1 ][ 1 ], ortes[ 0 ][ 2 ] + ortes[ 1 ][ 2 ] ],
@@ -184,16 +141,67 @@ namespace $.$$ {
 				var i = 0,
 					len = drawing_cell.length
 				for( i; i < len; i++ ) {
-					this.draw_3d_line( drawing_cell[ i ][ 0 ], drawing_cell[ i ][ 1 ] )
+					this.draw_3d_line( atombox, drawing_cell[ i ][ 0 ], drawing_cell[ i ][ 1 ] )
 				}
 			}
-			this.atombox().name = "atombox"
+			atombox.name = "atombox"
+			return atombox
+		}
+
+		@ $mol_mem
+		scene() {
+			const scene = new THREE.Scene()
+
+			const dir_light = new THREE.DirectionalLight( 0xffffff, 1 )
+			dir_light.position.set( 1, 1.5, 2 )
+			scene.add( dir_light )
+
+			const ambient_light = new THREE.AmbientLight( 0x999999 )
+			scene.add( ambient_light )
+
+			return scene
+		}
+
+		@ $mol_mem
+		camera() {
+			if( !this.size() ) return
+			const { width, height } = this.size()!
+			const camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 20000 )
+			camera.position.set( 900, 900, 1800 )
+			return camera
+		}
+
+		@ $mol_mem
+		controls() {
+			const controls = new THREE.TrackballControls( this.camera()!, this.dom_node_actual() as HTMLElement )
+			controls.rotateSpeed = 7.5
+			controls.staticMoving = true
+			return controls
+		}
+
+		@ $mol_mem
+		renderer() {
+			const camera = this.camera()
+			if( !camera ) return
+			const renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } )
+			// if ( this.colorset == "W" ) renderer.setClearColor( 0xffffff, 1 )
+			// else renderer.setClearColor( 0x000000, 1 )
+			// renderer.setPixelRatio( window.devicePixelRatio )
+			renderer.render( this.scene(), camera )
+			return renderer
+		}
+
+		render_start() {
+			const renderer = this.renderer()
+			if( !renderer ) return
+			const container = this.dom_node_actual()
+			container.replaceChildren( renderer.domElement )
 			this.scene().add( this.atombox() )
 			this.render_loop()
 		}
 
 		render_loop() {
-			this.renderer().render( this.scene(), this.camera() )
+			this.renderer()!.render( this.scene(), this.camera()! )
 			this.controls().update()
 			requestAnimationFrame( () => this.render_loop() )
 		}
@@ -210,14 +218,81 @@ namespace $.$$ {
 			if( !this.size() ) return
 			const { width, height } = this.size()!
 
-			this.camera().aspect = width / height
-			this.camera().updateProjectionMatrix()
+			this.camera()!.aspect = width / height
+			this.camera()!.updateProjectionMatrix()
 
-			this.renderer().setSize( width, height )
-			this.renderer().render( this.scene(), this.camera() )
+			this.renderer()!.setSize( width, height )
+			this.renderer()!.render( this.scene(), this.camera()! )
 
 			this.controls().handleResize()
 		}
 
 	}
+
+
+	/**
+	 * Dispose of all Object3D`s nested Geometries, Materials and Textures
+	 *
+	 * @param object  Object3D, BufferGeometry, Material or Texture
+	 * @param disposeMedia If set to true will dispose of the texture image or video element, default false
+	 */
+	function deepDispose(
+		object: THREE.Object3D | THREE.BufferGeometry | THREE.Material | THREE.Texture
+	) {
+		const dispose = ( object: THREE.BufferGeometry | THREE.Material | THREE.Texture ) => {
+			console.log( object )
+			object.dispose()
+		}
+		const disposeObject = ( object: any ) => {
+			if( object.geometry ) dispose( object.geometry )
+			if( object.material )
+				traverseMaterialsTextures( object.material, dispose, dispose )
+		}
+
+		if( object instanceof THREE.BufferGeometry || object instanceof THREE.Texture )
+			return dispose( object )
+
+		if( object instanceof THREE.Material )
+			return traverseMaterialsTextures( object, dispose, dispose )
+
+		disposeObject( object )
+
+		if( object.traverse ) object.traverse( ( obj ) => disposeObject( obj ) )
+	}
+
+	/**
+	 * Traverse material or array of materials and all nested textures
+	 * executing there respective callback
+	 *
+	 * @param material          Three js Material or array of material
+	 * @param materialCallback  Material callback
+	 * @param textureCallback   THREE.Texture callback
+	 */
+	function traverseMaterialsTextures(
+		material: THREE.Material | THREE.Material[],
+		materialCallback?: ( material: any ) => void,
+		textureCallback?: ( texture: any ) => void
+	) {
+		const traverseMaterial = ( mat: THREE.Material ) => {
+			if( materialCallback ) materialCallback( mat )
+
+			if( !textureCallback ) return
+
+			Object.values( mat )
+				.filter( ( value ) => value instanceof THREE.Texture )
+				.forEach( ( texture ) => textureCallback( texture )
+				)
+
+			if( ( mat as THREE.ShaderMaterial ).uniforms )
+				Object.values( ( mat as THREE.ShaderMaterial ).uniforms )
+					.filter( ( { value } ) => value instanceof THREE.Texture )
+					.forEach( ( { value } ) => textureCallback( value ) )
+		}
+
+		if( Array.isArray( material ) ) {
+			material.forEach( ( mat ) => traverseMaterial( mat ) )
+		} else traverseMaterial( material )
+	}
+
 }
+
