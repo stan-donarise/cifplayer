@@ -1,3 +1,4 @@
+//@ts-nocheck
 namespace $.$$ {
 
 	const THREE = $mpds_cifplayer_lib_three.all()
