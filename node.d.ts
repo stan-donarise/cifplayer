@@ -2106,6 +2106,18 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_file extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_file_compare extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_check extends $mol_button_minor {
         attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
@@ -2136,82 +2148,11 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_check_list extends $mol_view {
-        dictionary(): Record<string, any>;
-        Option(id: any): $$.$mol_check;
-        options(): Record<string, any>;
-        keys(): readonly string[];
-        sub(): readonly $mol_check[];
-        option_checked(id: any, next?: any): boolean;
-        option_title(id: any): string;
-        option_label(id: any): readonly any[];
-        enabled(): boolean;
-        option_enabled(id: any): boolean;
-        option_hint(id: any): string;
-        items(): readonly $mol_check[];
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_check_list extends $.$mol_check_list {
-        options(): {
-            [key: string]: string;
-        };
-        dictionary(next?: Record<string, boolean>): Record<string, boolean>;
-        option_checked(id: string, next?: boolean | null): boolean;
-        keys(): readonly string[];
-        items(): $mol_check[];
-        option_title(key: string): string;
+    class $mol_check_icon extends $mol_check {
     }
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_switch extends $mol_check_list {
-        value(next?: any): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_session<Value> extends $mol_object {
-        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-        static native(): Storage | {
-            getItem(key: string): any;
-            setItem(key: string, value: string): void;
-            removeItem(key: string): void;
-        };
-        static value<Value>(key: string, next?: Value): Value;
-        prefix(): string;
-        value(key: string, next?: Value): Value;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_switch extends $.$mol_switch {
-        value(next?: any): any;
-        option_checked(key: string, next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
-    class $mol_deck extends $mol_list {
-        items(): readonly $mol_view[];
-        rows(): readonly $mol_view[];
-        current(next?: any): string;
-        switch_options(): Record<string, any>;
-        Switch(): $$.$mol_switch;
-        Content(): $mol_view;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_deck extends $.$mol_deck {
-        current(next?: string): string;
-        switch_options(): Record<string, string>;
-        Content(): $mol_view;
-    }
 }
 
 declare namespace $ {
@@ -2602,6 +2543,19 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_labeler extends $mol_list {
+        rows(): readonly any[];
+        label(): readonly $mol_view_content[];
+        Label(): $mol_view;
+        content(): readonly any[];
+        Content(): $mol_view;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_textarea extends $mol_stack {
         attr(): Record<string, any>;
         event(): Record<string, any>;
@@ -2650,21 +2604,70 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_labeler extends $mol_list {
-        rows(): readonly any[];
-        label(): readonly $mol_view_content[];
-        Label(): $mol_view;
-        content(): readonly any[];
-        Content(): $mol_view;
+    class $mpds_cifplayer_scene extends $mol_view {
+        scene(): any;
+        camera(): any;
+        controls(): any;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $mol_icon_magnify extends $mol_icon {
+        path(): string;
     }
 }
 
 declare namespace $ {
+    class $mol_icon_magnify_plus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_magnify_minus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_image extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_image_filter extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_image_filter_center_focus extends $mol_icon {
+        path(): string;
+    }
 }
 
 declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
+        sub(): readonly any[];
         str(next?: any): string;
+        scene(): any;
+        controls(): any;
+        camera(): any;
+        Root(): $mpds_cifplayer_scene;
+        zoom_up(next?: any): any;
+        Zoom_up_icon(): $mol_icon_magnify_plus;
+        Zoom_up(): $mol_button_minor;
+        zoom_down(next?: any): any;
+        Zoom_down_icon(): $mol_icon_magnify_minus;
+        Zoom_down(): $mol_button_minor;
+        centered(next?: any): boolean;
+        Center_icon(): $mol_icon_image_filter_center_focus;
+        Center(): $mol_check_icon;
+        Overlay(): $mol_view;
     }
 }
 
@@ -2676,9 +2679,8 @@ declare namespace $ {
         menu_title(): string;
         spreads(): Record<string, any>;
         param(): string;
-        Deck_switch(id: any): $$.$mol_switch;
-        Deck_content(id: any): $mol_view;
-        Deck(id: any): $$.$mol_deck;
+        Placeholder(): any;
+        menu_tools(): readonly any[];
         Cif_spread(id: any): $$.$mol_book2;
         nasty_cif_section(id: any): readonly any[];
         cif_paths(): readonly any[];
@@ -2686,29 +2688,32 @@ declare namespace $ {
         good_cif_paths(): readonly any[];
         bad_cif_paths(): readonly any[];
         cif_spreads(): Record<string, any>;
+        Comparison_icon(): $mol_icon_file_compare;
+        comparison_on(next?: any): boolean;
+        Comparison_toggle(): $mol_check_icon;
+        cif_title(id: any): string;
+        zoom_up(next?: any): any;
+        Zoom_up(): $mol_button_minor;
         matinfio_obj(id: any): Record<string, any>;
         matinfio_expanded(id: any, next?: any): boolean;
         Matinfio_dump(id: any): $$.$mol_dump_value;
-        Matinfio(id: any): $mol_view;
+        Matinfio_label(id: any): $mol_labeler;
         cif_loader3_obj(id: any): Record<string, any>;
         cif_loader3_expanded(id: any, next?: any): boolean;
         Cif_loader3_dump(id: any): $$.$mol_dump_value;
-        Cif_loader3(id: any): $mol_view;
+        Cif_loader3_label(id: any): $mol_labeler;
         crystcif_obj(id: any): Record<string, any>;
         crystcif_expanded(id: any, next?: any): boolean;
         Crystcif_dump(id: any): $$.$mol_dump_value;
-        Crystcif(id: any): $mol_page;
+        Crystcif_label(id: any): $mol_labeler;
+        Row(id: any): $mol_view;
         cif_value(id: any, next?: any): string;
         Cif_textarea(id: any): $$.$mol_textarea;
         Cif_text(id: any): $$.$mol_list;
-        cif_title(id: any): string;
-        Matinfio_label(id: any): $mol_labeler;
-        Cif_loader3_label(id: any): $mol_labeler;
-        Crystcif_label(id: any): $mol_labeler;
-        Row(id: any): $mol_view;
         Cif_page(id: any): $mol_page;
         Player(id: any): $mpds_cifplayer_player;
         Player_page(id: any): $mol_page;
+        cif_pages(id: any): readonly any[];
         nasty_cif_reference(id: any): string;
         Reference(id: any): $mol_labeler;
         nasty_cif_problem(id: any): string;

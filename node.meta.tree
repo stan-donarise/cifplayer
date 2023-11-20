@@ -73,6 +73,7 @@
 	pack idea git \https://github.com/hyoo-ru/idea.hyoo.ru.git
 	pack intern git \https://github.com/hyoo-ru/intern.hyoo.ru.git
 \/mpds/cifplayer/comparison
+	deploy \/mpds/cifplayer/comparison/cifs/example.cif
 	deploy \/mpds/cifplayer/comparison/cifs/H20.cif
 	deploy \/mpds/cifplayer/comparison/cifs/nasty_cifs.csv
 	deploy \/mpds/cifplayer/comparison/cifs/good/04182.cif
