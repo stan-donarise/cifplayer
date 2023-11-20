@@ -105,9 +105,9 @@ namespace $.$$ {
 	 * @param disposeMedia If set to true will dispose of the texture image or video element, default false
 	 */
 	export function $mpds_cifplayer_scene_dispose_deep(
-		object: THREE.Object3D | THREE.BufferGeometry | THREE.Material | THREE.Texture
+		object: any
 	) {
-		const dispose = ( object: THREE.BufferGeometry | THREE.Material | THREE.Texture ) => {
+		const dispose = ( object: any ) => {
 			object.dispose()
 		}
 		const disposeObject = ( object: any ) => {
@@ -137,11 +137,11 @@ namespace $.$$ {
 	 * @param textureCallback   THREE.Texture callback
 	 */
 	function traverseMaterialsTextures(
-		material: THREE.Material | THREE.Material[],
+		material: any,
 		materialCallback?: ( material: any ) => void,
 		textureCallback?: ( texture: any ) => void
 	) {
-		const traverseMaterial = ( mat: THREE.Material ) => {
+		const traverseMaterial = ( mat: any ) => {
 			if( materialCallback ) materialCallback( mat )
 
 			if( !textureCallback ) return
@@ -150,8 +150,8 @@ namespace $.$$ {
 				.filter( ( value: any ) => value instanceof THREE.Texture )
 				.forEach( ( texture: any ) => textureCallback( texture ) )
 
-			if( ( mat as THREE.ShaderMaterial ).uniforms )
-				Object.values( ( mat as THREE.ShaderMaterial ).uniforms )
+			if( ( mat ).uniforms )
+				Object.values( ( mat ).uniforms )
 					.filter( ( { value }: any ) => value instanceof THREE.Texture )
 					.forEach( ( { value }: any ) => textureCallback( value ) )
 		}
