@@ -2692,8 +2692,6 @@ declare namespace $ {
         comparison_on(next?: any): boolean;
         Comparison_toggle(): $mol_check_icon;
         cif_title(id: any): string;
-        zoom_up(next?: any): any;
-        Zoom_up(): $mol_button_minor;
         matinfio_obj(id: any): Record<string, any>;
         matinfio_expanded(id: any, next?: any): boolean;
         Matinfio_dump(id: any): $$.$mol_dump_value;

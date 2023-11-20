@@ -9543,16 +9543,6 @@ var $;
         cif_title(id) {
             return "";
         }
-        zoom_up(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Zoom_up() {
-            const obj = new this.$.$mol_button_minor();
-            obj.click = (next) => this.zoom_up(next);
-            return obj;
-        }
         matinfio_obj(id) {
             return {};
         }
@@ -9651,7 +9641,6 @@ var $;
             const obj = new this.$.$mol_page();
             obj.title = () => this.cif_title(id);
             obj.body = () => [
-                this.Zoom_up(),
                 this.Row(id),
                 this.Cif_text(id)
             ];
@@ -9711,12 +9700,6 @@ var $;
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_comparison.prototype, "Comparison_toggle", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "zoom_up", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "Zoom_up", null);
     __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_comparison.prototype, "matinfio_expanded", null);
