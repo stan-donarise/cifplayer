@@ -1,6 +1,7 @@
 namespace $.$$ {
 
 	const THREE = $mpds_cifplayer_lib_three.all()
+	type THREE = typeof THREE
 
 	const atom_pos_scale = 100
 
@@ -110,7 +111,7 @@ namespace $.$$ {
 
 			const origin = new THREE.Vector3( 0, 0, 0 )
 
-			const axes: THREE.ArrowHelper[] = this.ortes().map( ( [ x, y, z ], i ) => 
+			const axes = this.ortes().map( ( [ x, y, z ], i ) => 
 				new THREE.ArrowHelper(
 					new THREE.Vector3( x, y, z ).normalize(),
 					origin,
@@ -147,7 +148,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		atoms_midpoint() {
-			return ( this.obj3d().atoms as any[] ).reduce(( acc: THREE.Vector3, point: any ) => {
+			return ( this.obj3d().atoms as any[] ).reduce(( acc: InstanceType< THREE["Vector3"] >, point: any ) => {
 
 				return acc.add( new THREE.Vector3(
 					point.x * atom_pos_scale,

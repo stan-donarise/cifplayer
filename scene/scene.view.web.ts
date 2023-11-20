@@ -1,7 +1,7 @@
-//@ts-nocheck
 namespace $.$$ {
 
 	const THREE = $mpds_cifplayer_lib_three.all()
+	type THREE = typeof THREE
 
 	export class $mpds_cifplayer_scene extends $.$mpds_cifplayer_scene {
 
@@ -105,9 +105,9 @@ namespace $.$$ {
 	 * @param disposeMedia If set to true will dispose of the texture image or video element, default false
 	 */
 	export function $mpds_cifplayer_scene_dispose_deep(
-		object: any
+		object: InstanceType< THREE["Object3D"] > | InstanceType< THREE["BufferGeometry"] > | InstanceType< THREE["Material"] > | InstanceType< THREE["Texture"] >
 	) {
-		const dispose = ( object: any ) => {
+		const dispose = ( object: InstanceType< THREE["BufferGeometry"] > | InstanceType< THREE["Material"] > | InstanceType< THREE["Texture"] > ) => {
 			object.dispose()
 		}
 		const disposeObject = ( object: any ) => {
@@ -137,11 +137,11 @@ namespace $.$$ {
 	 * @param textureCallback   THREE.Texture callback
 	 */
 	function traverseMaterialsTextures(
-		material: any,
+		material: InstanceType< THREE["Material"] > | InstanceType< THREE["Material"] >[],
 		materialCallback?: ( material: any ) => void,
 		textureCallback?: ( texture: any ) => void
 	) {
-		const traverseMaterial = ( mat: any ) => {
+		const traverseMaterial = ( mat: InstanceType< THREE["Material"] > ) => {
 			if( materialCallback ) materialCallback( mat )
 
 			if( !textureCallback ) return
@@ -150,8 +150,8 @@ namespace $.$$ {
 				.filter( ( value: any ) => value instanceof THREE.Texture )
 				.forEach( ( texture: any ) => textureCallback( texture ) )
 
-			if( ( mat ).uniforms )
-				Object.values( ( mat ).uniforms )
+			if( ( mat as any ).uniforms ) //InstanceType< THREE["ShaderMaterial"] >
+				Object.values( ( mat as any ).uniforms )
 					.filter( ( { value }: any ) => value instanceof THREE.Texture )
 					.forEach( ( { value }: any ) => textureCallback( value ) )
 		}
