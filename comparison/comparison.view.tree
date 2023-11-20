@@ -2,55 +2,45 @@ $mpds_cifplayer_comparison $mol_book2_catalog
 	menu_title \CIF parsers comparison
 	spreads <= cif_spreads *
 	param \cif_path
-	Deck* $mol_deck
-		Switch => Deck_switch*
-		Content => Deck_content*
-		items /
-			<= Matinfio* $mol_view
-				title \matinfio
-				sub /
-					<= Matinfio_dump* $mol_dump_value
-						value <= matinfio_obj* *
-						expanded? <=> matinfio_expanded*? true
-			<= Cif_loader3* $mol_view
-				title \CIFLoader3
-				sub /
-					<= Cif_loader3_dump* $mol_dump_value
-						value <= cif_loader3_obj* *
-						expanded? <=> cif_loader3_expanded*? true
-			<= Crystcif* $mol_page
-				title \crystcif-parse
-				sub /
-					<= Crystcif_dump* $mol_dump_value
-						value <= crystcif_obj* *
-						expanded? <=> crystcif_expanded*? true
-			<= Cif_text* $mol_list
-				title \Text
-				sub /
-					^ nasty_cif_section*
-					<= Cif_textarea* $mol_textarea
-						value? <=> cif_value*? \
+	Placeholder null
+	menu_tools /
+		<= Comparison_toggle $mol_check_icon
+			Icon <= Comparison_icon $mol_icon_file_compare
+			checked? <=> comparison_on? false
 	Cif_spread* $mol_book2
 		menu_title <= cif_title* \
-		pages /
+		pages <= cif_pages* /
 			<= Cif_page* $mol_page
 				title <= cif_title*
 				body /
+					<= Zoom_up $mol_button_minor
+						click? <=> zoom_up? null
 					<= Row* $mol_view
 						sub /
 							<= Matinfio_label* $mol_labeler
 								title \matinfio
 								content /
-									<= Matinfio_dump*
+									<= Matinfio_dump* $mol_dump_value
+										value <= matinfio_obj* *
+										expanded? <=> matinfio_expanded*? true
 							<= Cif_loader3_label* $mol_labeler
 								title \CIFLoader3
 								content /
-									<= Cif_loader3_dump*
+									<= Cif_loader3_dump* $mol_dump_value
+										value <= cif_loader3_obj* *
+										expanded? <=> cif_loader3_expanded*? true
 							<= Crystcif_label* $mol_labeler
 								title \crystcif-parse
 								content /
-									<= Crystcif_dump*
-					<= Cif_text*
+									<= Crystcif_dump* $mol_dump_value
+										value <= crystcif_obj* *
+										expanded? <=> crystcif_expanded*? true
+					<= Cif_text* $mol_list
+						title \Text
+						sub /
+							^ nasty_cif_section*
+							<= Cif_textarea* $mol_textarea
+								value? <=> cif_value*? \
 			<= Player_page* $mol_page
 				title <= cif_title*
 				body /
@@ -68,6 +58,7 @@ $mpds_cifplayer_comparison $mol_book2_catalog
 		^ good_cif_paths
 		^ bad_cif_paths
 	other_cif_paths /
+		\/mpds/cifplayer/comparison/cifs/example.cif
 		\/mpds/cifplayer/comparison/cifs/H20.cif
 	good_cif_paths /
 		\/mpds/cifplayer/comparison/cifs/good/1923795.cif

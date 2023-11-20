@@ -1,6 +1,10 @@
 export {
 	BoxGeometry,
 
+	AxesHelper,
+	CameraHelper,
+	EdgesGeometry,
+	LineSegments,
 	Material,
 	// MeshPhongMaterial,
 	// MeshBasicMaterial,

@@ -1,2 +1,18 @@
 $mpds_cifplayer_player $mol_view
+	sub /
+		<= Root $mpds_cifplayer_scene
+			scene => scene
+			controls => controls
+			camera => camera
+		<= Overlay $mol_view
+			sub /
+				<= Zoom_up $mol_button_minor
+					click? <=> zoom_up? null
+					sub / <= Zoom_up_icon $mol_icon_magnify_plus
+				<= Zoom_down $mol_button_minor
+					click? <=> zoom_down? null
+					sub / <= Zoom_down_icon $mol_icon_magnify_minus
+				<= Center $mol_check_icon
+					checked? <=> centered? true
+					Icon <= Center_icon $mol_icon_image_filter_center_focus
 	str? \

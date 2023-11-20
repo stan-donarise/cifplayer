@@ -1,3 +1,4 @@
+deploy \/mpds/cifplayer/comparison/cifs/example.cif
 deploy \/mpds/cifplayer/comparison/cifs/H20.cif
 deploy \/mpds/cifplayer/comparison/cifs/nasty_cifs.csv
 deploy \/mpds/cifplayer/comparison/cifs/good/04182.cif

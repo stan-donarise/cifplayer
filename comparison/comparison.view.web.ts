@@ -5,6 +5,11 @@ namespace $.$$ {
 	}
 
 	export class $mpds_cifplayer_comparison extends $.$mpds_cifplayer_comparison {
+
+		@ $mol_mem_key
+		cif_pages( id: any ): readonly any[] {
+			return this.comparison_on() ? super.cif_pages( id ) : [ this.Player_page( id ) ]
+		}
 		
 		cif_spreads(): Record<string, any> {
 			return Object.fromEntries( this.cif_paths().map( path => [ path, this.Cif_spread( path ) ] ) ) 

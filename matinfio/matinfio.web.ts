@@ -625,7 +625,7 @@ namespace $ {
 		static to_player( str ) {
 			var structure,
 				format = this.detect_format( str )
-			console.log(this.cif2jsobj( str ))
+				
 			switch( format ) {
 				case 'CIF': structure = this.cif2jsobj( str ); break
 				case 'POSCAR': structure = this.poscar2jsobj( str ); break

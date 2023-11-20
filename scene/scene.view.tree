@@ -1,0 +1,4 @@
+$mpds_cifplayer_scene $mol_view
+	scene null
+	camera null
+	controls null

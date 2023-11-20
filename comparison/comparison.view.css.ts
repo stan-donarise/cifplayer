@@ -5,6 +5,7 @@ namespace $.$$ {
 		Player_page: {
 			flex: {
 				basis: '40rem',
+				grow: 1,
 			},
 		},
 
