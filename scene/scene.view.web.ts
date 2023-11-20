@@ -125,7 +125,7 @@ namespace $.$$ {
 
 		disposeObject( object )
 
-		if( object.traverse ) object.traverse( ( obj ) => disposeObject( obj ) )
+		if( object.traverse ) object.traverse( ( obj: any ) => disposeObject( obj ) )
 	}
 
 	/**
@@ -157,9 +157,8 @@ namespace $.$$ {
 		}
 
 		if( Array.isArray( material ) ) {
-			material.forEach( ( mat ) => traverseMaterial( mat ) )
+			material.forEach( ( mat: any ) => traverseMaterial( mat ) )
 		} else traverseMaterial( material )
 	}
 
 }
-
