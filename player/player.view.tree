@@ -1,18 +1,59 @@
 $mpds_cifplayer_player $mol_view
+	str? \
+	atom_pos_scale 100
+	atom_radius_scale 60
+	zoom_scale_step 0.3
 	sub /
 		<= Root $mpds_cifplayer_scene
 			scene => scene
 			controls => controls
 			camera => camera
-		<= Overlay $mol_view
+		<= Info $mol_view
+			sub /
+				<= Descr_a $mol_paragraph
+					title <= descr_a \a=
+				<= Descr_b $mol_paragraph
+					title <= descr_b \b=
+				<= Descr_c $mol_paragraph
+					title <= descr_c \c=
+				<= Descr_alpha $mol_paragraph
+					title <= descr_alpha \α=
+				<= Descr_beta $mol_paragraph
+					title <= descr_beta \β=
+				<= Descr_gamma $mol_paragraph
+					title <= descr_gamma \γ=
+				<= Symlabel $mol_paragraph
+					title <= symlabel \SG
+		<= Tools $mol_view
 			sub /
 				<= Zoom_up $mol_button_minor
 					click? <=> zoom_up? null
-					sub / <= Zoom_up_icon $mol_icon_magnify_plus
+					sub / <= Zoom_up_icon $mol_icon_magnify_plus_outline
 				<= Zoom_down $mol_button_minor
 					click? <=> zoom_down? null
-					sub / <= Zoom_down_icon $mol_icon_magnify_minus
+					sub / <= Zoom_down_icon $mol_icon_magnify_minus_outline
 				<= Center $mol_check_icon
 					checked? <=> centered? true
 					Icon <= Center_icon $mol_icon_image_filter_center_focus
-	str? \
+		<= Overlays_panel $mol_view
+			sub /
+				<= Switch_overlay $mol_switch
+					value? <=> overlay? \S
+					options <= available_overlays *
+						\
+							\none
+						S \elements
+	colors_light *
+		a \#990000
+		b \#009900
+		c \#0099FF
+	colors_dark *
+		a \#EE4B2B
+		b \#009900
+		c \#0099FF
+	style *
+		^
+		width <= width? \0
+		--color_a <= color_a \
+		--color_b <= color_b \
+		--color_c <= color_c \

@@ -21,7 +21,6 @@ namespace $.$$ {
 			const renderer = this.renderer()
 			renderer.domElement.style.position = 'absolute' //otherwise renderer.domElement prevents dom_node from resizing
 			container.replaceChildren( renderer.domElement )
-			this.lights()
 			this.resize()
 			this.render_loop()
 		}
@@ -30,16 +29,6 @@ namespace $.$$ {
 		scene() {
 			const scene = new THREE.Scene()
 			return scene
-		}
-
-		@ $mol_mem
-		lights() {
-			const dir_light = new THREE.DirectionalLight( 0xffffff, 1.5 )
-			dir_light.position.set( 1, 1.5, 2 )
-			this.scene().add( dir_light )
-			const ambient_light = new THREE.AmbientLight( 0x999999, 2.5 )
-			this.scene().add( ambient_light )
-			return { dir_light, ambient_light }
 		}
 
 		@ $mol_mem
@@ -93,6 +82,10 @@ namespace $.$$ {
 			this.renderer_render()
 
 			this.controls().handleResize()
+		}
+
+		destructor(): void {
+			this.renderer().dispose()
 		}
 
 	}

@@ -68,6 +68,29 @@ namespace $.$$ {
 			const loader = $mpds_cifplayer_lib_cif.loader()
 			return loader.parse( this.cif_value( id ) )
 		}
+
+		@ $mol_mem
+		player_visible_width() {
+			const rect = this.player_view_rect( this.spread() )
+			if ( ! rect  ) return '0px'
+			const visible_width = rect.width - rect.left
+			return visible_width + 'px'
+		}
+
+		@ $mol_mem
+		player_expanded() {
+			const rect = this.player_view_rect( this.spread() )
+			if ( ! rect  ) return false
+			return rect.left < 30 ? true : false
+		}
+
+		menu_toogle( next?: any ) {
+			if ( this.player_expanded() ) {
+				this.Menu().dom_node_actual().scrollIntoView( { behavior: 'smooth' } )
+			} else {
+				this.Player_page( this.spread() ).dom_node_actual().scrollIntoView( { behavior: 'smooth' } )
+			}
+		}
 		
 	}
 }

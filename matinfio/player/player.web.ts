@@ -30,7 +30,6 @@ namespace $ {
 		}
 		const pos2els: any = {}
 		const hashes: any = {}
-		let optionpanel: any = {}
 
 		for( let i = 0; i < crystal.atoms.length; i++ ) {
 			const pos = [ crystal.atoms[ i ].x, crystal.atoms[ i ].y, crystal.atoms[ i ].z ]
@@ -83,10 +82,9 @@ namespace $ {
 				pos2els[ hash ] = [ crystal.atoms[ i ].symbol ]
 			}
 		}
-		for( let opt in optionpanel ) {
-			if( opt !== "S" && opt !== "N" ) {
-				render.overlayed[ opt ] = $mpds_cifplayer_matinfio_custom_atom_loop_props[ opt ]
-			}
+
+		for( let oprop in crystal.atoms.at(-1).overlays ) {
+			render.overlayed[ oprop ] = $mpds_cifplayer_matinfio_custom_atom_loop_props[ oprop ]
 		}
 		
 		return render

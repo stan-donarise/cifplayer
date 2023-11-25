@@ -2,9 +2,16 @@ namespace $.$$ {
 
 	$mol_style_define( $mpds_cifplayer_comparison, {
 
+		Menu: {
+			flex: {
+				basis: '20rem',
+			},
+		},
+
 		Player_page: {
 			flex: {
-				basis: '40rem',
+				basis: '100%',
+				// basis: '30rem',
 				grow: 1,
 			},
 		},
@@ -15,8 +22,9 @@ namespace $.$$ {
 			},
 		},
 		
-		Player: {
+		Player_page_body: {
 			flex: {
+				basis: '20rem',
 				grow: 1,
 			},
 		},
@@ -28,6 +36,17 @@ namespace $.$$ {
 				},
 			},
 		},
+
+		Menu_toggle: {
+			'@': {
+				mol_check_checked: {
+					true: {
+						transform: 'scaleX(-1)',
+						color: $mol_theme.control,
+					}
+				}
+			}
+		}
 
 	} )
 
