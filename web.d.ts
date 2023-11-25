@@ -1227,7 +1227,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $mol_hotkey extends $.$mol_hotkey {
         key(): {
-            [x: number]: ((event: KeyboardEvent) => void) | undefined;
+            readonly [x: number]: ((event: KeyboardEvent) => void) | undefined;
             readonly backspace?: ((event: KeyboardEvent) => void) | undefined;
             readonly tab?: ((event: KeyboardEvent) => void) | undefined;
             readonly enter?: ((event: KeyboardEvent) => void) | undefined;
@@ -2603,67 +2603,327 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    const $mpds_cifplayer_matinfio_chemical_elements: {
+        JmolColors: {
+            D: string;
+            H: string;
+            He: string;
+            Li: string;
+            Be: string;
+            B: string;
+            C: string;
+            N: string;
+            O: string;
+            F: string;
+            Ne: string;
+            Na: string;
+            Mg: string;
+            Al: string;
+            Si: string;
+            P: string;
+            S: string;
+            Cl: string;
+            Ar: string;
+            K: string;
+            Ca: string;
+            Sc: string;
+            Ti: string;
+            V: string;
+            Cr: string;
+            Mn: string;
+            Fe: string;
+            Co: string;
+            Ni: string;
+            Cu: string;
+            Zn: string;
+            Ga: string;
+            Ge: string;
+            As: string;
+            Se: string;
+            Br: string;
+            Kr: string;
+            Rb: string;
+            Sr: string;
+            Y: string;
+            Zr: string;
+            Nb: string;
+            Mo: string;
+            Tc: string;
+            Ru: string;
+            Rh: string;
+            Pd: string;
+            Ag: string;
+            Cd: string;
+            In: string;
+            Sn: string;
+            Sb: string;
+            Te: string;
+            I: string;
+            Xe: string;
+            Cs: string;
+            Ba: string;
+            La: string;
+            Ce: string;
+            Pr: string;
+            Nd: string;
+            Pm: string;
+            Sm: string;
+            Eu: string;
+            Gd: string;
+            Tb: string;
+            Dy: string;
+            Ho: string;
+            Er: string;
+            Tm: string;
+            Yb: string;
+            Lu: string;
+            Hf: string;
+            Ta: string;
+            W: string;
+            Re: string;
+            Os: string;
+            Ir: string;
+            Pt: string;
+            Au: string;
+            Hg: string;
+            Tl: string;
+            Pb: string;
+            Bi: string;
+            Po: string;
+            At: string;
+            Rn: string;
+            Fr: string;
+            Ra: string;
+            Ac: string;
+            Th: string;
+            Pa: string;
+            U: string;
+            Np: string;
+            Pu: string;
+            Am: string;
+            Cm: string;
+            Bk: string;
+            Cf: string;
+            Es: string;
+            Fm: string;
+            Md: string;
+            No: string;
+            Lr: string;
+            Rf: string;
+            Db: string;
+            Sg: string;
+            Bh: string;
+            Hs: string;
+            Mt: string;
+        };
+        AseRadii: {
+            X: number;
+            H: number;
+            He: number;
+            Li: number;
+            Be: number;
+            B: number;
+            C: number;
+            N: number;
+            O: number;
+            F: number;
+            Ne: number;
+            Na: number;
+            Mg: number;
+            Al: number;
+            Si: number;
+            P: number;
+            S: number;
+            Cl: number;
+            Ar: number;
+            K: number;
+            Ca: number;
+            Sc: number;
+            Ti: number;
+            V: number;
+            Cr: number;
+            Mn: number;
+            Fe: number;
+            Co: number;
+            Ni: number;
+            Cu: number;
+            Zn: number;
+            Ga: number;
+            Ge: number;
+            As: number;
+            Se: number;
+            Br: number;
+            Kr: number;
+            Rb: number;
+            Sr: number;
+            Y: number;
+            Zr: number;
+            Nb: number;
+            Mo: number;
+            Tc: number;
+            Ru: number;
+            Rh: number;
+            Pd: number;
+            Ag: number;
+            Cd: number;
+            In: number;
+            Sn: number;
+            Sb: number;
+            Te: number;
+            I: number;
+            Xe: number;
+            Cs: number;
+            Ba: number;
+            La: number;
+            Ce: number;
+            Pr: number;
+            Nd: number;
+            Pm: number;
+            Sm: number;
+            Eu: number;
+            Gd: number;
+            Tb: number;
+            Dy: number;
+            Ho: number;
+            Er: number;
+            Tm: number;
+            Yb: number;
+            Lu: number;
+            Hf: number;
+            Ta: number;
+            W: number;
+            Re: number;
+            Os: number;
+            Ir: number;
+            Pt: number;
+            Au: number;
+            Hg: number;
+            Tl: number;
+            Pb: number;
+            Bi: number;
+            Po: number;
+            At: number;
+            Rn: number;
+            Fr: number;
+            Ra: number;
+            Ac: number;
+            Th: number;
+            Pa: number;
+            U: number;
+            Np: number;
+            Pu: number;
+            Am: number;
+            Cm: number;
+            Bk: number;
+            Cf: number;
+            Es: number;
+            Fm: number;
+            Md: number;
+            No: number;
+            Lr: number;
+            Rf: number;
+            Db: number;
+            Sg: number;
+            Bh: number;
+            Hs: number;
+            Mt: number;
+        };
+    };
+    const $mpds_cifplayer_matinfio_custom_atom_loop_props: Record<string, string>;
+    const $mpds_cifplayer_matinfio_log: {
+        error: {
+            (...data: any[]): void;
+            (message?: any, ...optionalParams: any[]): void;
+        };
+        warning: {
+            (...data: any[]): void;
+            (message?: any, ...optionalParams: any[]): void;
+        };
+    };
+    class $mpds_cifplayer_matinfio extends $mol_object2 {
+        static log: {
+            error: {
+                (...data: any[]): void;
+                (message?: any, ...optionalParams: any[]): void;
+            };
+            warning: {
+                (...data: any[]): void;
+                (message?: any, ...optionalParams: any[]): void;
+            };
+        };
+        static detect_format(str: string): "CIF" | "OPTIMADE" | "POSCAR" | "unknown";
+        static to_player(str: string): false | {
+            atoms: any[];
+            cell: any;
+            descr: any;
+            overlayed: Record<string, string>;
+            info: any;
+            mpds_data: any;
+            mpds_demo: any;
+        };
+        static to_flatten(str: string): false | {
+            cell: any;
+            atoms: any[];
+            types: number[];
+            symlabel: string | boolean;
+        };
+        static to_cif(str: string): string | false;
+    }
+}
+
+declare namespace $ {
     class $mpds_cifplayer_lib_math extends $mol_object2 {
         static all(): any;
     }
 }
 
 declare namespace $ {
-    class $mpds_cifplayer_matinfio extends $mol_object2 {
-        static detect_format(str: any): "CIF" | "OPTIMADE" | "POSCAR" | "unknown";
-        static unit(vec: any): any;
-        static cell2vec(a: any, b: any, c: any, alpha: any, beta: any, gamma: any): any;
-        static vec2cell(matrix: any): any[];
-        static jsobj2player(crystal: any): {
-            atoms: never[];
-            cell: any;
-            descr: boolean;
-            overlayed: {};
-            info: any;
-            mpds_data: any;
-            mpds_demo: any;
-        };
-        static jsobj2cif(crystal: any): string;
-        static jsobj2flatten(crystal: any): {
-            cell: any[];
-            atoms: any[];
-            types: any;
-            symlabel: string | false;
-        };
-        static cif2jsobj(str: any): false | {
-            cell: {};
-            atoms: never[];
-            cartesian: boolean;
-        };
-        static poscar2jsobj(str: any): false | {
-            cell: any;
-            atoms: {}[];
-            types: number[];
-            cartesian: boolean;
-        };
-        static optimade2jsobj(str: any): false | {
-            cell: any;
-            atoms: any[];
-            info: string;
-            cartesian: boolean;
-        };
-        static to_player(str: any): false | {
-            atoms: never[];
-            cell: any;
-            descr: boolean;
-            overlayed: {};
-            info: any;
-            mpds_data: any;
-            mpds_demo: any;
-        };
-        static to_flatten(str: any): false | {
-            cell: any[];
-            atoms: any[];
-            types: any;
-            symlabel: string | false;
-        };
-        static to_cif(str: any): any;
-    }
+    function $mpds_cifplayer_matinfio_cell_to_vec(this: $, a: number, b: number, c: number, alpha: number, beta: number, gamma: number): any;
+    function $mpds_cifplayer_matinfio_cell_from_vec(matrix: number[]): number[];
+}
+
+declare namespace $ {
+    function $mpds_cifplayer_matinfio_cif_to_obj(str: string): any;
+    function $mpds_cifplayer_matinfio_cif_from_obj(crystal: any): string;
+}
+
+declare namespace $ {
+    function $mpds_cifplayer_matinfio_poscar_to_obj(this: $, str: string): false | {
+        cell: number[][];
+        atoms: any[];
+        types: number[];
+        cartesian: boolean;
+    };
+}
+
+declare namespace $ {
+    function $mpds_cifplayer_matinfio_optimade_to_obj(this: $, str: string): false | {
+        cell: any;
+        atoms: any[];
+        info: string;
+        cartesian: boolean;
+    };
+}
+
+declare namespace $ {
+    function $mpds_cifplayer_matinfio_player_from_obj(this: $, crystal: any): {
+        atoms: any[];
+        cell: any;
+        descr: any;
+        overlayed: Record<string, string>;
+        info: any;
+        mpds_data: any;
+        mpds_demo: any;
+    };
+}
+
+declare namespace $ {
+    function $mpds_cifplayer_matinfio_flatten_from_obj(this: $, crystal: any): {
+        cell: any;
+        atoms: any[];
+        types: number[];
+        symlabel: string | boolean;
+    };
 }
 
 declare namespace $.$$ {
