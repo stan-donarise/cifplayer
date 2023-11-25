@@ -2009,6 +2009,23 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_theme_auto extends $mol_plugin {
+        attr(): Record<string, any>;
+        theme(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_lights(this: $, next?: boolean): boolean;
+}
+
+declare namespace $.$$ {
+    class $mol_theme_auto extends $.$mol_theme_auto {
+        theme(): "$mol_theme_light" | "$mol_theme_dark";
+    }
+}
+
+declare namespace $ {
     class $mol_icon_file extends $mol_icon {
         path(): string;
     }
@@ -2052,6 +2069,28 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_brightness_6 extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_lights_toggle extends $mol_check_icon {
+        Icon(): $mol_icon_brightness_6;
+        hint(): string;
+        checked(next?: any): boolean;
+        Lights_icon(): $mol_icon_brightness_6;
+        lights(next?: any): boolean;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_lights_toggle extends $.$mol_lights_toggle {
+        lights(next?: boolean): boolean;
+    }
 }
 
 declare namespace $ {
@@ -2503,6 +2542,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_arrow_right extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mpds_cifplayer_scene extends $mol_view {
         scene(): any;
         camera(): any;
@@ -2526,10 +2571,6 @@ declare namespace $.$$ {
         webgl_support(): boolean;
         auto(): void;
         scene(): any;
-        lights(): {
-            dir_light: any;
-            ambient_light: any;
-        };
         camera(): any;
         controls(): any;
         renderer(): any;
@@ -2540,6 +2581,7 @@ declare namespace $.$$ {
             height: number;
         } | undefined;
         resize(): void;
+        destructor(): void;
     }
     export function $mpds_cifplayer_scene_dispose_deep(object: InstanceType<THREE["Object3D"]> | InstanceType<THREE["BufferGeometry"]> | InstanceType<THREE["Material"]> | InstanceType<THREE["Texture"]>): void;
     export {};
@@ -2558,7 +2600,19 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_magnify_plus_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_magnify_minus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_magnify_minus_outline extends $mol_icon {
         path(): string;
     }
 }
@@ -2582,23 +2636,112 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_check_list extends $mol_view {
+        dictionary(): Record<string, any>;
+        Option(id: any): $$.$mol_check;
+        options(): Record<string, any>;
+        keys(): readonly string[];
+        sub(): readonly $mol_check[];
+        option_checked(id: any, next?: any): boolean;
+        option_title(id: any): string;
+        option_label(id: any): readonly any[];
+        enabled(): boolean;
+        option_enabled(id: any): boolean;
+        option_hint(id: any): string;
+        items(): readonly $mol_check[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_check_list extends $.$mol_check_list {
+        options(): {
+            [key: string]: string;
+        };
+        dictionary(next?: Record<string, boolean>): Record<string, boolean>;
+        option_checked(id: string, next?: boolean | null): boolean;
+        keys(): readonly string[];
+        items(): $mol_check[];
+        option_title(key: string): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_switch extends $mol_check_list {
+        value(next?: any): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_session<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static value<Value>(key: string, next?: Value): Value;
+        prefix(): string;
+        value(key: string, next?: Value): Value;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_switch extends $.$mol_switch {
+        value(next?: any): any;
+        option_checked(key: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
-        sub(): readonly any[];
         str(next?: any): string;
+        atom_pos_scale(): number;
+        atom_radius_scale(): number;
+        zoom_scale_step(): number;
+        sub(): readonly any[];
+        colors_light(): Record<string, any>;
+        colors_dark(): Record<string, any>;
+        style(): Record<string, any>;
         scene(): any;
         controls(): any;
         camera(): any;
         Root(): $$.$mpds_cifplayer_scene;
+        descr_a(): string;
+        Descr_a(): $$.$mol_paragraph;
+        descr_b(): string;
+        Descr_b(): $$.$mol_paragraph;
+        descr_c(): string;
+        Descr_c(): $$.$mol_paragraph;
+        descr_alpha(): string;
+        Descr_alpha(): $$.$mol_paragraph;
+        descr_beta(): string;
+        Descr_beta(): $$.$mol_paragraph;
+        descr_gamma(): string;
+        Descr_gamma(): $$.$mol_paragraph;
+        symlabel(): string;
+        Symlabel(): $$.$mol_paragraph;
+        Info(): $mol_view;
         zoom_up(next?: any): any;
-        Zoom_up_icon(): $mol_icon_magnify_plus;
+        Zoom_up_icon(): $mol_icon_magnify_plus_outline;
         Zoom_up(): $mol_button_minor;
         zoom_down(next?: any): any;
-        Zoom_down_icon(): $mol_icon_magnify_minus;
+        Zoom_down_icon(): $mol_icon_magnify_minus_outline;
         Zoom_down(): $mol_button_minor;
         centered(next?: any): boolean;
         Center_icon(): $mol_icon_image_filter_center_focus;
         Center(): $mol_check_icon;
-        Overlay(): $mol_view;
+        Tools(): $mol_view;
+        overlay(next?: any): string;
+        available_overlays(): Record<string, any>;
+        Switch_overlay(): $$.$mol_switch;
+        Overlays_panel(): $mol_view;
+        width(next?: any): string;
+        color_a(): string;
+        color_b(): string;
+        color_c(): string;
     }
 }
 
@@ -2930,30 +3073,56 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-    class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
+    const THREE: typeof import("../lib/three/build");
+    type THREE = typeof THREE;
+    export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
+        sample: string;
+        str(): string;
+        available_overlays(): any;
+        symlabel(): string;
+        descr_a(): string;
+        descr_b(): string;
+        descr_c(): string;
+        descr_alpha(): string;
+        descr_beta(): string;
+        descr_gamma(): string;
+        camera_distance(): any;
         zoom_up(): void;
         zoom_down(): void;
         webgl_support(): boolean;
-        default_overlay: string;
-        colorset: string;
-        sample: string;
-        str(): string;
-        obj3d(): any;
+        sphere_resolution(): {
+            w: number;
+            h: number;
+        };
+        obj3d_raw(): any;
         draw_3d_line(box: any, start_arr: number[], finish_arr: number[], color?: number): void;
+        text_canvas(text: string): HTMLCanvasElement;
         create_sprite(text: string): any;
+        color_a(): string;
+        color_b(): string;
+        color_c(): string;
+        axcolor(): string[];
         ortes(): number[][];
-        axes(): any[];
+        axes(): any;
         centered(next?: any): boolean;
-        atombox_center(): any;
+        cell_center(): any;
         atoms_midpoint(): any;
         atoms_shift(): any;
-        atombox(): any;
+        scaled_atoms(): any;
+        new_box(name: string): any;
+        overlay_box(): any;
+        atom_box(): any;
+        dir_light(): InstanceType<THREE["DirectionalLight"]>;
+        ambient_light(): InstanceType<THREE["AmbientLight"]>;
+        cell(): any;
         auto(): void;
     }
+    export {};
 }
 
 declare namespace $ {
     class $mpds_cifplayer_comparison extends $mol_book2_catalog {
+        plugins(): readonly any[];
         menu_title(): string;
         spreads(): Record<string, any>;
         param(): string;
@@ -2965,10 +3134,12 @@ declare namespace $ {
         other_cif_paths(): readonly any[];
         good_cif_paths(): readonly any[];
         bad_cif_paths(): readonly any[];
+        Theme(): $$.$mol_theme_auto;
         cif_spreads(): Record<string, any>;
         Comparison_icon(): $mol_icon_file_compare;
         comparison_on(next?: any): boolean;
         Comparison_toggle(): $mol_check_icon;
+        Lights(): $$.$mol_lights_toggle;
         cif_title(id: any): string;
         matinfio_obj(id: any): Record<string, any>;
         matinfio_expanded(id: any, next?: any): boolean;
@@ -2987,7 +3158,24 @@ declare namespace $ {
         Cif_textarea(id: any): $$.$mol_textarea;
         Cif_text(id: any): $$.$mol_list;
         Cif_page(id: any): $mol_page;
+        Menu_toggle_icon(): $mol_icon_arrow_right;
+        menu_toogle(next?: any): any;
+        player_expanded(): boolean;
+        Menu_toggle(): $mol_check_icon;
+        player_visible_width(): string;
         Player(id: any): $$.$mpds_cifplayer_player;
+        player_view_rect(id: any): {
+            width: number;
+            height: number;
+            left: number;
+            right: number;
+            top: number;
+            bottom: number;
+        } | null;
+        Player_page_body(id: any): $mol_view;
+        Player_page_title(id: any): $mol_view;
+        Player_page_tools(id: any): $mol_view;
+        Player_page_head(id: any): $mol_view;
         Player_page(id: any): $mol_page;
         cif_pages(id: any): readonly any[];
         nasty_cif_reference(id: any): string;
@@ -3024,6 +3212,9 @@ declare namespace $.$$ {
         matinfio_obj(id: any): Record<string, any>;
         crystcif_obj(id: any): Record<string, any>;
         cif_loader3_obj(id: any): Record<string, any>;
+        player_visible_width(): string;
+        player_expanded(): boolean;
+        menu_toogle(next?: any): void;
     }
 }
 

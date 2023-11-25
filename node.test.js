@@ -7299,6 +7299,68 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_theme_auto extends $mol_plugin {
+        attr() {
+            return {
+                mol_theme: this.theme()
+            };
+        }
+        theme() {
+            return "";
+        }
+    }
+    $.$mol_theme_auto = $mol_theme_auto;
+})($ || ($ = {}));
+//mol/theme/auto/-view.tree/auto.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function parse(theme) {
+        if (theme === 'true')
+            return true;
+        if (theme === 'false')
+            return false;
+        return null;
+    }
+    function $mol_lights(next) {
+        const arg = parse(this.$mol_state_arg.value('mol_lights'));
+        const base = false;
+        if (next === undefined) {
+            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
+        }
+        else {
+            if (arg === null) {
+                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            }
+            else {
+                this.$mol_state_arg.value('mol_lights', String(next));
+            }
+            return next;
+        }
+    }
+    $.$mol_lights = $mol_lights;
+})($ || ($ = {}));
+//mol/lights/lights.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_theme_auto extends $.$mol_theme_auto {
+            theme() {
+                return this.$.$mol_lights() ? '$mol_theme_light' : '$mol_theme_dark';
+            }
+        }
+        $$.$mol_theme_auto = $mol_theme_auto;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/theme/auto/auto.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_file extends $mol_icon {
         path() {
             return "M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V8L14,2H6Z";
@@ -7441,6 +7503,66 @@ var $;
     $mol_style_attach("mol/check/icon/icon.view.css", "[mol_check_icon]:where([mol_check_checked]) {\n\tcolor: var(--mol_theme_current);\n}\n");
 })($ || ($ = {}));
 //mol/check/icon/-css/icon.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_brightness_6 extends $mol_icon {
+        path() {
+            return "M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z";
+        }
+    }
+    $.$mol_icon_brightness_6 = $mol_icon_brightness_6;
+})($ || ($ = {}));
+//mol/icon/brightness/6/-view.tree/6.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_lights_toggle extends $mol_check_icon {
+        Icon() {
+            return this.Lights_icon();
+        }
+        hint() {
+            return this.$.$mol_locale.text('$mol_lights_toggle_hint');
+        }
+        checked(next) {
+            return this.lights(next);
+        }
+        Lights_icon() {
+            const obj = new this.$.$mol_icon_brightness_6();
+            return obj;
+        }
+        lights(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_lights_toggle.prototype, "Lights_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_lights_toggle.prototype, "lights", null);
+    $.$mol_lights_toggle = $mol_lights_toggle;
+})($ || ($ = {}));
+//mol/lights/toggle/-view.tree/toggle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_lights_toggle extends $.$mol_lights_toggle {
+            lights(next) {
+                return this.$.$mol_lights(next);
+            }
+        }
+        $$.$mol_lights_toggle = $mol_lights_toggle;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/lights/toggle/toggle.view.ts
 ;
 "use strict";
 var $;
@@ -9149,6 +9271,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_arrow_right extends $mol_icon {
+        path() {
+            return "M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z";
+        }
+    }
+    $.$mol_icon_arrow_right = $mol_icon_arrow_right;
+})($ || ($ = {}));
+//mol/icon/arrow/right/-view.tree/right.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mpds_cifplayer_scene extends $mol_view {
         scene() {
             return null;
@@ -9205,6 +9339,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_magnify_plus_outline extends $mol_icon {
+        path() {
+            return "M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16C5.91,16 3,13.09 3,9.5C3,5.91 5.91,3 9.5,3C13.09,3 16,5.91 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z";
+        }
+    }
+    $.$mol_icon_magnify_plus_outline = $mol_icon_magnify_plus_outline;
+})($ || ($ = {}));
+//mol/icon/magnify/plus/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_magnify_minus extends $mol_icon {
         path() {
             return "M9,2C12.87,2 16,5.13 16,9C16,10.57 15.5,12 14.61,13.19L15.41,14H16L22,20L20,22L14,16V15.41L13.19,14.61C12,15.5 10.57,16 9,16C5.13,16 2,12.87 2,9C2,5.13 5.13,2 9,2M5,8V10H13V8H5Z";
@@ -9213,6 +9359,18 @@ var $;
     $.$mol_icon_magnify_minus = $mol_icon_magnify_minus;
 })($ || ($ = {}));
 //mol/icon/magnify/minus/-view.tree/minus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_magnify_minus_outline extends $mol_icon {
+        path() {
+            return "M15.5,14H14.71L14.43,13.73C15.41,12.59 16,11.11 16,9.5C16,5.91 13.09,3 9.5,3C5.91,3 3,5.91 3,9.5C3,13.09 5.91,16 9.5,16C11.11,16 12.59,15.41 13.73,14.43L14,14.71V15.5L19,20.5L20.5,19L15.5,14M9.5,14C7,14 5,12 5,9.5C5,7 7,5 9.5,5C12,5 14,7 14,9.5C14,12 12,14 9.5,14M7,9H12V10H7V9Z";
+        }
+    }
+    $.$mol_icon_magnify_minus_outline = $mol_icon_magnify_minus_outline;
+})($ || ($ = {}));
+//mol/icon/magnify/minus/outline/-view.tree/outline.view.tree.ts
 ;
 "use strict";
 var $;
@@ -9253,17 +9411,251 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mpds_cifplayer_player extends $mol_view {
+    class $mol_check_list extends $mol_view {
+        dictionary() {
+            return {};
+        }
+        Option(id) {
+            const obj = new this.$.$mol_check();
+            obj.checked = (next) => this.option_checked(id, next);
+            obj.label = () => this.option_label(id);
+            obj.enabled = () => this.option_enabled(id);
+            obj.hint = () => this.option_hint(id);
+            obj.minimal_height = () => 24;
+            return obj;
+        }
+        options() {
+            return {};
+        }
+        keys() {
+            return [];
+        }
         sub() {
+            return this.items();
+        }
+        option_checked(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        option_title(id) {
+            return "";
+        }
+        option_label(id) {
             return [
-                this.Root(),
-                this.Overlay()
+                this.option_title(id)
             ];
         }
+        enabled() {
+            return true;
+        }
+        option_enabled(id) {
+            return this.enabled();
+        }
+        option_hint(id) {
+            return "";
+        }
+        items() {
+            return [];
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_check_list.prototype, "Option", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_check_list.prototype, "option_checked", null);
+    $.$mol_check_list = $mol_check_list;
+})($ || ($ = {}));
+//mol/check/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_check_list extends $.$mol_check_list {
+            options() {
+                return {};
+            }
+            dictionary(next) {
+                return next ?? {};
+            }
+            option_checked(id, next) {
+                const prev = this.dictionary();
+                if (next === undefined)
+                    return prev[id] ?? null;
+                const next_rec = { ...prev, [id]: next };
+                if (next === null)
+                    delete next_rec[id];
+                return this.dictionary(next_rec)[id] ?? null;
+            }
+            keys() {
+                return Object.keys(this.options());
+            }
+            items() {
+                return this.keys().map(key => this.Option(key));
+            }
+            option_title(key) {
+                return this.options()[key] || key;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_check_list.prototype, "keys", null);
+        __decorate([
+            $mol_mem
+        ], $mol_check_list.prototype, "items", null);
+        $$.$mol_check_list = $mol_check_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/check/list/list.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/list/list.view.css", "[mol_check_list] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\tflex: 1 1 auto;\n\tborder-radius: var(--mol_gap_round);\n\tgap: 1px;\n}\n\n[mol_check_list_option] {\n\tflex: 0 1 auto;\n}\n\n[mol_check_list_option]:where([mol_check_checked=\"true\"]) {\n\ttext-shadow: 0 0;\n\tcolor: var(--mol_theme_current);\n}\n\n[mol_check_list_option]:where([mol_check_checked=\"true\"][disabled]) {\n\tcolor: var(--mol_theme_text);\n}\n");
+})($ || ($ = {}));
+//mol/check/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_switch extends $mol_check_list {
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_switch.prototype, "value", null);
+    $.$mol_switch = $mol_switch;
+})($ || ($ = {}));
+//mol/switch/-view.tree/switch.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_session extends $mol_object {
+        static 'native()';
+        static native() {
+            if (this['native()'])
+                return this['native()'];
+            check: try {
+                const native = $mol_dom_context.sessionStorage;
+                if (!native)
+                    break check;
+                native.setItem('', '');
+                native.removeItem('');
+                return this['native()'] = native;
+            }
+            catch (error) {
+                console.warn(error);
+            }
+            return this['native()'] = {
+                getItem(key) {
+                    return this[':' + key];
+                },
+                setItem(key, value) {
+                    this[':' + key] = value;
+                },
+                removeItem(key) {
+                    this[':' + key] = void 0;
+                }
+            };
+        }
+        static value(key, next) {
+            if (next === void 0)
+                return JSON.parse(this.native().getItem(key) || 'null');
+            if (next === null)
+                this.native().removeItem(key);
+            else
+                this.native().setItem(key, JSON.stringify(next));
+            return next;
+        }
+        prefix() { return ''; }
+        value(key, next) {
+            return $mol_state_session.value(this.prefix() + '.' + key, next);
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_session, "value", null);
+    $.$mol_state_session = $mol_state_session;
+})($ || ($ = {}));
+//mol/state/session/session.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_switch extends $.$mol_switch {
+            value(next) {
+                return $mol_state_session.value(`${this}.value()`, next) ?? '';
+            }
+            option_checked(key, next) {
+                if (next === undefined)
+                    return this.value() == key;
+                this.value(next ? key : '');
+                return next;
+            }
+        }
+        $$.$mol_switch = $mol_switch;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/switch/switch.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mpds_cifplayer_player extends $mol_view {
         str(next) {
             if (next !== undefined)
                 return next;
             return "";
+        }
+        atom_pos_scale() {
+            return 100;
+        }
+        atom_radius_scale() {
+            return 60;
+        }
+        zoom_scale_step() {
+            return 0.3;
+        }
+        sub() {
+            return [
+                this.Root(),
+                this.Info(),
+                this.Tools(),
+                this.Overlays_panel()
+            ];
+        }
+        colors_light() {
+            return {
+                a: "#990000",
+                b: "#009900",
+                c: "#0099FF"
+            };
+        }
+        colors_dark() {
+            return {
+                a: "#EE4B2B",
+                b: "#009900",
+                c: "#0099FF"
+            };
+        }
+        style() {
+            return {
+                ...super.style(),
+                width: this.width(),
+                "--color_a": this.color_a(),
+                "--color_b": this.color_b(),
+                "--color_c": this.color_c()
+            };
         }
         scene() {
             return this.Root().scene();
@@ -9278,13 +9670,82 @@ var $;
             const obj = new this.$.$mpds_cifplayer_scene();
             return obj;
         }
+        descr_a() {
+            return "a=";
+        }
+        Descr_a() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_a();
+            return obj;
+        }
+        descr_b() {
+            return "b=";
+        }
+        Descr_b() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_b();
+            return obj;
+        }
+        descr_c() {
+            return "c=";
+        }
+        Descr_c() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_c();
+            return obj;
+        }
+        descr_alpha() {
+            return "α=";
+        }
+        Descr_alpha() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_alpha();
+            return obj;
+        }
+        descr_beta() {
+            return "β=";
+        }
+        Descr_beta() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_beta();
+            return obj;
+        }
+        descr_gamma() {
+            return "γ=";
+        }
+        Descr_gamma() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.descr_gamma();
+            return obj;
+        }
+        symlabel() {
+            return "SG";
+        }
+        Symlabel() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.symlabel();
+            return obj;
+        }
+        Info() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Descr_a(),
+                this.Descr_b(),
+                this.Descr_c(),
+                this.Descr_alpha(),
+                this.Descr_beta(),
+                this.Descr_gamma(),
+                this.Symlabel()
+            ];
+            return obj;
+        }
         zoom_up(next) {
             if (next !== undefined)
                 return next;
             return null;
         }
         Zoom_up_icon() {
-            const obj = new this.$.$mol_icon_magnify_plus();
+            const obj = new this.$.$mol_icon_magnify_plus_outline();
             return obj;
         }
         Zoom_up() {
@@ -9301,7 +9762,7 @@ var $;
             return null;
         }
         Zoom_down_icon() {
-            const obj = new this.$.$mol_icon_magnify_minus();
+            const obj = new this.$.$mol_icon_magnify_minus_outline();
             return obj;
         }
         Zoom_down() {
@@ -9327,7 +9788,7 @@ var $;
             obj.Icon = () => this.Center_icon();
             return obj;
         }
-        Overlay() {
+        Tools() {
             const obj = new this.$.$mol_view();
             obj.sub = () => [
                 this.Zoom_up(),
@@ -9336,6 +9797,44 @@ var $;
             ];
             return obj;
         }
+        overlay(next) {
+            if (next !== undefined)
+                return next;
+            return "S";
+        }
+        available_overlays() {
+            return {
+                "": "none",
+                S: "elements"
+            };
+        }
+        Switch_overlay() {
+            const obj = new this.$.$mol_switch();
+            obj.value = (next) => this.overlay(next);
+            obj.options = () => this.available_overlays();
+            return obj;
+        }
+        Overlays_panel() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Switch_overlay()
+            ];
+            return obj;
+        }
+        width(next) {
+            if (next !== undefined)
+                return next;
+            return "0";
+        }
+        color_a() {
+            return "";
+        }
+        color_b() {
+            return "";
+        }
+        color_c() {
+            return "";
+        }
     }
     __decorate([
         $mol_mem
@@ -9343,6 +9842,30 @@ var $;
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "Root", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_a", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_b", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_c", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_alpha", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_beta", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Descr_gamma", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Symlabel", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Info", null);
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "zoom_up", null);
@@ -9372,7 +9895,19 @@ var $;
     ], $mpds_cifplayer_player.prototype, "Center", null);
     __decorate([
         $mol_mem
-    ], $mpds_cifplayer_player.prototype, "Overlay", null);
+    ], $mpds_cifplayer_player.prototype, "Tools", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "overlay", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Switch_overlay", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "Overlays_panel", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "width", null);
     $.$mpds_cifplayer_player = $mpds_cifplayer_player;
 })($ || ($ = {}));
 //mpds/cifplayer/player/-view.tree/player.view.tree.ts
@@ -9383,9 +9918,77 @@ var $;
     var $$;
     (function ($$) {
         $mol_style_define($mpds_cifplayer_player, {
-            Overlay: {
+            position: 'relative',
+            Descr_a: {
+                color: $mol_style_func.vary('--color_a')
+            },
+            Descr_b: {
+                color: $mol_style_func.vary('--color_b')
+            },
+            Descr_c: {
+                color: $mol_style_func.vary('--color_c')
+            },
+            Info: {
                 position: 'absolute',
+                padding: $mol_gap.block,
+                gap: $mol_gap.space,
                 zIndex: 1,
+                flex: {
+                    direction: 'column',
+                },
+            },
+            Overlays_panel: {
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                align: {
+                    items: 'center',
+                },
+                zIndex: 1,
+            },
+            Switch_overlay: {
+                justify: {
+                    content: 'center'
+                },
+            },
+            Tools: {
+                position: 'absolute',
+                right: 0,
+                top: '2rem',
+                zIndex: 1,
+                flex: {
+                    direction: 'column',
+                },
+            },
+            Zoom_up: {
+                width: '3rem',
+                height: '3rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
+            Zoom_up_icon: {
+                width: '125%',
+                height: '125%',
+            },
+            Zoom_down: {
+                width: '3rem',
+                height: '3rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
+            Zoom_down_icon: {
+                width: '125%',
+                height: '125%',
+            },
+            Center: {
+                width: '3rem',
+                height: '3rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
+            Center_icon: {
+                width: '80%',
+                height: '80%',
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -9396,6 +9999,11 @@ var $;
 var $;
 (function ($) {
     class $mpds_cifplayer_comparison extends $mol_book2_catalog {
+        plugins() {
+            return [
+                this.Theme()
+            ];
+        }
         menu_title() {
             return "CIF parsers comparison";
         }
@@ -9410,7 +10018,8 @@ var $;
         }
         menu_tools() {
             return [
-                this.Comparison_toggle()
+                this.Comparison_toggle(),
+                this.Lights()
             ];
         }
         Cif_spread(id) {
@@ -9527,6 +10136,10 @@ var $;
                 "/mpds/cifplayer/comparison/cifs/bad/022.cif"
             ];
         }
+        Theme() {
+            const obj = new this.$.$mol_theme_auto();
+            return obj;
+        }
         cif_spreads() {
             return {};
         }
@@ -9543,6 +10156,10 @@ var $;
             const obj = new this.$.$mol_check_icon();
             obj.Icon = () => this.Comparison_icon();
             obj.checked = (next) => this.comparison_on(next);
+            return obj;
+        }
+        Lights() {
+            const obj = new this.$.$mol_lights_toggle();
             return obj;
         }
         cif_title(id) {
@@ -9651,16 +10268,64 @@ var $;
             ];
             return obj;
         }
+        Menu_toggle_icon() {
+            const obj = new this.$.$mol_icon_arrow_right();
+            return obj;
+        }
+        menu_toogle(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        player_expanded() {
+            return false;
+        }
+        Menu_toggle() {
+            const obj = new this.$.$mol_check_icon();
+            obj.Icon = () => this.Menu_toggle_icon();
+            obj.click = (next) => this.menu_toogle(next);
+            obj.checked = () => this.player_expanded();
+            return obj;
+        }
+        player_visible_width() {
+            return "";
+        }
         Player(id) {
             const obj = new this.$.$mpds_cifplayer_player();
             obj.str = () => this.cif_value(id);
+            obj.width = () => this.player_visible_width();
             return obj;
+        }
+        player_view_rect(id) {
+            return this.Player_page_body(id).view_rect();
+        }
+        Player_page_body(id) {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Player(id)
+            ];
+            return obj;
+        }
+        Player_page_title(id) {
+            return this.Player_page(id).Title();
+        }
+        Player_page_tools(id) {
+            return this.Player_page(id).Tools();
+        }
+        Player_page_head(id) {
+            return this.Player_page(id).Head();
         }
         Player_page(id) {
             const obj = new this.$.$mol_page();
             obj.title = () => this.cif_title(id);
-            obj.body = () => [
-                this.Player(id)
+            obj.head = () => [
+                this.Menu_toggle(),
+                this.Player_page_title(id),
+                this.Player_page_tools(id)
+            ];
+            obj.sub = () => [
+                this.Player_page_head(id),
+                this.Player_page_body(id)
             ];
             return obj;
         }
@@ -9698,6 +10363,9 @@ var $;
     ], $mpds_cifplayer_comparison.prototype, "Cif_spread", null);
     __decorate([
         $mol_mem
+    ], $mpds_cifplayer_comparison.prototype, "Theme", null);
+    __decorate([
+        $mol_mem
     ], $mpds_cifplayer_comparison.prototype, "Comparison_icon", null);
     __decorate([
         $mol_mem
@@ -9705,6 +10373,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_comparison.prototype, "Comparison_toggle", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_comparison.prototype, "Lights", null);
     __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_comparison.prototype, "matinfio_expanded", null);
@@ -9748,8 +10419,20 @@ var $;
         $mol_mem_key
     ], $mpds_cifplayer_comparison.prototype, "Cif_page", null);
     __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_comparison.prototype, "Menu_toggle_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_comparison.prototype, "menu_toogle", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_comparison.prototype, "Menu_toggle", null);
+    __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_comparison.prototype, "Player", null);
+    __decorate([
+        $mol_mem_key
+    ], $mpds_cifplayer_comparison.prototype, "Player_page_body", null);
     __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_comparison.prototype, "Player_page", null);
@@ -9769,9 +10452,14 @@ var $;
     var $$;
     (function ($$) {
         $mol_style_define($mpds_cifplayer_comparison, {
+            Menu: {
+                flex: {
+                    basis: '20rem',
+                },
+            },
             Player_page: {
                 flex: {
-                    basis: '40rem',
+                    basis: '100%',
                     grow: 1,
                 },
             },
@@ -9780,8 +10468,9 @@ var $;
                     bottom: '2rem',
                 },
             },
-            Player: {
+            Player_page_body: {
                 flex: {
+                    basis: '20rem',
                     grow: 1,
                 },
             },
@@ -9792,6 +10481,16 @@ var $;
                     },
                 },
             },
+            Menu_toggle: {
+                '@': {
+                    mol_check_checked: {
+                        true: {
+                            transform: 'scaleX(-1)',
+                            color: $mol_theme.control,
+                        }
+                    }
+                }
+            }
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -13943,5 +14642,24 @@ var $;
     });
 })($ || ($ = {}));
 //mol/try/try.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_test({
+        'null by default'() {
+            const key = String(Math.random());
+            $mol_assert_equal($mol_state_session.value(key), null);
+        },
+        'storing'() {
+            const key = String(Math.random());
+            $mol_state_session.value(key, '$mol_state_session_test');
+            $mol_assert_equal($mol_state_session.value(key), '$mol_state_session_test');
+            $mol_state_session.value(key, null);
+            $mol_assert_equal($mol_state_session.value(key), null);
+        },
+    });
+})($ || ($ = {}));
+//mol/state/session/session.test.ts
 
 //# sourceMappingURL=node.test.js.map
