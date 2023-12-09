@@ -74,7 +74,7 @@ namespace $.$$ {
 			const rect = this.player_view_rect( this.spread() )
 			if ( ! rect  ) return '0px'
 			const visible_width = rect.width - rect.left
-			return visible_width + 'px'
+			return Math.max( visible_width, 300 ) + 'px'
 		}
 
 		@ $mol_mem

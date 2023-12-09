@@ -1,6 +1,6 @@
 namespace $.$$ {
 
-	const THREE = $mpds_cifplayer_lib_three.all()
+	const THREE = $mpds_cifplayer_lib_three
 	type THREE = typeof THREE
 
 	export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
@@ -251,7 +251,7 @@ namespace $.$$ {
 		new_box( name: string ) {
 			const old = this.scene()?.getObjectByName( name )
 			if( old ) {
-				$mpds_cifplayer_scene_dispose_deep( old )
+				$mpds_cifplayer_lib_three_view_dispose_deep( old )
 				this.scene()?.remove( old )
 			}
 			const box = new THREE.Object3D()
@@ -302,7 +302,7 @@ namespace $.$$ {
 			} else {
 				dir_light = new THREE.DirectionalLight( 0xffffff, intensity )
 				dir_light.position.set( 1, 1.5, 2 )
-				this.cell().add( dir_light )
+				this.scene().add( dir_light )
 			}
 			return dir_light
 		}
@@ -317,7 +317,7 @@ namespace $.$$ {
 				ambient_light.intensity = intensity
 			} else {
 				ambient_light = new THREE.AmbientLight( 0x999999, intensity )
-				this.cell().add( ambient_light )
+				this.scene().add( ambient_light )
 			}
 			return ambient_light
 		}
@@ -371,4 +371,3 @@ namespace $.$$ {
 	}
 
 }
-

@@ -1,6 +1,6 @@
 namespace $ {
 
-	const Mimpl = $mpds_cifplayer_lib_math.all()
+	const math = $mpds_cifplayer_lib_math
 
 	/** Prepare internal repr for visualization in three.js */
 	export function $mpds_cifplayer_matinfio_player_from_obj( this: $, crystal: any ) {
@@ -69,7 +69,7 @@ namespace $ {
 				// CIF has fractional positions
 				// OPTIMADE has cartesian positions
 				// POSCAR may have either of two
-				var cpos = crystal.cartesian ? pos : Mimpl.multiply( pos, cell )
+				var cpos = crystal.cartesian ? pos : math.multiply( pos, cell )
 				render.atoms.push( { 
 					"x": cpos[ 0 ],
 					"y": cpos[ 1 ],

@@ -1,6 +1,6 @@
 namespace $ {
 
-	const Mimpl = $mpds_cifplayer_lib_math.all()
+	const math = $mpds_cifplayer_lib_math
 
 	const is_numeric = function( v: any ) {
 		return !isNaN( parseFloat( v ) ) && isFinite( v )
@@ -105,7 +105,7 @@ namespace $ {
 			}
 		}
 
-		Mimpl.multiply( cell, factor )
+		math.multiply( cell, factor )
 
 		if( atoms.length )
 			return {

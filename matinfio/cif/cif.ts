@@ -1,13 +1,13 @@
 //@ts-nocheck
 namespace $ {
 
-	const Mimpl = $mpds_cifplayer_lib_math.all()
+	const math = $mpds_cifplayer_lib_math
 
 	const startswith = ( str: string, prefix: string ) => {
 		return str.indexOf( prefix ) === 0
 	}
 
-	export function $mpds_cifplayer_matinfio_cif_to_obj( str: string ) {
+	export function $mpds_cifplayer_matinfio_cif_to_obj( this: $, str: string ) {
 		var structures = [],
 			symops = [],
 			atprop_seq = [],
@@ -82,7 +82,7 @@ namespace $ {
 				continue
 
 			} else if( startswith( fingerprt, '_cif_error' ) ) { // custom tag
-				logger.error( cur_line.substr( 12, cur_line.length - 13 ) )
+				this.$mpds_cifplayer_matinfio_log.error( cur_line.substr( 12, cur_line.length - 13 ) )
 				return false
 
 			} else if( startswith( fingerprt, '_pauling_file_entry' ) ) { // custom tag
@@ -158,7 +158,7 @@ namespace $ {
 
 		if( structures.length ) return structures[ structures.length - 1 ] // TODO switch between frames
 		else {
-			logger.error( "Error: unexpected CIF format" )
+			this.$mpds_cifplayer_matinfio_log.error( "Error: unexpected CIF format" )
 			return false
 		}
 	}
@@ -199,15 +199,15 @@ namespace $ {
 
 		if( crystal.cartesian ) {
 
-			//var t_cell_mat = Mimpl.transpose(cell_mat);
+			//var t_cell_mat = math.transpose(cell_mat);
 			var t_cell_mat = cell_mat
 			//console.log(t_cell_mat);
 
 			crystal.atoms.forEach( function( atom: any, i: number ) {
 				//console.log([atom.x, atom.y, atom.z]);
 				// TODO better test lusolve against usolve, lsolve etc.
-				var solved = Mimpl.lusolve( t_cell_mat, [ atom.x, atom.y, atom.z ] ),
-					fracs = Mimpl.transpose( solved )[ 0 ]
+				var solved = math.lusolve( t_cell_mat, [ atom.x, atom.y, atom.z ] ),
+					fracs = math.transpose( solved )[ 0 ]
 
 				//console.log(fracs);
 				cif_str += " " + atom.symbol + ( i + 1 ) + "  " + atom.symbol + "  "

@@ -1,9 +1,9 @@
 namespace $ {
 
-	const Mimpl = $mpds_cifplayer_lib_math.all()
+	const math = $mpds_cifplayer_lib_math
 
 	function unit( vec: number[] ) {
-		return Mimpl.divide( vec, Mimpl.norm( vec ) )
+		return math.divide( vec, math.norm( vec ) )
 	}
 
 	/** Crystalline cell parameters to 3x3 matrix */
@@ -16,24 +16,24 @@ namespace $ {
 		const ab_norm = [ 0, 0, 1 ] // TODO
 		const a_dir = [ 1, 0, 0 ] // TODO
 		const Z = unit( ab_norm )
-		const X = unit( Mimpl.subtract( a_dir, Mimpl.multiply( Mimpl.dot( a_dir, Z ), Z ) ) )
-		const Y = Mimpl.cross( Z, X )
-		const va = Mimpl.multiply( a, [ 1, 0, 0 ] )
-		const vb = Mimpl.multiply( b, [ Mimpl.cos( gamma ), Mimpl.sin( gamma ), 0 ] )
-		const cx = Mimpl.cos( beta )
-		const cy = Mimpl.divide( Mimpl.subtract( Mimpl.cos( alpha ), Mimpl.multiply( Mimpl.cos( beta ), Mimpl.cos( gamma ) ) ), Mimpl.sin( gamma ) )
-		const cz = Mimpl.sqrt( Mimpl.subtract( Mimpl.subtract( 1, Mimpl.multiply( cx, cx ) ), Mimpl.multiply( cy, cy ) ) )
-		const vc = Mimpl.multiply( c, [ cx, cy, cz ] )
+		const X = unit( math.subtract( a_dir, math.multiply( math.dot( a_dir, Z ), Z ) ) )
+		const Y = math.cross( Z, X )
+		const va = math.multiply( a, [ 1, 0, 0 ] )
+		const vb = math.multiply( b, [ math.cos( gamma ), math.sin( gamma ), 0 ] )
+		const cx = math.cos( beta )
+		const cy = math.divide( math.subtract( math.cos( alpha ), math.multiply( math.cos( beta ), math.cos( gamma ) ) ), math.sin( gamma ) )
+		const cz = math.sqrt( math.subtract( math.subtract( 1, math.multiply( cx, cx ) ), math.multiply( cy, cy ) ) )
+		const vc = math.multiply( c, [ cx, cy, cz ] )
 		const abc = [ va, vb, vc ]
 		const t = [ X, Y, Z ]
-		return Mimpl.multiply( abc, t )
+		return math.multiply( abc, t )
 	}
 	/** 3x3 matrix to crystalline cell parameters */
 	export function $mpds_cifplayer_matinfio_cell_from_vec( matrix: number[] ) {
 		const norms: number[] = []
 		const angles = []
 		matrix.forEach( function( vec ) {
-			norms.push( Mimpl.norm( vec ) )
+			norms.push( math.norm( vec ) )
 		} )
 		let j = -1
 		let k = -2
@@ -42,7 +42,7 @@ namespace $ {
 			k = i - 2
 			const lenmult = norms[ j ] * norms[ k ]
 			const tau = lenmult > 1e-16 
-				? 180 / Math.PI * Math.acos( Mimpl.dot( matrix[ j ], matrix[ k ] ) / lenmult )
+				? 180 / Math.PI * Math.acos( math.dot( matrix[ j ], matrix[ k ] ) / lenmult )
 				: 90.0
 			angles.push( tau )
 		}

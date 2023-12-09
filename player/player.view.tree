@@ -4,7 +4,7 @@ $mpds_cifplayer_player $mol_view
 	atom_radius_scale 60
 	zoom_scale_step 0.3
 	sub /
-		<= Root $mpds_cifplayer_scene
+		<= Root $mpds_cifplayer_lib_three_view
 			scene => scene
 			controls => controls
 			camera => camera

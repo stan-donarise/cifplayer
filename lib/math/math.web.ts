@@ -1,12 +1,5 @@
 namespace $ {
 
-	export class $mpds_cifplayer_lib_math extends $mol_object2 {
-
-		@ $mol_mem
-		static all() {
-			return require( '../mpds/cifplayer/lib/math/math.js' )
-		}
-
-	}
+	export const $mpds_cifplayer_lib_math = require( '../mpds/cifplayer/lib/math/bundle/math.js' ) //as typeof import( '../math/build/index' )
 
 }

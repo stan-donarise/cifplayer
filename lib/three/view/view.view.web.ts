@@ -1,9 +1,9 @@
 namespace $.$$ {
 
-	const THREE = $mpds_cifplayer_lib_three.all()
+	const THREE = $mpds_cifplayer_lib_three
 	type THREE = typeof THREE
 
-	export class $mpds_cifplayer_scene extends $.$mpds_cifplayer_scene {
+	export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
 
 		@ $mol_mem
 		webgl_support() {
@@ -16,11 +16,6 @@ namespace $.$$ {
 		}
 
 		auto() {
-			const container = this.dom_node_actual()
-			if ( !container ) return
-			const renderer = this.renderer()
-			renderer.domElement.style.position = 'absolute' //otherwise renderer.domElement prevents dom_node from resizing
-			container.replaceChildren( renderer.domElement )
 			this.resize()
 			this.render_loop()
 		}
@@ -46,21 +41,22 @@ namespace $.$$ {
 			return controls
 		}
 
+		Canvas() {
+			return this.renderer()?.domElement
+		}
+
 		@ $mol_mem
 		renderer() {
-			$mol_wire_solid()
+			if ( ! this.scene() || ! this.camera() ) return
 			const renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } )
+			renderer.domElement.style.position = 'absolute'
 			return renderer
 		}
 
-		renderer_render() {
-			this.renderer()!.render( this.scene(), this.camera()! )
-		}
-
 		render_loop() {
-			this.renderer_render()
-			this.controls().update()
-			requestAnimationFrame( () => this.render_loop() )
+			this.renderer()?.render( this.scene(), this.camera() )
+			this.controls()?.update()
+			requestAnimationFrame( ()=> this.render_loop() )
 		}
 
 		@ $mol_mem
@@ -79,13 +75,9 @@ namespace $.$$ {
 			this.camera()!.updateProjectionMatrix()
 
 			this.renderer()!.setSize( width, height )
-			this.renderer_render()
+			this.render_loop()
 
 			this.controls().handleResize()
-		}
-
-		destructor(): void {
-			this.renderer().dispose()
 		}
 
 	}
@@ -97,7 +89,7 @@ namespace $.$$ {
 	 * @param object  Object3D, BufferGeometry, Material or Texture
 	 * @param disposeMedia If set to true will dispose of the texture image or video element, default false
 	 */
-	export function $mpds_cifplayer_scene_dispose_deep(
+	export function $mpds_cifplayer_lib_three_view_dispose_deep(
 		object: InstanceType< THREE["Object3D"] > | InstanceType< THREE["BufferGeometry"] > | InstanceType< THREE["Material"] > | InstanceType< THREE["Texture"] >
 	) {
 		const dispose = ( object: InstanceType< THREE["BufferGeometry"] > | InstanceType< THREE["Material"] > | InstanceType< THREE["Texture"] > ) => {
