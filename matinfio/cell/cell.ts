@@ -28,6 +28,7 @@ namespace $ {
 		const t = [ X, Y, Z ]
 		return math.multiply( abc, t )
 	}
+
 	/** 3x3 matrix to crystalline cell parameters */
 	export function $mpds_cifplayer_matinfio_cell_from_vec( matrix: number[] ) {
 		const norms: number[] = []
@@ -48,4 +49,5 @@ namespace $ {
 		}
 		return norms.concat( angles )
 	}
+	
 }

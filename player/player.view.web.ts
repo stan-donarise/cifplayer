@@ -91,7 +91,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		obj3d_raw() {
-			return $mpds_cifplayer_matinfio.to_player( this.str() ) as any
+			return new $mpds_cifplayer_matinfio( this.str() ).player() as any
 		}
 
 		draw_3d_line( box: any, start_arr: number[], finish_arr: number[], color = 0xDDDDDD ) {

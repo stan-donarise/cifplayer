@@ -1,7 +1,12 @@
 namespace $ {
 
-	export function $mpds_cifplayer_matinfio_optimade_to_obj( this: $, str: string ) {
+	export function $mpds_cifplayer_matinfio_optimade_str_to_obj( this: $, str: string ) {
 		const payload = JSON.parse( str )
+		
+		return this.$mpds_cifplayer_matinfio_optimade_to_obj( payload )
+	}
+
+	export function $mpds_cifplayer_matinfio_optimade_to_obj( this: $, payload: Record< string, any > ) {
 		const atoms: any[] = []
 		const src = payload?.data?.[ 0 ] ?? payload
 

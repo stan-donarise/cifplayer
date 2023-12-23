@@ -55,7 +55,7 @@ namespace $.$$ {
 
 		@ $mol_mem_key
 		matinfio_obj( id: any ): Record<string, any> {
-			return $mpds_cifplayer_matinfio.to_player( this.cif_value( id ) ) as any
+			return new $mpds_cifplayer_matinfio( this.cif_value( id ) ).player() as any
 		}
 
 		@ $mol_mem_key

@@ -17,6 +17,8 @@ namespace $ {
 		'label': 'labels'
 	}
 
+	type Format = 'CIF' | 'OPTIMADE' | 'POSCAR' | 'OPTIMADE_str' | 'unknown'
+
 	export const $mpds_cifplayer_matinfio_log = {
 		error: console.error,
 		warning: console.warn,
@@ -43,46 +45,50 @@ namespace $ {
 			return 'unknown'
 		}
 
-		static to_player( str: string ) {
-			var structure,
-				format = this.detect_format( str )
-				
-			switch( format ) {
-				case 'CIF': structure = this.$.$mpds_cifplayer_matinfio_cif_to_obj( str ); break
-				case 'POSCAR': structure = this.$.$mpds_cifplayer_matinfio_poscar_to_obj( str ); break
-				case 'OPTIMADE': structure = this.$.$mpds_cifplayer_matinfio_optimade_to_obj( str ); break
-				default: this.log.error( "Error: file format not recognized" )
-			}
-			if( !structure ) return false
-			return this.$.$mpds_cifplayer_matinfio_player_from_obj( structure )
+		readonly source: {
+			readonly data: any,
+			readonly format: Format,
 		}
 
-		static to_flatten( str: string ) {
-			var structure,
-				format = this.detect_format( str )
-
-			switch( format ) {
-				case 'CIF': structure = this.$.$mpds_cifplayer_matinfio_cif_to_obj( str ); break
-				case 'POSCAR': structure = this.$.$mpds_cifplayer_matinfio_poscar_to_obj( str ); break
-				case 'OPTIMADE': this.log.error( "OPTIMADE not supported" ); break
-				default: this.log.error( "Error: file format not recognized" )
+		constructor( data: any, format?: Format ) {
+			super()
+			this.source = {
+				data,
+				format: format ?? $mpds_cifplayer_matinfio.detect_format( data )
 			}
-			if( !structure ) return false
-			return this.$.$mpds_cifplayer_matinfio_flatten_from_obj( structure )
 		}
 
-		static to_cif( str: string ) {
-			var structure,
-				format = this.detect_format( str )
-
-			switch( format ) {
-				case 'CIF': return str
-				case 'POSCAR': structure = this.$.$mpds_cifplayer_matinfio_poscar_to_obj( str ); break
-				case 'OPTIMADE': structure = this.$.$mpds_cifplayer_matinfio_optimade_to_obj( str ); break
-				default: this.log.error( "Error: file format not recognized" )
+		@ $mol_mem
+		internal_obj() {
+			switch( this.source.format ) {
+				case 'CIF': return this.$.$mpds_cifplayer_matinfio_cif_to_obj( this.source.data )
+				case 'POSCAR': return this.$.$mpds_cifplayer_matinfio_poscar_to_obj( this.source.data )
+				case 'OPTIMADE': return this.$.$mpds_cifplayer_matinfio_optimade_to_obj( this.source.data )
+				case 'OPTIMADE_str': return this.$.$mpds_cifplayer_matinfio_optimade_str_to_obj( this.source.data )
+				default: this.$.$mpds_cifplayer_matinfio_log.error( "Error: file format not recognized" )
 			}
-			if( !structure ) return false
-			return this.$.$mpds_cifplayer_matinfio_cif_from_obj( structure )
+			return false
+		}
+		
+		@ $mol_mem
+		player() {
+			return this.$.$mpds_cifplayer_matinfio_player_from_obj( this.internal_obj() )
+		}
+
+		@ $mol_mem
+		flatten() {
+			if( this.source.format == 'OPTIMADE' ) {
+				this.$.$mpds_cifplayer_matinfio_log.error( "OPTIMADE not supported" )
+			}
+
+			return this.$.$mpds_cifplayer_matinfio_flatten_from_obj( this.internal_obj() )
+		}
+
+		@ $mol_mem
+		cif() {
+			if( this.source.format == 'CIF' ) return this.source.data
+
+			return this.$.$mpds_cifplayer_matinfio_cif_from_obj( this.internal_obj() )
 		}
 
 	}
