@@ -3,10 +3,18 @@ $mpds_cifplayer_player $mol_view
 	atom_pos_scale 100
 	atom_radius_scale 60
 	zoom_scale_step 0.3
+	auto /
+		<= cell null
+		<= axes null
+		<= dir_light null
+		<= ambient_light null
+		<= atom_box null
+		<= overlay_box null
 	sub /
 		<= Root $mpds_cifplayer_lib_three_view
 			scene => scene
 			controls => controls
+			controls_target <= controls_target null
 			camera => camera
 		<= Info $mol_view
 			sub /

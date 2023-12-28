@@ -17,7 +17,11 @@ namespace $.$$ {
 
 		auto() {
 			this.resize()
-			this.render_loop()
+			const render_loop = ()=> {
+				this.rerender()
+				requestAnimationFrame( ()=> render_loop() )
+			}
+			render_loop()
 		}
 
 		@ $mol_mem
@@ -34,15 +38,20 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		controls() {
-			const controls = new THREE.TrackballControls( this.camera()!, this.dom_node_actual() as HTMLElement )
-			controls.rotateSpeed = 7.5
-			controls.staticMoving = true
-			return controls
+		controls_target() {
+			return new THREE.Vector3()
 		}
 
-		Canvas() {
-			return this.renderer()?.domElement
+		@ $mol_mem
+		controls(): InstanceType< THREE["TrackballControls"] > {
+			const controls = $mol_mem_cached( ()=> this.controls() ) ??
+				new THREE.TrackballControls( this.camera()!, this.dom_node_actual() as HTMLElement )
+
+			controls.rotateSpeed = 7.5
+			controls.staticMoving = true
+			controls.target = this.controls_target()
+
+			return controls
 		}
 
 		@ $mol_mem
@@ -53,10 +62,14 @@ namespace $.$$ {
 			return renderer
 		}
 
-		render_loop() {
+		@ $mol_mem
+		canvas() {
+			return this.renderer()?.domElement
+		}
+
+		rerender() {
 			this.renderer()?.render( this.scene(), this.camera() )
 			this.controls()?.update()
-			requestAnimationFrame( ()=> this.render_loop() )
 		}
 
 		@ $mol_mem
@@ -75,7 +88,7 @@ namespace $.$$ {
 			this.camera()!.updateProjectionMatrix()
 
 			this.renderer()!.setSize( width, height )
-			this.render_loop()
+			this.rerender()
 
 			this.controls().handleResize()
 		}

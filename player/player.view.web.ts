@@ -16,47 +16,47 @@ namespace $.$$ {
 		available_overlays() {
 			return {
 				...super.available_overlays(),
-				...this.obj3d_raw().overlayed
+				...this.structure_3d_data().overlayed
 			}
 		}
 
 		@ $mol_mem
 		symlabel(): string {
-			return this.obj3d_raw().mpds_data
+			return this.structure_3d_data().mpds_data
 				? ''
-				: (this.obj3d_raw().descr.symlabel)
-					? 'SG ' + this.obj3d_raw().descr.symlabel
+				: (this.structure_3d_data().descr.symlabel)
+					? 'SG ' + this.structure_3d_data().descr.symlabel
 					: ''
 		}
 
 		@ $mol_mem
 		descr_a(): string {
-			return `a=${(Math.round(parseFloat(this.obj3d_raw().descr.a) * 1000) / 1000).toFixed(3)}Å`
+			return `a=${(Math.round(parseFloat(this.structure_3d_data().descr.a) * 1000) / 1000).toFixed(3)}Å`
 		}
 
 		@ $mol_mem
 		descr_b(): string {
-			return `b=${(Math.round(parseFloat(this.obj3d_raw().descr.b) * 1000) / 1000).toFixed(3)}Å`
+			return `b=${(Math.round(parseFloat(this.structure_3d_data().descr.b) * 1000) / 1000).toFixed(3)}Å`
 		}
 
 		@ $mol_mem
 		descr_c(): string {
-			return `c=${(Math.round(parseFloat(this.obj3d_raw().descr.c) * 1000) / 1000).toFixed(3)}Å`
+			return `c=${(Math.round(parseFloat(this.structure_3d_data().descr.c) * 1000) / 1000).toFixed(3)}Å`
 		}
 
 		@ $mol_mem
 		descr_alpha(): string {
-			return `α=${(Math.round(parseFloat(this.obj3d_raw().descr.alpha) * 1000) / 1000).toFixed(3)}°`
+			return `α=${(Math.round(parseFloat(this.structure_3d_data().descr.alpha) * 1000) / 1000).toFixed(3)}°`
 		}
 
 		@ $mol_mem
 		descr_beta(): string {
-			return `β=${(Math.round(parseFloat(this.obj3d_raw().descr.beta) * 1000) / 1000).toFixed(3)}°`
+			return `β=${(Math.round(parseFloat(this.structure_3d_data().descr.beta) * 1000) / 1000).toFixed(3)}°`
 		}
 
 		@ $mol_mem
 		descr_gamma(): string {
-			return `γ=${(Math.round(parseFloat(this.obj3d_raw().descr.gamma) * 1000) / 1000).toFixed(3)}°`
+			return `γ=${(Math.round(parseFloat(this.structure_3d_data().descr.gamma) * 1000) / 1000).toFixed(3)}°`
 		}
 
 		@$mol_mem
@@ -90,7 +90,7 @@ namespace $.$$ {
 		}
 
 		@$mol_mem
-		obj3d_raw() {
+		structure_3d_data() {
 			return new $mpds_cifplayer_matinfio( this.str() ).player() as any
 		}
 
@@ -129,13 +129,16 @@ namespace $.$$ {
 			const canvas = this.text_canvas( text )
 			const texture = new THREE.Texture( canvas )
 			texture.needsUpdate = true
+
 			const material = new THREE.SpriteMaterial( { map: texture, depthTest: false } )
 			const sprite = new THREE.Sprite( material )
 			sprite.renderOrder = 1
-			const txt = new THREE.Object3D()
 			sprite.scale.set( canvas.width, 30, 1 )
+
+			const txt = new THREE.Object3D()
 			txt.add( sprite )
 			txt.name = "label"
+
 			return txt
 		}
 
@@ -164,9 +167,9 @@ namespace $.$$ {
 			const ortes: number[][] = []
 
 			for( let i = 0; i < 3; i++ ) {
-				const x = Math.round( parseFloat( this.obj3d_raw().cell[ i ][ 0 ] ) * 1000 ) / 10
-				const y = Math.round( parseFloat( this.obj3d_raw().cell[ i ][ 1 ] ) * 1000 ) / 10
-				const z = Math.round( parseFloat( this.obj3d_raw().cell[ i ][ 2 ] ) * 1000 ) / 10
+				const x = Math.round( parseFloat( this.structure_3d_data().cell[ i ][ 0 ] ) * 1000 ) / 10
+				const y = Math.round( parseFloat( this.structure_3d_data().cell[ i ][ 1 ] ) * 1000 ) / 10
+				const z = Math.round( parseFloat( this.structure_3d_data().cell[ i ][ 2 ] ) * 1000 ) / 10
 				
 				ortes.push( [ x, y, z ] )
 			}
@@ -176,7 +179,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		axes() {
-			const box = this.new_box( 'axes' )
+			const box = this.new_three_object( 'axes' )
 
 			const origin = new THREE.Vector3( 0, 0, 0 )
 
@@ -197,29 +200,21 @@ namespace $.$$ {
 		}
 
 		@$mol_mem
-		centered( next?: any ): boolean {
-			if( next == true ) {
-				this.controls().target = this.cell_center().clone()
-			} else {
-				this.controls().target = new THREE.Vector3()
-			}
-			return next ?? false
-		}
-
-		@$mol_mem
 		cell_center() {
 			const ortes = this.ortes()
-			const x = ortes[ 0 ][ 0 ]
-			const y = ortes[ 1 ][ 1 ]
-			const z = ortes[ 2 ][ 2 ]
 			const vecs = ortes.map( v => new THREE.Vector3( v[ 0 ], v[ 1 ], v[ 2 ] ) )
 			const origin = vecs[ 0 ].add( vecs[ 1 ] ).add( vecs[ 2 ] ).multiplyScalar( 0.5 )
 			return origin
 		}
 
 		@$mol_mem
+		controls_target() {
+			return this.centered() ? this.cell_center().clone() : new THREE.Vector3()
+		}
+
+		@$mol_mem
 		atoms_midpoint() {
-			return ( this.obj3d_raw().atoms as any[] ).reduce(( acc: InstanceType< THREE["Vector3"] >, point: any ) => {
+			return ( this.structure_3d_data().atoms as any[] ).reduce(( acc: InstanceType< THREE["Vector3"] >, point: any ) => {
 
 				return acc.add( new THREE.Vector3(
 					point.x * this.atom_pos_scale(),
@@ -227,7 +222,7 @@ namespace $.$$ {
 					point.z * this.atom_pos_scale(),
 				) )
 
-			}, new THREE.Vector3() ).divideScalar( this.obj3d_raw().atoms.length )
+			}, new THREE.Vector3() ).divideScalar( this.structure_3d_data().atoms.length )
 		}
 
 		@$mol_mem
@@ -237,7 +232,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		scaled_atoms() {
-			return this.obj3d_raw().atoms.map( ( atom: any ) => {
+			return this.structure_3d_data().atoms.map( ( atom: any ) => {
 				return {
 					...atom,
 					x: Math.floor( atom.x * this.atom_pos_scale() ),
@@ -248,36 +243,36 @@ namespace $.$$ {
 			} )
 		}
 
-		new_box( name: string ) {
+		new_three_object( name: string ) {
 			const old = this.scene()?.getObjectByName( name )
 			if( old ) {
 				$mpds_cifplayer_lib_three_view_dispose_deep( old )
 				this.scene()?.remove( old )
 			}
-			const box = new THREE.Object3D()
-			box.name = name
-			this.scene().add( box )
-			return box
+			const obj = new THREE.Object3D()
+			obj.name = name
+			this.scene().add( obj )
+			return obj
 		}
 
 		@$mol_mem
 		overlay_box() {
-			const box = this.new_box( 'overlay_box' )
+			const overlay_box = this.new_three_object( 'overlay_box' )
 			this.scaled_atoms().forEach( ( data: any ) => {
 				const overlays = data.overlays
 				if( this.overlay() ) {
 					const label = this.create_sprite( overlays[ this.overlay() ] )
 					label.position.set( data.x, data.y, data.z )
 					label.position.add( this.atoms_shift() )
-					box.add( label )
+					overlay_box.add( label )
 				}
 			} )
-			return box
+			return overlay_box
 		}
 
 		@$mol_mem
 		atom_box() {
-			const box = this.new_box( 'atom_box' )
+			const atom_box = this.new_three_object( 'atom_box' )
 			this.scaled_atoms().forEach( ( data: any ) => {
 				const atom = new THREE.Mesh(
 					new THREE.SphereGeometry( data.r, this.sphere_resolution().w, this.sphere_resolution().h ),
@@ -286,24 +281,24 @@ namespace $.$$ {
 				atom.position.set( data.x, data.y, data.z )
 				atom.position.add( this.atoms_shift() )
 				atom.name = "atom"
-				box.add( atom )
+				atom_box.add( atom )
 			} )
-			return box
+			return atom_box
 		}
 		
 		@ $mol_mem
 		dir_light(): InstanceType< THREE["DirectionalLight"] >  {
 			const intensity = this.$.$mol_lights() ? 2 : 0.75
 
-			let dir_light = $mol_mem_cached( ()=> this.dir_light() )
-
-			if( dir_light ) {
-				dir_light.intensity = intensity
-			} else {
-				dir_light = new THREE.DirectionalLight( 0xffffff, intensity )
-				dir_light.position.set( 1, 1.5, 2 )
-				this.scene().add( dir_light )
+			const dir_light_old = $mol_mem_cached( ()=> this.dir_light() )
+			if( dir_light_old ) {
+				dir_light_old.intensity = intensity
+				return dir_light_old
 			}
+
+			const dir_light = new THREE.DirectionalLight( 0xffffff, intensity )
+			dir_light.position.set( 1, 1.5, 2 )
+			this.scene().add( dir_light )
 			return dir_light
 		}
 		
@@ -311,27 +306,27 @@ namespace $.$$ {
 		ambient_light(): InstanceType< THREE["AmbientLight"] > {
 			const intensity = this.$.$mol_lights() ? 3 : 1.25
 
-			let ambient_light = $mol_mem_cached( ()=> this.ambient_light() )
-
-			if( ambient_light ) {
-				ambient_light.intensity = intensity
-			} else {
-				ambient_light = new THREE.AmbientLight( 0x999999, intensity )
-				this.scene().add( ambient_light )
+			const ambient_light_old = $mol_mem_cached( ()=> this.ambient_light() )
+			if( ambient_light_old ) {
+				ambient_light_old.intensity = intensity
+				return ambient_light_old
 			}
+
+			const ambient_light = new THREE.AmbientLight( 0x999999, intensity )
+			this.scene().add( ambient_light )
 			return ambient_light
 		}
 
 		@$mol_mem
 		cell() {
-			const box = this.new_box( 'cell_box' )
+			const cell_box = this.new_three_object( 'cell_box' )
 			
 			const axes_helper = new THREE.AxesHelper( 200 )
 			const { x, y, z } = this.cell_center()
 			axes_helper.position.set( x, y, z )
-			box.add( axes_helper )
+			cell_box.add( axes_helper )
 
-			if( this.obj3d_raw().cell.length ) {
+			if( this.structure_3d_data().cell.length ) {
 
 				const ortes = this.ortes()
 
@@ -352,20 +347,11 @@ namespace $.$$ {
 				drawing_cell.push( [ plane_point3, dpoint ] )
 
 				for( let i = 0; i < drawing_cell.length; i++ ) {
-					this.draw_3d_line( box, drawing_cell[ i ][ 0 ], drawing_cell[ i ][ 1 ] )
+					this.draw_3d_line( cell_box, drawing_cell[ i ][ 0 ], drawing_cell[ i ][ 1 ] )
 				}
 			}
-			return box
-		}
-
-		auto() {
-			this.cell()
-			this.axes()
-			this.dir_light()
-			this.ambient_light()
-			this.atom_box()
-			this.overlay_box()
-			this.centered( true )
+			
+			return cell_box
 		}
 
 	}

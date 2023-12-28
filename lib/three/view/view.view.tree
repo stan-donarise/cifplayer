@@ -1,6 +1,7 @@
 $mpds_cifplayer_lib_three_view $mol_view
 	sub /
-		<= Canvas null
+		<= canvas null
 	scene null
 	camera null
 	controls null
+	controls_target null
