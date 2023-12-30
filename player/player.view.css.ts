@@ -2,11 +2,22 @@ namespace $.$$ {
 
 	$mol_style_define( $mpds_cifplayer_player, {
 
-		position: 'relative',
+		background: {
+			color: $mol_theme.back,
+		},
 
-		// Root: {
-		// 	position: 'absolute',
-		// },
+		'@': {
+			fullscreen: {
+				'true': {
+					position: 'fixed',
+					zIndex: 9999,
+					top: 0,
+					left: 0,
+					right: 0,
+					bottom: 0,
+				},
+			},
+		},
 
 		Descr_a: {
 			color: $mol_style_func.vary('--color_a')
@@ -22,12 +33,7 @@ namespace $.$$ {
 
 		Info: {
 			position: 'absolute',
-			// left: $mol_gap.block,
-			// top: $mol_gap.block,
 			padding: $mol_gap.block,
-			// align: {
-			// 	items: 'center',
-			// },
 			gap: $mol_gap.space,
 			zIndex: 1,
 			flex: {
@@ -54,44 +60,23 @@ namespace $.$$ {
 		Tools: {
 			position: 'absolute',
 			right: 0,
-			top: '2rem',
 			zIndex: 1,
 			flex: {
 				direction: 'column',
 			},
+			align: {
+				items: 'flex-end',
+			},
 		},
 
-		Zoom_up: {
-			width: '3rem',
-			height: '3rem',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
 		Zoom_up_icon: {
-			width: '125%',
-			height: '125%',
+			width: '2rem',
+			height: '2rem',
 		},
 
-		Zoom_down: {
-			width: '3rem',
-			height: '3rem',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
 		Zoom_down_icon: {
-			width: '125%',
-			height: '125%',
-		},
-
-		Center: {
-			width: '3rem',
-			height: '3rem',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		Center_icon: {
-			width: '80%',
-			height: '80%',
+			width: '2rem',
+			height: '2rem',
 		},
 
 	} )

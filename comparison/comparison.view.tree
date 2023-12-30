@@ -44,23 +44,8 @@ $mpds_cifplayer_comparison $mol_book2_catalog
 								value? <=> cif_value*? \
 			<= Player_page* $mol_page
 				title <= cif_title*
-				Title => Player_page_title*
-				Tools => Player_page_tools*
-				head /
-					<= Menu_toggle $mol_check_icon
-						Icon <= Menu_toggle_icon $mol_icon_arrow_right
-						click? <=> menu_toogle? null
-						checked <= player_expanded false
-					<= Player_page_title*
-					<= Player_page_tools*
-				Head => Player_page_head*
-				sub /
-					<= Player_page_head*
-					<= Player_page_body* $mol_view
-						view_rect => player_view_rect*
-						sub / <= Player* $mpds_cifplayer_player
-							str <= cif_value*?
-							width <= player_visible_width \
+				Body_content <= Player* $mpds_cifplayer_player
+					str <= cif_value*?
 	nasty_cif_section* /
 		<= Reference* $mol_labeler
 			title \Reference

@@ -34,15 +34,18 @@ $mpds_cifplayer_player $mol_view
 					title <= symlabel \SG
 		<= Tools $mol_view
 			sub /
+				<= Fullscreen $mol_check
+					checked? <=> fullscreen? false
+					Icon <= Expand_icon $mol_icon_arrow_expand_all
+				<= Center $mol_check_icon
+					checked? <=> centered? true
+					Icon <= Center_icon $mol_icon_image_filter_center_focus
 				<= Zoom_up $mol_button_minor
 					click? <=> zoom_up? null
 					sub / <= Zoom_up_icon $mol_icon_magnify_plus_outline
 				<= Zoom_down $mol_button_minor
 					click? <=> zoom_down? null
 					sub / <= Zoom_down_icon $mol_icon_magnify_minus_outline
-				<= Center $mol_check_icon
-					checked? <=> centered? true
-					Icon <= Center_icon $mol_icon_image_filter_center_focus
 		<= Overlays_panel $mol_view
 			sub /
 				<= Switch_overlay $mol_switch
@@ -59,7 +62,9 @@ $mpds_cifplayer_player $mol_view
 		c \#0099FF
 	style *
 		^
-		width <= width? \0
 		--color_a <= color_a \
 		--color_b <= color_b \
 		--color_c <= color_c \
+	attr *
+		^
+		fullscreen <= fullscreen?

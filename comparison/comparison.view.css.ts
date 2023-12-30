@@ -2,6 +2,8 @@ namespace $.$$ {
 
 	$mol_style_define( $mpds_cifplayer_comparison, {
 
+		contain: 'none', //otherwise in fullscreen 'fixed' positions plot relative to parent not to the viewport
+
 		Menu: {
 			flex: {
 				basis: '20rem',
@@ -10,22 +12,18 @@ namespace $.$$ {
 
 		Player_page: {
 			flex: {
-				basis: '100%',
-				// basis: '30rem',
 				grow: 1,
+				basis: '30rem',
+			},
+			Body: {
+				contain: 'none', //otherwise in fullscreen 'fixed' positions plot relative to parent not to the viewport
+				transform: 'none',
 			},
 		},
 
 		Row: {
 			padding: {
 				bottom: '2rem',
-			},
-		},
-		
-		Player_page_body: {
-			flex: {
-				basis: '20rem',
-				grow: 1,
 			},
 		},
 
@@ -36,17 +34,6 @@ namespace $.$$ {
 				},
 			},
 		},
-
-		Menu_toggle: {
-			'@': {
-				mol_check_checked: {
-					true: {
-						transform: 'scaleX(-1)',
-						color: $mol_theme.control,
-					}
-				}
-			}
-		}
 
 	} )
 
