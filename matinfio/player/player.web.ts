@@ -3,12 +3,12 @@ namespace $ {
 	const math = $mpds_cifplayer_lib_math
 
 	/** Prepare internal repr for visualization in three.js */
-	export function $mpds_cifplayer_matinfio_player_from_obj( this: $, crystal: any ) {
+	export function $mpds_cifplayer_matinfio_player_from_obj( this: $, crystal: $mpds_cifplayer_matinfio_internal_obj ) {
 		var cell
 		let descr: any = false
 
 		if( Object.keys( crystal.cell ).length == 6 ) { // for CIF
-			cell = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell.a, crystal.cell.b, crystal.cell.c, crystal.cell.alpha, crystal.cell.beta, crystal.cell.gamma )
+			cell = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell )
 			descr = crystal.cell
 			var symlabel = ( crystal.sg_name || crystal.ng_name ) ? ( ( crystal.sg_name ? crystal.sg_name : "" ) + ( crystal.ng_name ? ( " (" + crystal.ng_name + ")" ) : "" ) ) : false
 			if( symlabel ) descr.symlabel = symlabel
@@ -20,15 +20,15 @@ namespace $ {
 		if( !crystal.atoms.length ) this.$mpds_cifplayer_matinfio_log.warning( "Note: no atomic coordinates supplied" )
 
 		const render = {
-			"atoms": [] as any[],
-			"cell": cell,
-			"descr": descr,
-			"overlayed": {} as Record< string, string >,
-			"sg_name": crystal.sg_name,
-			"ng_name": parseInt( crystal.ng_name ),
-			"info": crystal.info,
-			"mpds_data": crystal.mpds_data,
-			"mpds_demo": crystal.mpds_demo
+			atoms: [] as any[],
+			cell: cell,
+			descr: descr,
+			overlayed: {} as Record< string, string >,
+			sg_name: crystal.sg_name,
+			ng_name: parseInt( crystal.ng_name ),
+			info: crystal.info,
+			mpds_data: crystal.mpds_data,
+			mpds_demo: crystal.mpds_demo
 		}
 		const pos2els: any = {}
 		const hashes: any = {}
@@ -92,7 +92,7 @@ namespace $ {
 			}
 		}
 
-		for( let oprop in crystal.atoms.at(-1).overlays ) {
+		for( let oprop in crystal.atoms.at(-1)!.overlays ) {
 			render.overlayed[ oprop ] = $mpds_cifplayer_matinfio_custom_atom_loop_props[ oprop ]
 		}
 		

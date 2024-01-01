@@ -24,6 +24,38 @@ namespace $ {
 		warning: console.warn,
 	}
 
+	export type $mpds_cifplayer_matinfio_internal_obj_atom = {
+		fract: {
+			x: number,
+			y: number,
+			z: number,
+		},
+		x: number,
+		y: number,
+		z: number,
+		symbol: string,
+		label: string,
+		overlays: Record< string, string | number >,
+	}
+
+	export type $mpds_cifplayer_matinfio_internal_obj = {
+		cell: {
+			a: number, 
+			b: number, 
+			c: number, 
+			alpha: number, 
+			beta: number, 
+			gamma: number,
+		},
+		atoms: $mpds_cifplayer_matinfio_internal_obj_atom[],
+		sg_name: string,
+		ng_name: string,
+		info: string,
+		cartesian: boolean,
+		mpds_demo: boolean,
+		mpds_data: boolean,
+	}
+
 	export class $mpds_cifplayer_matinfio extends $mol_object2 {
 
 		static log = this.$.$mpds_cifplayer_matinfio_log
@@ -59,15 +91,15 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		internal_obj() {
+		internal_obj(): $mpds_cifplayer_matinfio_internal_obj {
 			switch( this.source.format ) {
 				case 'CIF': return this.$.$mpds_cifplayer_matinfio_cif_to_obj( this.source.data )
-				case 'POSCAR': return this.$.$mpds_cifplayer_matinfio_poscar_to_obj( this.source.data )
-				case 'OPTIMADE': return this.$.$mpds_cifplayer_matinfio_optimade_to_obj( this.source.data )
-				case 'OPTIMADE_str': return this.$.$mpds_cifplayer_matinfio_optimade_str_to_obj( this.source.data )
+				case 'POSCAR': return this.$.$mpds_cifplayer_matinfio_poscar_to_obj( this.source.data ) as any
+				case 'OPTIMADE': return this.$.$mpds_cifplayer_matinfio_optimade_to_obj( this.source.data ) as any
+				case 'OPTIMADE_str': return this.$.$mpds_cifplayer_matinfio_optimade_str_to_obj( this.source.data ) as any
 				default: this.$.$mpds_cifplayer_matinfio_log.error( "Error: file format not recognized" )
 			}
-			return false
+			return this.$.$mol_fail( new $mol_data_error('Error: file format not recognized') )
 		}
 		
 		@ $mol_mem

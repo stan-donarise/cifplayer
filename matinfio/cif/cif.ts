@@ -1,4 +1,3 @@
-//@ts-nocheck
 namespace $ {
 
 	const math = $mpds_cifplayer_lib_math
@@ -7,36 +6,36 @@ namespace $ {
 		return str.indexOf( prefix ) === 0
 	}
 
-	export function $mpds_cifplayer_matinfio_cif_to_obj( this: $, str: string ) {
-		var structures = [],
-			symops = [],
-			atprop_seq = [],
-			lines = str.toString().replace( /(\r\n|\r)/gm, "\n" ).split( "\n" ),
-			cur_structure = {
-				cell: {} as any,
-				atoms: [],
-				cartesian: false,
-				mpds_demo: false,
-			} as any,
-			loop_active = false,
-			new_structure = false,
-			symops_active = false,
-			data_info = "",
-			cur_line = "",
-			fingerprt = "",
-			line_data: any[] = [],
-			symmetry_seq = [],
-			cell_props = [ 'a', 'b', 'c', 'alpha', 'beta', 'gamma' ],
-			loop_vals = [ 
-				'_atom_site_label',
-				'_atom_site_type_symbol',
-				'_atom_site_fract_x',
-				'_atom_site_fract_y',
-				'_atom_site_fract_z',
-			],
-			atom_props = [ 'label', 'symbol', 'x', 'y', 'z' ],
-			chem_element_idxs = [ 0, 1 ],
-			overlayed_idxs = []
+	export function $mpds_cifplayer_matinfio_cif_to_obj( this: $, str: string ): $mpds_cifplayer_matinfio_internal_obj {
+		const structures = []
+		let symops = []
+		let atprop_seq: any[] = []
+		let lines = str.toString().replace( /(\r\n|\r)/gm, "\n" ).split( "\n" )
+		let cur_structure: any | $mpds_cifplayer_matinfio_internal_obj = {
+			cell: {},
+			atoms: [],
+			cartesian: false,
+			mpds_demo: false,
+		}
+		let loop_active = false
+		let new_structure = false
+		let symops_active = false
+		let data_info = ""
+		let cur_line = ""
+		let fingerprt = ""
+		let line_data: any[] = []
+		let symmetry_seq = []
+		const cell_props = [ 'a', 'b', 'c', 'alpha', 'beta', 'gamma' ]
+		const loop_vals = [ 
+			'_atom_site_label',
+			'_atom_site_type_symbol',
+			'_atom_site_fract_x',
+			'_atom_site_fract_y',
+			'_atom_site_fract_z',
+		]
+		const atom_props = [ 'label', 'symbol', 'x', 'y', 'z' ]
+		const chem_element_idxs = [ 0, 1 ]
+		let overlayed_idxs = []
 
 		for( let oprop in $mpds_cifplayer_matinfio_custom_atom_loop_props ) {
 			overlayed_idxs.push( loop_vals.length )
@@ -63,16 +62,16 @@ namespace $ {
 			} else if( startswith( fingerprt, '_cell_' ) ) {
 				loop_active = false
 				line_data = cur_line.split( " " )
-				var cell_data = line_data[ 0 ].split( "_" ),
-					cell_value = cell_data[ cell_data.length - 1 ]
-				if( cell_props.indexOf( cell_value ) !== -1 && line_data[ line_data.length - 1 ] ) {
+				const cell_data = line_data[ 0 ].split( "_" )
+				const cell_prop_name = cell_data[ cell_data.length - 1 ]
+				if( cell_props.indexOf( cell_prop_name ) !== -1 && line_data[ line_data.length - 1 ] ) {
 
-					if( cell_value == 'a' ) { // MPDS demo check
-						var digits = line_data[ line_data.length - 1 ].split( '.' )
+					if( cell_prop_name == 'a' ) { // MPDS demo check
+						const digits = line_data[ line_data.length - 1 ].split( '.' )
 						if( digits[ digits.length - 1 ].length == 2 )
 							cur_structure.mpds_demo = true
 					}
-					cur_structure.cell[ cell_value ] = parseFloat( line_data[ line_data.length - 1 ] )
+					cur_structure.cell[ cell_prop_name ] = parseFloat( line_data[ line_data.length - 1 ] )
 				}
 				continue
 
@@ -88,17 +87,17 @@ namespace $ {
 				continue
 
 			} else if( startswith( fingerprt, '_cif_error' ) ) { // custom tag
-				this.$mpds_cifplayer_matinfio_log.error( cur_line.substr( 12, cur_line.length - 13 ) )
-				return false
+				const error_message = cur_line.substr( 12, cur_line.length - 13 )
+				return this.$mol_fail( new $mol_data_error( error_message ) )
 
 			} else if( startswith( fingerprt, '_pauling_file_entry' ) ) { // custom tag
 				cur_structure.mpds_data = true
 				continue
 
 			} else if( startswith( fingerprt, 'loop_' ) ) {
-				loop_active = true,
-					atprop_seq = [],
-					symops_active = false
+				loop_active = true
+				atprop_seq = []
+				symops_active = false
 				continue
 			}
 
@@ -114,14 +113,12 @@ namespace $ {
 					}
 					line_data = cur_line.replace( /\t/g, " " ).split( " " ).filter( function( o ) { return o ? true : false } )
 
-					var atom = { 'overlays': {} as Record< string, string > },
-						j = 0,
-						len2 = atprop_seq.length // TODO handle in-loop mismatch
+					const atom: any | $mpds_cifplayer_matinfio_internal_obj_atom = { overlays: {} }
 
-					for( ; j < len2; j++ ) {
-						var atom_index = loop_vals.indexOf( atprop_seq[ j ] )
+					for( let j = 0; j < atprop_seq.length; j++ ) { // TODO handle in-loop mismatch
+						const atom_index = loop_vals.indexOf( atprop_seq[ j ] )
 						if( atom_index == -1 ) continue
-						var pos = chem_element_idxs.indexOf( atom_index )
+						const pos = chem_element_idxs.indexOf( atom_index )
 
 						// NB label != symbol
 						if( pos == 1 ) line_data[ j ] = line_data[ j ].charAt( 0 ).toUpperCase() + line_data[ j ].slice( 1 ).toLowerCase()
@@ -136,7 +133,10 @@ namespace $ {
 							atom.overlays.label = atom.label
 							if( !atom.symbol ) atom.symbol = atom.label.replace( /[0-9]/g, '' )
 						}
-						if( !$mpds_cifplayer_matinfio_chemical_elements.JmolColors[ atom.symbol ] && atom.symbol && atom.symbol.length > 1 ) {
+						if( !( $mpds_cifplayer_matinfio_chemical_elements.JmolColors as any )[ atom.symbol ] 
+							&& atom.symbol 
+							&& atom.symbol.length > 1 
+						) {
 							atom.symbol = atom.symbol.substr( 0, atom.symbol.length - 1 )
 						}
 						if( !!atom.symbol ) {
@@ -155,8 +155,8 @@ namespace $ {
 					'cell': {},
 					'atoms': [],
 					'cartesian': false
-				},
-					symops = []
+				}
+				symops = []
 			}
 		}
 		if( cur_structure.cell.gamma ) {
@@ -165,11 +165,9 @@ namespace $ {
 			structures.push( cur_structure )
 		}
 
-		if( structures.length ) return structures[ structures.length - 1 ] // TODO switch between frames
-		else {
-			this.$mpds_cifplayer_matinfio_log.error( "Error: unexpected CIF format" )
-			return false
-		}
+		if( !structures.length ) return this.$mol_fail( new $mol_data_error('Error: unexpected CIF format') )
+		
+		return structures[ structures.length - 1 ] // TODO switch between frames
 	}
 
 
@@ -183,7 +181,7 @@ namespace $ {
 
 		if( Object.keys( crystal.cell ).length == 6 ) {
 			cell_abc = crystal.cell
-			cell_mat = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell.a, crystal.cell.b, crystal.cell.c, crystal.cell.alpha, crystal.cell.beta, crystal.cell.gamma )
+			cell_mat = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell )
 			// cell_mat = this.cell2vec( ...( crystal.cell as [ number, number, number, number, number, number ] ) )
 		} else {
 			cell_abc = $mpds_cifplayer_matinfio_cell_from_vec( crystal.cell )
