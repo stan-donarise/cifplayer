@@ -52,6 +52,11 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_func_name(this: $, func: Function): string;
+    function $mol_func_name_from<Target extends Function>(target: Target, source: Function): Target;
+}
+
+declare namespace $ {
     class $mol_object2 {
         static $: typeof $$;
         [Symbol.toStringTag]: string;
@@ -62,7 +67,9 @@ declare namespace $ {
         static [Symbol.toPrimitive](): string;
         static toString(): string;
         destructor(): void;
+        static destructor(): void;
         toString(): string;
+        static toJSON(): any;
         toJSON(): any;
     }
 }
@@ -222,11 +229,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_func_name(this: $, func: Function): string;
-    function $mol_func_name_from<Target extends Function>(target: Target, source: Function): Target;
-}
-
-declare namespace $ {
     function $mol_guid(length?: number, exists?: (id: string) => boolean): string;
 }
 
@@ -238,6 +240,39 @@ declare namespace $ {
 declare namespace $ {
     let $mol_compare_deep_cache: WeakMap<any, WeakMap<any, boolean>>;
     function $mol_compare_deep<Value>(left: Value, right: Value): boolean;
+}
+
+declare namespace $ {
+    type $mol_log3_event<Fields> = {
+        [key in string]: unknown;
+    } & {
+        time?: string;
+        place: unknown;
+        message: string;
+    } & Fields;
+    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
+    let $mol_log3_come: $mol_log3_logger<{}>;
+    let $mol_log3_done: $mol_log3_logger<{}>;
+    let $mol_log3_fail: $mol_log3_logger<{}>;
+    let $mol_log3_warn: $mol_log3_logger<{
+        hint: string;
+    }>;
+    let $mol_log3_rise: $mol_log3_logger<{}>;
+    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
+    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
+    let $mol_log3_stack: (() => void)[];
+}
+
+declare namespace $ {
+    type $mol_type_keys_extract<Input, Upper, Lower = never> = {
+        [Field in keyof Input]: unknown extends Input[Field] ? never : Input[Field] extends never ? never : Input[Field] extends Upper ? [
+            Lower
+        ] extends [Input[Field]] ? Field : never : never;
+    }[keyof Input];
+}
+
+declare namespace $ {
+    function $mol_log3_web_make(level: $mol_type_keys_extract<Console, Function>, color: string): (this: $, event: $mol_log3_event<{}>) => () => void;
 }
 
 declare namespace $ {
@@ -435,14 +470,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_type_keys_extract<Input, Upper, Lower = never> = {
-        [Field in keyof Input]: unknown extends Input[Field] ? never : Input[Field] extends never ? never : Input[Field] extends Upper ? [
-            Lower
-        ] extends [Input[Field]] ? Field : never : never;
-    }[keyof Input];
-}
-
-declare namespace $ {
     type $mol_type_pick<Input, Upper> = Pick<Input, $mol_type_keys_extract<Input, Upper>>;
 }
 
@@ -467,6 +494,7 @@ declare namespace $ {
     type $mol_style_unit_angle = 'deg' | 'rad' | 'grad' | 'turn';
     type $mol_style_unit_time = 's' | 'ms';
     type $mol_style_unit_any = $mol_style_unit_length | $mol_style_unit_angle | $mol_style_unit_time;
+    type $mol_style_unit_str<Quanity extends $mol_style_unit_any> = `${number}${Quanity}`;
     class $mol_style_unit<Literal extends $mol_style_unit_any> extends $mol_decor<number> {
         readonly literal: Literal;
         constructor(value: number, literal: Literal);
@@ -503,33 +531,35 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_style_func_name = 'calc' | 'hsla' | 'rgba' | 'var' | 'clamp' | 'url' | 'scale' | 'cubic-bezier' | 'linear' | 'steps' | $mol_style_func_filter;
+    type $mol_style_func_name = 'calc' | 'hsla' | 'rgba' | 'var' | 'clamp' | 'scale' | 'cubic-bezier' | 'linear' | 'steps' | $mol_style_func_image | $mol_style_func_filter;
+    type $mol_style_func_image = 'url' | 'linear-gradient' | 'radial-gradient' | 'conic-gradient';
     type $mol_style_func_filter = 'blur' | 'brightness' | 'contrast' | 'drop-shadow' | 'grayscale' | 'hue-rotate' | 'invert' | 'opacity' | 'sepia' | 'saturate';
     class $mol_style_func<Name extends $mol_style_func_name, Value = unknown> extends $mol_decor<Value> {
         readonly name: Name;
         constructor(name: Name, value: Value);
         prefix(): string;
         postfix(): string;
+        static linear_gradient<Value>(value: Value): $mol_style_func<"linear-gradient", Value>;
         static calc<Value>(value: Value): $mol_style_func<"calc", Value>;
         static vary<Name extends string, Value extends string>(name: Name, defaultValue?: Value): $mol_style_func<"var", Name | (Name | Value)[]>;
         static url<Href extends string>(href: Href): $mol_style_func<"url", string>;
         static hsla(hue: number, saturation: number, lightness: number, alpha: number): $mol_style_func<"hsla", (number | `${number}%`)[]>;
-        static clamp(min: $mol_style_unit<any>, mid: $mol_style_unit<any>, max: $mol_style_unit<any>): $mol_style_func<"clamp", $mol_style_unit<any>[]>;
+        static clamp(min: $mol_style_unit_str<any>, mid: $mol_style_unit_str<any>, max: $mol_style_unit_str<any>): $mol_style_func<"clamp", `${number}${any}`[]>;
         static rgba(red: number, green: number, blue: number, alpha: number): $mol_style_func<"rgba", number[]>;
         static scale(zoom: number): $mol_style_func<"scale", number[]>;
-        static linear(...breakpoints: Array<number | [number, number | $mol_style_unit<'%'>]>): $mol_style_func<"linear", string[]>;
+        static linear(...breakpoints: Array<number | [number, number | $mol_style_unit_str<'%'>]>): $mol_style_func<"linear", string[]>;
         static cubic_bezier(x1: number, y1: number, x2: number, y2: number): $mol_style_func<"cubic-bezier", number[]>;
         static steps(value: number, step_position: 'jump-start' | 'jump-end' | 'jump-none' | 'jump-both' | 'start' | 'end'): $mol_style_func<"steps", (number | "end" | "start" | "jump-start" | "jump-end" | "jump-none" | "jump-both")[]>;
-        static blur(value?: $mol_style_unit<$mol_style_unit_length>): $mol_style_func<"blur", string | $mol_style_unit<$mol_style_unit_length>>;
-        static brightness(value?: number | $mol_style_unit<'%'>): $mol_style_func<"brightness", string | number | $mol_style_unit<"%">>;
-        static contrast(value?: number | $mol_style_unit<'%'>): $mol_style_func<"contrast", string | number | $mol_style_unit<"%">>;
-        static drop_shadow(color: $mol_style_properties_color, x_offset: $mol_style_unit<$mol_style_unit_length>, y_offset: $mol_style_unit<$mol_style_unit_length>, blur_radius?: $mol_style_unit<$mol_style_unit_length>): $mol_style_func<"drop-shadow", ($mol_style_unit<$mol_style_unit_length> | $mol_style_properties_color)[]>;
-        static grayscale(value?: number | $mol_style_unit<'%'>): $mol_style_func<"grayscale", string | number | $mol_style_unit<"%">>;
-        static hue_rotate(value?: 0 | $mol_style_unit<$mol_style_unit_angle>): $mol_style_func<"hue-rotate", string | 0 | $mol_style_unit<$mol_style_unit_angle>>;
-        static invert(value?: number | $mol_style_unit<'%'>): $mol_style_func<"invert", string | number | $mol_style_unit<"%">>;
-        static opacity(value?: number | $mol_style_unit<'%'>): $mol_style_func<"opacity", string | number | $mol_style_unit<"%">>;
-        static sepia(value?: number | $mol_style_unit<'%'>): $mol_style_func<"sepia", string | number | $mol_style_unit<"%">>;
-        static saturate(value?: number | $mol_style_unit<'%'>): $mol_style_func<"saturate", string | number | $mol_style_unit<"%">>;
+        static blur(value?: $mol_style_unit_str<$mol_style_unit_length>): $mol_style_func<"blur", string>;
+        static brightness(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"brightness", string | number>;
+        static contrast(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"contrast", string | number>;
+        static drop_shadow(color: $mol_style_properties_color, x_offset: $mol_style_unit_str<$mol_style_unit_length>, y_offset: $mol_style_unit_str<$mol_style_unit_length>, blur_radius?: $mol_style_unit_str<$mol_style_unit_length>): $mol_style_func<"drop-shadow", (`${number}%` | `${number}px` | `${number}mm` | `${number}cm` | `${number}Q` | `${number}in` | `${number}pc` | `${number}pt` | `${number}cap` | `${number}ch` | `${number}em` | `${number}rem` | `${number}ex` | `${number}ic` | `${number}lh` | `${number}rlh` | `${number}vh` | `${number}vw` | `${number}vi` | `${number}vb` | `${number}vmin` | `${number}vmax` | $mol_style_properties_color)[]>;
+        static grayscale(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"grayscale", string | number>;
+        static hue_rotate(value?: 0 | $mol_style_unit_str<$mol_style_unit_angle>): $mol_style_func<"hue-rotate", string | 0>;
+        static invert(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"invert", string | number>;
+        static opacity(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"opacity", string | number>;
+        static sepia(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"sepia", string | number>;
+        static saturate(value?: number | $mol_style_unit_str<'%'>): $mol_style_func<"saturate", string | number>;
     }
 }
 
@@ -609,7 +639,7 @@ declare namespace $ {
             blendMode?: Mix_blend_mode | Mix_blend_mode[][] | Common;
             clip?: Box | Box[][] | Common;
             color?: $mol_style_properties_color | Common;
-            image?: readonly (readonly [$mol_style_func<'url'> | string & {}])[] | 'none' | Common;
+            image?: readonly (readonly [$mol_style_func<$mol_style_func_image> | string & {}])[] | 'none' | Common;
             repeat?: Repeat | [Repeat, Repeat] | Common;
             position?: 'left' | 'right' | 'top' | 'bottom' | 'center' | Common;
             size?: (BG_size | [BG_size, BG_size])[];
@@ -850,8 +880,10 @@ declare namespace $ {
     type Keys<View extends $mol_view> = '>' | '@' | keyof $mol_style_properties | $mol_style_pseudo_element | $mol_style_pseudo_class | $mol_type_keys_extract<View, () => $mol_view> | `$${string}`;
     export type $mol_style_guard<View extends $mol_view, Config> = {
         [key in Keys<View>]?: unknown;
-    } & {
-        [key in keyof Config]: key extends keyof $mol_style_properties ? $mol_style_properties[key] : key extends '>' | $mol_style_pseudo_class | $mol_style_pseudo_element ? $mol_style_guard<View, Config[key]> : key extends '@' ? Attrs<View, Config[key]> : key extends '@media' ? Medias<View, Config[key]> : key extends `--${string}` ? any : key extends keyof $ ? $mol_style_guard<InstanceType<Extract<$[key], typeof $mol_view>>, Config[key]> : key extends keyof View ? View[key] extends (id?: any) => infer Sub ? Sub extends $mol_view ? $mol_style_guard<Sub, Config[key]> : $mol_type_error<'Property returns non $mol_view', {
+    } & $mol_style_properties & {
+        [key in keyof Config]: key extends keyof $mol_style_properties ? $mol_style_properties[key] : key extends '>' | $mol_style_pseudo_class | $mol_style_pseudo_element ? $mol_style_guard<View, Config[key]> : key extends '@' ? Attrs<View, Config[key]> : key extends '@media' ? Medias<View, Config[key]> : key extends `[${string}]` ? {
+            [val in keyof Config[key]]: $mol_style_guard<View, Config[key][val]>;
+        } : key extends `--${string}` ? any : key extends keyof $ ? $mol_style_guard<InstanceType<Extract<$[key], typeof $mol_view>>, Config[key]> : key extends keyof View ? View[key] extends (id?: any) => infer Sub ? Sub extends $mol_view ? $mol_style_guard<Sub, Config[key]> : $mol_type_error<'Property returns non $mol_view', {
             Returns: Sub;
         }> : $mol_type_error<'Field is not a Property'> : key extends `$${string}` ? $mol_type_error<'Unknown View Class'> : $mol_type_error<'Unknown CSS Property'>;
     };
@@ -923,6 +955,7 @@ declare namespace $ {
         target(): string;
         file_name(): string;
         current(): boolean;
+        relation(): string;
         event_click(event?: any): any;
         click(event?: any): any;
     }
@@ -1369,31 +1402,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_log3_event<Fields> = {
-        [key in string]: unknown;
-    } & {
-        time?: string;
-        place: unknown;
-        message: string;
-    } & Fields;
-    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
-    let $mol_log3_come: $mol_log3_logger<{}>;
-    let $mol_log3_done: $mol_log3_logger<{}>;
-    let $mol_log3_fail: $mol_log3_logger<{}>;
-    let $mol_log3_warn: $mol_log3_logger<{
-        hint: string;
-    }>;
-    let $mol_log3_rise: $mol_log3_logger<{}>;
-    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
-    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
-    let $mol_log3_stack: (() => void)[];
-}
-
-declare namespace $ {
-    function $mol_log3_web_make(level: $mol_type_keys_extract<Console, Function>, color: string): (this: $, event: $mol_log3_event<{}>) => () => void;
-}
-
-declare namespace $ {
     export function $mol_wire_sync<Host extends object>(obj: Host): ObjectOrFunctionResultAwaited<Host>;
     type FunctionResultAwaited<Some> = Some extends (...args: infer Args) => infer Res ? (...args: Args) => Awaited<Res> : Some;
     type MethodsResultAwaited<Host extends Object> = {
@@ -1491,7 +1499,7 @@ declare namespace $ {
     class $mol_fetch_response extends $mol_object2 {
         readonly native: Response;
         constructor(native: Response);
-        status(): "redirect" | "success" | "unknown" | "inform" | "wrong" | "failed";
+        status(): "success" | "unknown" | "inform" | "redirect" | "wrong" | "failed";
         code(): number;
         message(): string;
         headers(): Headers;
@@ -1533,18 +1541,6 @@ declare namespace $ {
         relate(base?: $mol_file): string;
         append(next: Uint8Array | string): void;
     }
-}
-
-declare namespace $ {
-    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): readonly any[];
-    function $mol_huggingface_rest(space: string, method: string, ...data: readonly any[]): readonly any[];
-    function $mol_huggingface_ws(space: string, fn_index: number, ...data: readonly any[]): Promise<readonly any[]> & {
-        destructor: () => void;
-    };
-}
-
-declare namespace $ {
-    function $hyoo_lingua_translate(this: $, lang: string, text: string): string;
 }
 
 declare namespace $ {
@@ -1934,7 +1930,7 @@ declare namespace $ {
         head(): readonly any[];
         Head(): $mol_view;
         body(): readonly $mol_view[];
-        Body_content(): $$.$mol_list;
+        Body_content(): $mol_view;
         body_content(): readonly any[];
         body_scroll_top(next?: any): number;
         Body(): $$.$mol_scroll;
@@ -1956,10 +1952,11 @@ declare namespace $ {
         spread_ids(): readonly string[];
         menu_filter_enabled(): boolean;
         spread_ids_filtered(): readonly string[];
+        menu_tools(): readonly any[];
+        addon_tools(): readonly any[];
         pages(): readonly any[];
         Spread_close(): $$.$mol_link;
         menu_title(): string;
-        menu_tools(): readonly any[];
         menu_head(): readonly any[];
         menu_filter(next?: any): string;
         Menu_filter(): $$.$mol_search;
@@ -2542,22 +2539,17 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_arrow_right extends $mol_icon {
-        path(): string;
-    }
+    const $mpds_cifplayer_lib_three: typeof import("../three/build/index");
 }
 
 declare namespace $ {
-    class $mpds_cifplayer_scene extends $mol_view {
+    class $mpds_cifplayer_lib_three_view extends $mol_view {
+        sub(): readonly any[];
         scene(): any;
         camera(): any;
         controls(): any;
-    }
-}
-
-declare namespace $ {
-    class $mpds_cifplayer_lib_three extends $mol_object2 {
-        static all(): typeof import("../three/build/index");
+        controls_target(): any;
+        canvas(): any;
     }
 }
 
@@ -2565,17 +2557,17 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-    const THREE: typeof import("../lib/three/build");
+    const THREE: typeof import("../build");
     type THREE = typeof THREE;
-    export class $mpds_cifplayer_scene extends $.$mpds_cifplayer_scene {
-        webgl_support(): boolean;
+    export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
         auto(): void;
         scene(): any;
         camera(): any;
-        controls(): any;
+        controls_target(): any;
+        controls(): InstanceType<THREE["TrackballControls"]>;
         renderer(): any;
-        renderer_render(): void;
-        render_loop(): void;
+        canvas(): any;
+        rerender(): void;
         size(): {
             width: number;
             height: number;
@@ -2583,8 +2575,86 @@ declare namespace $.$$ {
         resize(): void;
         destructor(): void;
     }
-    export function $mpds_cifplayer_scene_dispose_deep(object: InstanceType<THREE["Object3D"]> | InstanceType<THREE["BufferGeometry"]> | InstanceType<THREE["Material"]> | InstanceType<THREE["Texture"]>): void;
+    export function $mpds_cifplayer_lib_three_view_dispose_deep(object: InstanceType<THREE["Object3D"]> | InstanceType<THREE["BufferGeometry"]> | InstanceType<THREE["Material"]> | InstanceType<THREE["Texture"]>): void;
     export {};
+}
+
+declare namespace $ {
+    class $mol_icon_eye extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_eye_check extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_tick extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_check_box extends $mol_check {
+        Icon(): $mol_icon_tick;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_pick extends $mol_pop {
+        event(): Record<string, any>;
+        Anchor(): $$.$mol_check;
+        keydown(event?: any): any;
+        trigger_enabled(): boolean;
+        trigger_content(): readonly $mol_view_content[];
+        hint(): string;
+        Trigger(): $$.$mol_check;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_pick extends $.$mol_pick {
+        keydown(event: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_image extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_image_filter extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_image_filter_center_focus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_arrow_expand extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_arrow_expand_all extends $mol_icon {
+        path(): string;
+    }
 }
 
 declare namespace $ {
@@ -2613,24 +2683,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_icon_magnify_minus_outline extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_image extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_image_filter extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_image_filter_center_focus extends $mol_icon {
         path(): string;
     }
 }
@@ -2701,14 +2753,23 @@ declare namespace $ {
         atom_pos_scale(): number;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
+        auto(): readonly any[];
         sub(): readonly any[];
         colors_light(): Record<string, any>;
         colors_dark(): Record<string, any>;
         style(): Record<string, any>;
+        attr(): Record<string, any>;
+        dir_light(): any;
+        ambient_light(): any;
+        atom_box(): any;
+        overlay_box(): any;
+        cell(): any;
+        axes(): any;
+        controls_target(): any;
         scene(): any;
         controls(): any;
         camera(): any;
-        Root(): $$.$mpds_cifplayer_scene;
+        Root(): $$.$mpds_cifplayer_lib_three_view;
         descr_a(): string;
         Descr_a(): $$.$mol_paragraph;
         descr_b(): string;
@@ -2721,24 +2782,40 @@ declare namespace $ {
         Descr_beta(): $$.$mol_paragraph;
         descr_gamma(): string;
         Descr_gamma(): $$.$mol_paragraph;
-        symlabel(): string;
-        Symlabel(): $$.$mol_paragraph;
+        info_sub(): readonly any[];
         Info(): $mol_view;
+        Sym_icon(): $mol_icon_eye_check;
+        symlabel(): string;
+        Toogle_all_title(): string;
+        toogle_all_symmetry(next?: any): any;
+        Toogle_all(): $mol_button_minor;
+        sym_name(id: any): string;
+        symmetry_visible(id: any, next?: any): boolean;
+        Sym_check(id: any): $mol_check_box;
+        sym_checks(): readonly any[];
+        Sym_checks(): $$.$mol_list;
+        Sym_list(): $$.$mol_scroll;
+        Symlabel(): $$.$mol_pick;
+        centered(next?: any): boolean;
+        Center_icon(): $mol_icon_image_filter_center_focus;
+        Center(): $mol_check_icon;
+        Left_panel(): $mol_view;
+        fullscreen(next?: any): boolean;
+        Expand_icon(): $mol_icon_arrow_expand_all;
+        Fullscreen(): $$.$mol_check;
         zoom_up(next?: any): any;
         Zoom_up_icon(): $mol_icon_magnify_plus_outline;
         Zoom_up(): $mol_button_minor;
         zoom_down(next?: any): any;
         Zoom_down_icon(): $mol_icon_magnify_minus_outline;
         Zoom_down(): $mol_button_minor;
-        centered(next?: any): boolean;
-        Center_icon(): $mol_icon_image_filter_center_focus;
-        Center(): $mol_check_icon;
+        Zoom_section(): $$.$mol_list;
         Tools(): $mol_view;
         overlay(next?: any): string;
         available_overlays(): Record<string, any>;
         Switch_overlay(): $$.$mol_switch;
-        Overlays_panel(): $mol_view;
-        width(next?: any): string;
+        overlays_sub(): readonly any[];
+        Overlays(): $mol_view;
         color_a(): string;
         color_b(): string;
         color_c(): string;
@@ -2746,7 +2823,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_matinfio_chemical_elements: {
+    export const $mpds_cifplayer_matinfio_chemical_elements: {
         JmolColors: {
             D: string;
             H: string;
@@ -2972,8 +3049,9 @@ declare namespace $ {
             Mt: number;
         };
     };
-    const $mpds_cifplayer_matinfio_custom_atom_loop_props: Record<string, string>;
-    const $mpds_cifplayer_matinfio_log: {
+    export const $mpds_cifplayer_matinfio_custom_atom_loop_props: Record<string, string>;
+    type Format = 'CIF' | 'OPTIMADE' | 'POSCAR' | 'OPTIMADE_str' | 'unknown';
+    export const $mpds_cifplayer_matinfio_log: {
         error: {
             (...data: any[]): void;
             (message?: any, ...optionalParams: any[]): void;
@@ -2983,7 +3061,7 @@ declare namespace $ {
             (message?: any, ...optionalParams: any[]): void;
         };
     };
-    class $mpds_cifplayer_matinfio extends $mol_object2 {
+    export class $mpds_cifplayer_matinfio extends $mol_object2 {
         static log: {
             error: {
                 (...data: any[]): void;
@@ -2995,28 +3073,89 @@ declare namespace $ {
             };
         };
         static detect_format(str: string): "CIF" | "OPTIMADE" | "POSCAR" | "unknown";
-        static to_player(str: string): false | {
+        readonly source: {
+            readonly data: any;
+            readonly format: Format;
+        };
+        constructor(data: any, format?: Format);
+        internal_obj(): any;
+        player(): {
             atoms: any[];
             cell: any;
             descr: any;
             overlayed: Record<string, string>;
+            sg_name: any;
+            ng_name: number;
             info: any;
             mpds_data: any;
             mpds_demo: any;
         };
-        static to_flatten(str: string): false | {
+        flatten(): {
             cell: any;
             atoms: any[];
             types: number[];
             symlabel: string | boolean;
         };
-        static to_cif(str: string): string | false;
+        cif(): any;
     }
+    export {};
 }
 
 declare namespace $ {
-    class $mpds_cifplayer_lib_math extends $mol_object2 {
-        static all(): any;
+    const $mpds_cifplayer_lib_math: any;
+}
+
+declare namespace $ {
+    const $mpds_cifplayer_lib_spacegroups: typeof import("../spacegroups/build/index");
+    type $mpds_cifplayer_lib_spacegroups_info = import('../spacegroups/build/index').SpaceGroupInfo;
+}
+
+declare namespace $ {
+    class $mpds_cifplayer_matinfio_spacegroup extends $mol_object2 {
+        readonly data: $mpds_cifplayer_lib_spacegroups_info;
+        protected constructor(data: $mpds_cifplayer_lib_spacegroups_info);
+        static by_name_and_num(name: string, num: number): $mpds_cifplayer_matinfio_spacegroup;
+        static by_name(name: string): $mpds_cifplayer_matinfio_spacegroup | null;
+        static by_num(num: number): $mpds_cifplayer_matinfio_spacegroup | null;
+        static unknown(): $mpds_cifplayer_matinfio_spacegroup;
+        symmetry_list(): string[];
+        calc_part(str: string, fract: {
+            x: number;
+            y: number;
+            z: number;
+        }): number;
+        symmetric_atom(symmetry: string, atom: {
+            fract: {
+                x: number;
+                y: number;
+                z: number;
+            };
+        }, cell: number[][]): {
+            x: any;
+            y: any;
+            z: any;
+            fract: {
+                x: number;
+                y: number;
+                z: number;
+            };
+        };
+        symmetric_atoms(atom: {
+            fract: {
+                x: number;
+                y: number;
+                z: number;
+            };
+        }, cell: number[][]): {
+            x: any;
+            y: any;
+            z: any;
+            fract: {
+                x: number;
+                y: number;
+                z: number;
+            };
+        }[];
     }
 }
 
@@ -3026,8 +3165,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_cif_to_obj(str: string): any;
-    function $mpds_cifplayer_matinfio_cif_from_obj(crystal: any): string;
+    function $mpds_cifplayer_matinfio_cif_to_obj(this: $, str: string): any;
+    function $mpds_cifplayer_matinfio_cif_from_obj(this: $, crystal: any): string;
 }
 
 declare namespace $ {
@@ -3040,7 +3179,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_optimade_to_obj(this: $, str: string): false | {
+    function $mpds_cifplayer_matinfio_optimade_str_to_obj(this: $, str: string): false | {
+        cell: any;
+        atoms: any[];
+        info: string;
+        cartesian: boolean;
+    };
+    function $mpds_cifplayer_matinfio_optimade_to_obj(this: $, payload: Record<string, any>): false | {
         cell: any;
         atoms: any[];
         info: string;
@@ -3054,6 +3199,8 @@ declare namespace $ {
         cell: any;
         descr: any;
         overlayed: Record<string, string>;
+        sg_name: any;
+        ng_name: number;
         info: any;
         mpds_data: any;
         mpds_demo: any;
@@ -3076,8 +3223,7 @@ declare namespace $.$$ {
     const THREE: typeof import("../lib/three/build");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
-        sample: string;
-        str(): string;
+        sub(): readonly any[];
         available_overlays(): any;
         symlabel(): string;
         descr_a(): string;
@@ -3089,13 +3235,7 @@ declare namespace $.$$ {
         camera_distance(): any;
         zoom_up(): void;
         zoom_down(): void;
-        webgl_support(): boolean;
-        sphere_resolution(): {
-            w: number;
-            h: number;
-        };
-        obj3d_raw(): any;
-        draw_3d_line(box: any, start_arr: number[], finish_arr: number[], color?: number): void;
+        structure_3d_data(): any;
         text_canvas(text: string): HTMLCanvasElement;
         create_sprite(text: string): any;
         color_a(): string;
@@ -3103,19 +3243,25 @@ declare namespace $.$$ {
         color_c(): string;
         axcolor(): string[];
         ortes(): number[][];
-        axes(): any;
-        centered(next?: any): boolean;
-        cell_center(): any;
-        atoms_midpoint(): any;
-        atoms_shift(): any;
-        scaled_atoms(): any;
-        new_box(name: string): any;
+        controls_target(): any;
+        new_three_object(name: string): any;
+        spacegroup(): $mpds_cifplayer_matinfio_spacegroup;
+        sym_checks(): $mol_check_box[];
+        sym_name(id: any): string;
+        toogle_all_symmetry(): void;
+        all_symmetry_enabled(): boolean;
+        symmetry_visible(id: any, next?: any): boolean;
+        Toogle_all_title(): string;
+        symmetric_atoms_raw(symmetry: string): any;
+        atoms(): any[];
         overlay_box(): any;
         atom_box(): any;
         dir_light(): InstanceType<THREE["DirectionalLight"]>;
         ambient_light(): InstanceType<THREE["AmbientLight"]>;
+        draw_3d_line(box: any, start_arr: number[], finish_arr: number[], color?: number): void;
+        cell_center(): any;
+        axes(): any;
         cell(): any;
-        auto(): void;
     }
     export {};
 }
@@ -3158,24 +3304,7 @@ declare namespace $ {
         Cif_textarea(id: any): $$.$mol_textarea;
         Cif_text(id: any): $$.$mol_list;
         Cif_page(id: any): $mol_page;
-        Menu_toggle_icon(): $mol_icon_arrow_right;
-        menu_toogle(next?: any): any;
-        player_expanded(): boolean;
-        Menu_toggle(): $mol_check_icon;
-        player_visible_width(): string;
         Player(id: any): $$.$mpds_cifplayer_player;
-        player_view_rect(id: any): {
-            width: number;
-            height: number;
-            left: number;
-            right: number;
-            top: number;
-            bottom: number;
-        } | null;
-        Player_page_body(id: any): $mol_view;
-        Player_page_title(id: any): $mol_view;
-        Player_page_tools(id: any): $mol_view;
-        Player_page_head(id: any): $mol_view;
         Player_page(id: any): $mol_page;
         cif_pages(id: any): readonly any[];
         nasty_cif_reference(id: any): string;
@@ -3212,9 +3341,6 @@ declare namespace $.$$ {
         matinfio_obj(id: any): Record<string, any>;
         crystcif_obj(id: any): Record<string, any>;
         cif_loader3_obj(id: any): Record<string, any>;
-        player_visible_width(): string;
-        player_expanded(): boolean;
-        menu_toogle(next?: any): void;
     }
 }
 
