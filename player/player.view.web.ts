@@ -6,12 +6,6 @@ namespace $.$$ {
 	export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
 
 		@ $mol_mem
-		sub(): readonly any[] {
-			this.auto()
-			return super.sub()
-		}
-
-		@ $mol_mem
 		available_overlays() {
 			return {
 				...super.available_overlays(),
@@ -338,8 +332,6 @@ namespace $.$$ {
 
 			if( ! this.structure_3d_data().cell_matrix?.length ) return
 
-			const [ a, b, c ] = this.axis_vectors()
-
 			const color = this.cell_lines_color()
 
 			const add_line = ( start: THREE.Vector3, end: THREE.Vector3 )=> {
@@ -348,20 +340,24 @@ namespace $.$$ {
 				cell_box.add( new THREE.Line( geometry, material ) )
 			}
 
+			const [ a, b, c ] = this.axis_vectors()
+
 			const ab = a.clone().add( b )
 			const ac = a.clone().add( c )
 			const bc = b.clone().add( c )
 			const abc = ab.clone().add( c )
 
-			add_line( a, ab )
-			add_line( a, ac )
-			add_line( b, ab )
-			add_line( b, bc )
-			add_line( c, ac )
-			add_line( c, bc )
-			add_line( abc, ab )
-			add_line( abc, ac )
-			add_line( abc, bc )
+			add_line( ab, a )
+			add_line( ab, b )
+			add_line( ab, abc )
+
+			add_line( ac, a )
+			add_line( ac, c )
+			add_line( ac, abc )
+
+			add_line( bc, b )
+			add_line( bc, c )
+			add_line( bc, abc )
 
 			if( this.centered() ) {
 				const axes_helper = new THREE.AxesHelper( 200 )
