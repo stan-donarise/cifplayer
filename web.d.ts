@@ -2312,6 +2312,8 @@ declare namespace $.$$ {
     type THREE = typeof THREE;
     export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
         auto(): void;
+        object<T extends InstanceType<THREE["Object3D"]>>(name: string, make: () => T): T;
+        object_blank<T extends InstanceType<THREE["Object3D"]>>(name: string, make: () => T): T;
         scene(): any;
         camera(): any;
         controls_target(): any;
@@ -2566,13 +2568,13 @@ declare namespace $ {
         ambient_light(): any;
         atom_box(): any;
         overlay_box(): any;
-        cell(): any;
-        axes(): any;
+        cell_box(): any;
+        axes_box(): any;
         controls_target(): any;
         scene(): any;
         controls(): any;
         camera(): any;
-        Root(): $$.$mpds_cifplayer_lib_three_view;
+        Three(): $$.$mpds_cifplayer_lib_three_view;
         descr_a(): string;
         Descr_a(): $$.$mol_paragraph;
         descr_b(): string;
@@ -2622,6 +2624,26 @@ declare namespace $ {
         color_a(): string;
         color_b(): string;
         color_c(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_diff_path<Item>(...paths: Item[][]): {
+        prefix: Item[];
+        suffix: Item[][];
+    };
+}
+
+declare namespace $ {
+    class $mol_error_mix extends Error {
+        errors: Error[];
+        constructor(message: string, ...errors: Error[]);
+        toJSON(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_data_error extends $mol_error_mix {
     }
 }
 
@@ -2864,6 +2886,37 @@ declare namespace $ {
             (message?: any, ...optionalParams: any[]): void;
         };
     };
+    export type $mpds_cifplayer_matinfio_internal_obj_atom = {
+        fract: {
+            x: number;
+            y: number;
+            z: number;
+        };
+        x: number;
+        y: number;
+        z: number;
+        symbol: string;
+        label: string;
+        overlays: Record<string, string | number>;
+    };
+    export type $mpds_cifplayer_matinfio_internal_obj = {
+        cell_matrix: number[][];
+        cell: {
+            a: number;
+            b: number;
+            c: number;
+            alpha: number;
+            beta: number;
+            gamma: number;
+        };
+        atoms: $mpds_cifplayer_matinfio_internal_obj_atom[];
+        sg_name: string;
+        ng_name: string;
+        info: string;
+        cartesian: boolean;
+        mpds_demo: boolean;
+        mpds_data: boolean;
+    };
     export class $mpds_cifplayer_matinfio extends $mol_object2 {
         static log: {
             error: {
@@ -2881,17 +2934,18 @@ declare namespace $ {
             readonly format: Format;
         };
         constructor(data: any, format?: Format);
-        internal_obj(): any;
+        internal_obj(): $mpds_cifplayer_matinfio_internal_obj;
         player(): {
             atoms: any[];
-            cell: any;
+            cell: undefined;
+            cell_matrix: number[][];
             descr: any;
             overlayed: Record<string, string>;
-            sg_name: any;
+            sg_name: string;
             ng_name: number;
-            info: any;
-            mpds_data: any;
-            mpds_demo: any;
+            info: string;
+            mpds_data: boolean;
+            mpds_demo: boolean;
         };
         flatten(): {
             cell: any;
@@ -2922,59 +2976,24 @@ declare namespace $ {
         static by_num(num: number): $mpds_cifplayer_matinfio_spacegroup | null;
         static unknown(): $mpds_cifplayer_matinfio_spacegroup;
         symmetry_list(): string[];
-        calc_part(str: string, fract: {
-            x: number;
-            y: number;
-            z: number;
-        }): number;
-        symmetric_atom(symmetry: string, atom: {
-            fract: {
-                x: number;
-                y: number;
-                z: number;
-            };
-        }, cell: number[][]): {
-            x: any;
-            y: any;
-            z: any;
-            fract: {
-                x: number;
-                y: number;
-                z: number;
-            };
-        };
-        symmetric_atoms(atom: {
-            fract: {
-                x: number;
-                y: number;
-                z: number;
-            };
-        }, cell: number[][]): {
-            x: any;
-            y: any;
-            z: any;
-            fract: {
-                x: number;
-                y: number;
-                z: number;
-            };
-        }[];
+        symmetric_atom(symmetry: string, atom: $mpds_cifplayer_matinfio_internal_obj_atom, cell: number[][]): $mpds_cifplayer_matinfio_internal_obj_atom;
+        symmetric_atoms(atom: $mpds_cifplayer_matinfio_internal_obj_atom, cell_matrix: number[][]): $mpds_cifplayer_matinfio_internal_obj_atom[];
     }
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_cell_to_vec(this: $, a: number, b: number, c: number, alpha: number, beta: number, gamma: number): any;
-    function $mpds_cifplayer_matinfio_cell_from_vec(matrix: number[]): number[];
+    function $mpds_cifplayer_matinfio_cell_to_matrix(this: $, cell: $mpds_cifplayer_matinfio_internal_obj['cell']): number[][];
+    function $mpds_cifplayer_matinfio_cell_params_from_matrix(matrix: number[]): number[];
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_cif_to_obj(this: $, str: string): any;
+    function $mpds_cifplayer_matinfio_cif_to_obj(this: $, str: string): $mpds_cifplayer_matinfio_internal_obj;
     function $mpds_cifplayer_matinfio_cif_from_obj(this: $, crystal: any): string;
 }
 
 declare namespace $ {
     function $mpds_cifplayer_matinfio_poscar_to_obj(this: $, str: string): false | {
-        cell: number[][];
+        cell_matrix: number[][];
         atoms: any[];
         types: number[];
         cartesian: boolean;
@@ -2983,13 +3002,13 @@ declare namespace $ {
 
 declare namespace $ {
     function $mpds_cifplayer_matinfio_optimade_str_to_obj(this: $, str: string): false | {
-        cell: any;
+        cell_matrix: any;
         atoms: any[];
         info: string;
         cartesian: boolean;
     };
     function $mpds_cifplayer_matinfio_optimade_to_obj(this: $, payload: Record<string, any>): false | {
-        cell: any;
+        cell_matrix: any;
         atoms: any[];
         info: string;
         cartesian: boolean;
@@ -2997,16 +3016,17 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_player_from_obj(this: $, crystal: any): {
+    function $mpds_cifplayer_matinfio_player_from_obj(this: $, crystal: $mpds_cifplayer_matinfio_internal_obj): {
         atoms: any[];
-        cell: any;
+        cell: undefined;
+        cell_matrix: number[][];
         descr: any;
         overlayed: Record<string, string>;
-        sg_name: any;
+        sg_name: string;
         ng_name: number;
-        info: any;
-        mpds_data: any;
-        mpds_demo: any;
+        info: string;
+        mpds_data: boolean;
+        mpds_demo: boolean;
     };
 }
 
@@ -3026,8 +3046,9 @@ declare namespace $.$$ {
     const THREE: typeof import("../lib/three/build");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
-        sub(): readonly any[];
-        available_overlays(): any;
+        available_overlays(): {
+            [x: string]: any;
+        };
         symlabel(): string;
         descr_a(): string;
         descr_b(): string;
@@ -3035,19 +3056,29 @@ declare namespace $.$$ {
         descr_alpha(): string;
         descr_beta(): string;
         descr_gamma(): string;
-        camera_distance(): any;
-        zoom_up(): void;
-        zoom_down(): void;
-        structure_3d_data(): any;
-        text_canvas(text: string): HTMLCanvasElement;
-        create_sprite(text: string): any;
         color_a(): string;
         color_b(): string;
         color_c(): string;
         axcolor(): string[];
-        ortes(): number[][];
+        camera_distance(): any;
+        zoom_up(): void;
+        zoom_down(): void;
+        structure_3d_data(): {
+            atoms: any[];
+            cell: undefined;
+            cell_matrix: number[][];
+            descr: any;
+            overlayed: Record<string, string>;
+            sg_name: string;
+            ng_name: number;
+            info: string;
+            mpds_data: boolean;
+            mpds_demo: boolean;
+        };
+        text_canvas(text: string): HTMLCanvasElement;
+        create_sprite(text: string): any;
+        axis_vectors(): any[];
         controls_target(): any;
-        new_three_object(name: string): any;
         spacegroup(): $mpds_cifplayer_matinfio_spacegroup;
         sym_checks(): $mol_check_box[];
         sym_name(id: any): string;
@@ -3055,16 +3086,16 @@ declare namespace $.$$ {
         all_symmetry_enabled(): boolean;
         symmetry_visible(id: any, next?: any): boolean;
         Toogle_all_title(): string;
-        symmetric_atoms_raw(symmetry: string): any;
+        symmetric_atoms_raw(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[];
         atoms(): any[];
-        overlay_box(): any;
         atom_box(): any;
+        overlay_box(): any;
         dir_light(): InstanceType<THREE["DirectionalLight"]>;
         ambient_light(): InstanceType<THREE["AmbientLight"]>;
-        draw_3d_line(box: any, start_arr: number[], finish_arr: number[], color?: number): void;
         cell_center(): any;
-        axes(): any;
-        cell(): any;
+        axes_box(): any;
+        cell_lines_color(): number;
+        cell_box(): any;
     }
     export {};
 }

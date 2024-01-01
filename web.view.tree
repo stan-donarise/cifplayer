@@ -520,10 +520,10 @@ $mpds_cifplayer_player $mol_view
 		<= ambient_light null
 		<= atom_box null
 		<= overlay_box null
-		<= cell null
-		<= axes null
+		<= cell_box null
+		<= axes_box null
 	sub /
-		<= Root $mpds_cifplayer_lib_three_view
+		<= Three $mpds_cifplayer_lib_three_view
 			scene => scene
 			controls => controls
 			controls_target <= controls_target null

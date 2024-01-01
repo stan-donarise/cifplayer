@@ -2607,13 +2607,13 @@ declare namespace $ {
         ambient_light(): any;
         atom_box(): any;
         overlay_box(): any;
-        cell(): any;
-        axes(): any;
+        cell_box(): any;
+        axes_box(): any;
         controls_target(): any;
         scene(): any;
         controls(): any;
         camera(): any;
-        Root(): $mpds_cifplayer_lib_three_view;
+        Three(): $mpds_cifplayer_lib_three_view;
         descr_a(): string;
         Descr_a(): $$.$mol_paragraph;
         descr_b(): string;

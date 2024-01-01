@@ -8588,13 +8588,13 @@ var $;
                 this.ambient_light(),
                 this.atom_box(),
                 this.overlay_box(),
-                this.cell(),
-                this.axes()
+                this.cell_box(),
+                this.axes_box()
             ];
         }
         sub() {
             return [
-                this.Root(),
+                this.Three(),
                 this.Left_panel(),
                 this.Tools(),
                 this.Overlays()
@@ -8640,25 +8640,25 @@ var $;
         overlay_box() {
             return null;
         }
-        cell() {
+        cell_box() {
             return null;
         }
-        axes() {
+        axes_box() {
             return null;
         }
         controls_target() {
             return null;
         }
         scene() {
-            return this.Root().scene();
+            return this.Three().scene();
         }
         controls() {
-            return this.Root().controls();
+            return this.Three().controls();
         }
         camera() {
-            return this.Root().camera();
+            return this.Three().camera();
         }
-        Root() {
+        Three() {
             const obj = new this.$.$mpds_cifplayer_lib_three_view();
             obj.controls_target = () => this.controls_target();
             return obj;
@@ -8920,7 +8920,7 @@ var $;
     ], $mpds_cifplayer_player.prototype, "str", null);
     __decorate([
         $mol_mem
-    ], $mpds_cifplayer_player.prototype, "Root", null);
+    ], $mpds_cifplayer_player.prototype, "Three", null);
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "Descr_a", null);
