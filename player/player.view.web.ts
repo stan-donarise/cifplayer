@@ -334,7 +334,7 @@ namespace $.$$ {
 
 			const color = this.cell_lines_color()
 
-			const add_line = ( start: THREE.Vector3, end: THREE.Vector3 )=> {
+			const add_line = ( start: InstanceType< THREE["Vector3"] >, end: InstanceType< THREE["Vector3"] > )=> {
 				const geometry = new THREE.BufferGeometry().setFromPoints( [ start, end ] );
 				const material = new THREE.LineBasicMaterial( { color } )
 				cell_box.add( new THREE.Line( geometry, material ) )

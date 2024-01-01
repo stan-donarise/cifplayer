@@ -15,7 +15,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
-		object< T extends THREE.Object3D >( name: string, make: ()=> T ): T {
+		object< T extends InstanceType< THREE["Object3D"] > >( name: string, make: ()=> T ): T {
 			const old = this.scene()?.getObjectByName( name )
 			if( old ) return old as T
 
@@ -27,7 +27,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
-		object_blank< T extends THREE.Object3D >( name: string, make: ()=> T ): T {
+		object_blank< T extends InstanceType< THREE["Object3D"] > >( name: string, make: ()=> T ): T {
 			const old = this.scene()?.getObjectByName( name )
 			if( old ) {
 				$mpds_cifplayer_lib_three_view_dispose_deep( old )
