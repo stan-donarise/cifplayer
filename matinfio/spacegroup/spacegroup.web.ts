@@ -38,70 +38,67 @@ namespace $ {
 			return this.data.s
 		}
 
-		calc_part( str: string, fract: { x: number, y: number, z: number } ) {
-			let res = 0
+		symmetric_atom( symmetry: string, atom: $mpds_cifplayer_matinfio_internal_obj_atom, cell: number[][] ): $mpds_cifplayer_matinfio_internal_obj_atom {
+			const spans = symmetry.split( ',' )
 
-			let sign: -1 | 1 = 1
-			let coef_sign = 1
-			let coef = ''
-
-			for( const char of str ) {
-				switch( char ) {
-					case 'x':
-					case 'y':
-					case 'z':
-						res += sign * fract[ char ]
-						break
-
-					case '+':
-						sign = 1
-						break
-					case '-':
-						sign = -1
-						break
-
-					default:
-						coef_sign = sign
-						coef += char
-						break
-				}
+			const fract = {
+				x: fract_cord_norm( calc_symmetry_span( spans[ 0 ], atom.fract ) ),
+				y: fract_cord_norm( calc_symmetry_span( spans[ 1 ], atom.fract ) ),
+				z: fract_cord_norm( calc_symmetry_span( spans[ 2 ], atom.fract ) ),
 			}
 
-			const split = coef.split( '/' )
+			const [ x, y, z ] = math.multiply( [ fract.x, fract.y, fract.z ], cell )
 
-			if( coef ) res += coef_sign * parseInt( split[ 0 ] ) / ( split[ 1 ] ? parseInt( split[ 1 ] ) : 1 )
-
-			res = res % 1
-			if( res < 0 ) res = res + 1 //normalization
-
-			// if( res > 1 ) res = res - 1 //normalization
-
-			return res
-		}
-
-		symmetric_atom( symmetry: string, atom: { fract: { x: number, y: number, z: number } }, cell: number[][] ) {
-			const parts = symmetry.split( ',' )
-
-			const fract = [
-				this.calc_part( parts[ 0 ], atom.fract ),
-				this.calc_part( parts[ 1 ], atom.fract ),
-				this.calc_part( parts[ 2 ], atom.fract ),
-			]
-
-			const cartesian = math.multiply( fract, cell )
-			return {
-				...atom,
-				x: cartesian[ 0 ],
-				y: cartesian[ 1 ],
-				z: cartesian[ 2 ],
-			}
+			return { ...atom, fract, x, y, z }
 		}
 
 		@ $mol_mem_key
-		symmetric_atoms( atom: { fract: { x: number, y: number, z: number } }, cell: number[][] ) {
-			return this.symmetry_list().map( name => this.symmetric_atom( name, atom, cell ) )
+		symmetric_atoms( atom: $mpds_cifplayer_matinfio_internal_obj_atom, cell_matrix: number[][] ) {
+			return this.symmetry_list().map( name => this.symmetric_atom( name, atom, cell_matrix ) )
 		}
 
+	}
+
+	function calc_symmetry_span( symmetry_span: string, fract: { x: number, y: number, z: number } ) {
+		let res = 0
+
+		let sign: -1 | 1 = 1
+		let coef_sign = 1
+		let coef = ''
+
+		for( const char of symmetry_span ) {
+			switch( char ) {
+
+				case 'x': case 'y': case 'z': 
+					res += sign * fract[ char ]
+					break
+
+				case '+':
+					sign = 1
+					break
+				case '-':
+					sign = -1
+					break
+
+				default:
+					coef_sign = sign
+					coef += char
+					break
+			}
+		}
+
+		const coef_split = coef.split( '/' )
+		const coef_num = parseInt( coef_split[ 0 ] ) / ( coef_split[ 1 ] ? parseInt( coef_split[ 1 ] ) : 1 )
+
+		if( coef ) res += coef_sign * coef_num
+
+		return res
+	}
+
+	function fract_cord_norm( cord: number ){
+		let res = cord % 1
+		if( res < 0 ) res = res + 1
+		return res
 	}
 
 }
