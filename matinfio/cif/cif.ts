@@ -181,10 +181,10 @@ namespace $ {
 
 		if( Object.keys( crystal.cell ).length == 6 ) {
 			cell_abc = crystal.cell
-			cell_mat = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell )
+			cell_mat = this.$mpds_cifplayer_matinfio_cell_to_matrix( crystal.cell )
 			// cell_mat = this.cell2vec( ...( crystal.cell as [ number, number, number, number, number, number ] ) )
 		} else {
-			cell_abc = $mpds_cifplayer_matinfio_cell_from_vec( crystal.cell )
+			cell_abc = $mpds_cifplayer_matinfio_cell_params_from_matrix( crystal.cell )
 			cell_mat = crystal.cell
 		}
 		cif_str += "_cell_length_a    " + cell_abc[ 0 ].toFixed( 6 ) + "\n"

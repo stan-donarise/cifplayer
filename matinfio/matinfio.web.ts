@@ -39,10 +39,11 @@ namespace $ {
 	}
 
 	export type $mpds_cifplayer_matinfio_internal_obj = {
+		cell_matrix: number[][],
 		cell: {
-			a: number, 
-			b: number, 
-			c: number, 
+			a: number,
+			b: number,
+			c: number,
 			alpha: number, 
 			beta: number, 
 			gamma: number,
@@ -97,7 +98,6 @@ namespace $ {
 				case 'POSCAR': return this.$.$mpds_cifplayer_matinfio_poscar_to_obj( this.source.data ) as any
 				case 'OPTIMADE': return this.$.$mpds_cifplayer_matinfio_optimade_to_obj( this.source.data ) as any
 				case 'OPTIMADE_str': return this.$.$mpds_cifplayer_matinfio_optimade_str_to_obj( this.source.data ) as any
-				default: this.$.$mpds_cifplayer_matinfio_log.error( "Error: file format not recognized" )
 			}
 			return this.$.$mol_fail( new $mol_data_error('Error: file format not recognized') )
 		}
@@ -110,7 +110,7 @@ namespace $ {
 		@ $mol_mem
 		flatten() {
 			if( this.source.format == 'OPTIMADE' ) {
-				this.$.$mpds_cifplayer_matinfio_log.error( "OPTIMADE not supported" )
+				return this.$.$mol_fail( new $mol_data_error('OPTIMADE not supported') )
 			}
 
 			return this.$.$mpds_cifplayer_matinfio_flatten_from_obj( this.internal_obj() )

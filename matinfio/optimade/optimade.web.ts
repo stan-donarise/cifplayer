@@ -46,7 +46,7 @@ namespace $ {
 		}
 
 		return {
-			'cell': src.attributes.lattice_vectors,
+			'cell_matrix': src.attributes.lattice_vectors,
 			'atoms': atoms,
 			'info': 'id=' + src.id,
 			'cartesian': true

@@ -7,12 +7,12 @@ namespace $ {
 	}
 
 	/** Crystalline cell parameters to 3x3 matrix */
-	export function $mpds_cifplayer_matinfio_cell_to_vec( this : $, cell: $mpds_cifplayer_matinfio_internal_obj['cell'] ): number[][] {
+	export function $mpds_cifplayer_matinfio_cell_to_matrix( this : $, cell: $mpds_cifplayer_matinfio_internal_obj['cell'] ): number[][] {
 		const { a, b, c, alpha, beta, gamma } = cell
-		// if( !a || !b || !c || !alpha || !beta || !gamma ) {
-		// 	this.$mpds_cifplayer_matinfio_log.error( "Error: invalid cell definition" )
-		// 	return false
-		// }
+		if( !a || !b || !c || !alpha || !beta || !gamma ) {
+			return this.$mol_fail( new $mol_data_error('Error: invalid cell definition') )
+		}
+
 		const alpha_rad = alpha * Math.PI / 180
 		const beta_rad = beta * Math.PI / 180
 		const gamma_rad = gamma * Math.PI / 180
@@ -34,7 +34,7 @@ namespace $ {
 	}
 
 	/** 3x3 matrix to crystalline cell parameters */
-	export function $mpds_cifplayer_matinfio_cell_from_vec( matrix: number[] ) {
+	export function $mpds_cifplayer_matinfio_cell_params_from_matrix( matrix: number[] ) {
 		const norms: number[] = []
 		const angles = []
 		matrix.forEach( function( vec ) {

@@ -14,6 +14,33 @@ namespace $.$$ {
 			render_loop()
 		}
 
+		@ $mol_mem_key
+		object< T extends THREE.Object3D >( name: string, make: ()=> T ): T {
+			const old = this.scene()?.getObjectByName( name )
+			if( old ) return old as T
+
+			const obj = make()
+			obj.name = name
+			this.scene().add( obj )
+
+			return obj as T
+		}
+
+		@ $mol_mem_key
+		object_blank< T extends THREE.Object3D >( name: string, make: ()=> T ): T {
+			const old = this.scene()?.getObjectByName( name )
+			if( old ) {
+				$mpds_cifplayer_lib_three_view_dispose_deep( old )
+				this.scene()?.remove( old )
+			}
+
+			const obj = make()
+			obj.name = name
+			this.scene().add( obj )
+
+			return obj as T
+		}
+
 		@ $mol_mem
 		scene() {
 			const scene = new THREE.Scene()

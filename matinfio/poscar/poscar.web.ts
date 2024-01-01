@@ -8,7 +8,7 @@ namespace $ {
 
 	export function $mpds_cifplayer_matinfio_poscar_to_obj( this: $, str: string ) {
 		var lines = str.toString().replace( /(\r\n|\r)/gm, "\n" ).split( "\n" ),
-			cell = [],
+			cell_matrix = [],
 			atoms = [],
 			factor = 1.0,
 			atindices: any[] = [],
@@ -36,7 +36,7 @@ namespace $ {
 			}
 			else if( i == 1 ) factor = parseFloat( lines[ i ] )
 			else if( [ 2, 3, 4 ].indexOf( i ) !== -1 ) {
-				cell.push( lines[ i ].split( " " ).filter( function( o ) { return o ? true : false } ).map( Number ) )
+				cell_matrix.push( lines[ i ].split( " " ).filter( function( o ) { return o ? true : false } ).map( Number ) )
 			}
 			else if( i == 5 ) {
 				tryarr = lines[ i ].split( " " ).filter( function( o ) { return o ? true : false } )
@@ -105,11 +105,11 @@ namespace $ {
 			}
 		}
 
-		math.multiply( cell, factor )
+		math.multiply( cell_matrix, factor )
 
 		if( atoms.length )
 			return {
-				'cell': cell,
+				'cell_matrix': cell_matrix,
 				'atoms': atoms,
 				'types': types,
 				'cartesian': cartesian

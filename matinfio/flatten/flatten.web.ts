@@ -5,7 +5,7 @@ namespace $ {
 		if( crystal.symops ) this.$mpds_cifplayer_matinfio_log.warning( "Reading of symmetry operations is not implemented, expect errors" )
 
 		const cell = Object.keys( crystal.cell ).length == 6
-			? this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell ) // for CIF
+			? this.$mpds_cifplayer_matinfio_cell_to_matrix( crystal.cell ) // for CIF
 			: crystal.cell // for POSCAR
 
 		const xyzatoms = []
