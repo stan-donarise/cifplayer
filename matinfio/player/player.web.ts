@@ -24,6 +24,8 @@ namespace $ {
 			"cell": cell,
 			"descr": descr,
 			"overlayed": {} as Record< string, string >,
+			"sg_name": crystal.sg_name,
+			"ng_name": parseInt( crystal.ng_name ),
 			"info": crystal.info,
 			"mpds_data": crystal.mpds_data,
 			"mpds_demo": crystal.mpds_demo
@@ -69,14 +71,21 @@ namespace $ {
 				// CIF has fractional positions
 				// OPTIMADE has cartesian positions
 				// POSCAR may have either of two
-				var cpos = crystal.cartesian ? pos : math.multiply( pos, cell )
+				const cpos = crystal.cartesian ? pos : math.multiply( pos, cell )
+				const fpos = crystal.cartesian ? math.divide( pos, cell ) : pos
+				
 				render.atoms.push( { 
-					"x": cpos[ 0 ],
-					"y": cpos[ 1 ],
-					"z": cpos[ 2 ],
-					"c": color,
-					"r": radius,
-					"overlays": overlays
+					'fract': {
+						'x': fpos[ 0 ],
+						'y': fpos[ 1 ],
+						'z': fpos[ 2 ],
+					},
+					'x': cpos[ 0 ],
+					'y': cpos[ 1 ],
+					'z': cpos[ 2 ],
+					'c': color,
+					'r': radius,
+					'overlays': overlays
 				} )
 				hashes[ hash ] = render.atoms.length - 1
 				pos2els[ hash ] = [ crystal.atoms[ i ].symbol ]

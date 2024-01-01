@@ -31,17 +31,30 @@ namespace $.$$ {
 			color: $mol_style_func.vary('--color_c')
 		},
 
-		Info: {
+		Left_panel: {
 			position: 'absolute',
+			zIndex: 1,
+			flex: {
+				direction: 'column',
+			},
+			align: {
+				items: 'flex-start',
+			},
+		},
+
+		Info: {
 			padding: $mol_gap.block,
 			gap: $mol_gap.space,
-			zIndex: 1,
 			flex: {
 				direction: 'column',
 			},
 		},
 
-		Overlays_panel: {
+		Toogle_all: {
+			boxShadow: `0 0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.5)`,	
+		},
+
+		Overlays: {
 			position: 'absolute',
 			bottom: 0,
 			width: '100%',
@@ -66,6 +79,13 @@ namespace $.$$ {
 			},
 			align: {
 				items: 'flex-end',
+			},
+		},
+
+		Zoom_section: {
+			padding: {
+				top: '2rem',
+				bottom: '2rem',
 			},
 		},
 

@@ -5,16 +5,6 @@ namespace $.$$ {
 
 	export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
 
-		@ $mol_mem
-		webgl_support() {
-			try {
-				var canvas = document.createElement( 'canvas' )
-				return !!( window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ) )
-			} catch( e ) {
-				return false
-			}
-		}
-
 		auto() {
 			this.resize()
 			const render_loop = ()=> {
@@ -57,8 +47,10 @@ namespace $.$$ {
 		@ $mol_mem
 		renderer() {
 			if ( ! this.scene() || ! this.camera() ) return
+
 			const renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } )
 			renderer.domElement.style.position = 'absolute'
+			
 			return renderer
 		}
 
@@ -91,6 +83,11 @@ namespace $.$$ {
 			this.rerender()
 
 			this.controls().handleResize()
+		}
+
+		destructor(): void {
+			$mpds_cifplayer_lib_three_view_dispose_deep( this.scene() )
+			this.renderer()?.dispose()
 		}
 
 	}

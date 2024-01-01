@@ -24,15 +24,21 @@ namespace $ {
 			data_info = "",
 			cur_line = "",
 			fingerprt = "",
-			line_data = [],
+			line_data: any[] = [],
 			symmetry_seq = [],
 			cell_props = [ 'a', 'b', 'c', 'alpha', 'beta', 'gamma' ],
-			loop_vals = [ '_atom_site_label', '_atom_site_type_symbol', '_atom_site_fract_x', '_atom_site_fract_y', '_atom_site_fract_z' ],
+			loop_vals = [ 
+				'_atom_site_label',
+				'_atom_site_type_symbol',
+				'_atom_site_fract_x',
+				'_atom_site_fract_y',
+				'_atom_site_fract_z',
+			],
 			atom_props = [ 'label', 'symbol', 'x', 'y', 'z' ],
 			chem_element_idxs = [ 0, 1 ],
 			overlayed_idxs = []
 
-		for( var oprop in $mpds_cifplayer_matinfio_custom_atom_loop_props ) {
+		for( let oprop in $mpds_cifplayer_matinfio_custom_atom_loop_props ) {
 			overlayed_idxs.push( loop_vals.length )
 			loop_vals.push( oprop )
 		}
@@ -108,7 +114,7 @@ namespace $ {
 					}
 					line_data = cur_line.replace( /\t/g, " " ).split( " " ).filter( function( o ) { return o ? true : false } )
 
-					var atom = { 'overlays': {} },
+					var atom = { 'overlays': {} as Record< string, string > },
 						j = 0,
 						len2 = atprop_seq.length // TODO handle in-loop mismatch
 
@@ -130,8 +136,12 @@ namespace $ {
 							atom.overlays.label = atom.label
 							if( !atom.symbol ) atom.symbol = atom.label.replace( /[0-9]/g, '' )
 						}
-						if( !$mpds_cifplayer_matinfio_chemical_elements.JmolColors[ atom.symbol ] && atom.symbol && atom.symbol.length > 1 ) atom.symbol = atom.symbol.substr( 0, atom.symbol.length - 1 )
-						if( !!atom.symbol ) cur_structure.atoms.push( atom )
+						if( !$mpds_cifplayer_matinfio_chemical_elements.JmolColors[ atom.symbol ] && atom.symbol && atom.symbol.length > 1 ) {
+							atom.symbol = atom.symbol.substr( 0, atom.symbol.length - 1 )
+						}
+						if( !!atom.symbol ) {
+							cur_structure.atoms.push( atom )
+						}
 					}
 				}
 				continue
@@ -154,7 +164,6 @@ namespace $ {
 			if( symops.length > 1 ) cur_structure.symops = symops
 			structures.push( cur_structure )
 		}
-		//console.log(structures);
 
 		if( structures.length ) return structures[ structures.length - 1 ] // TODO switch between frames
 		else {
@@ -163,8 +172,10 @@ namespace $ {
 		}
 	}
 
+
+
 	/** Convert internal repr into CIF */
-	export function $mpds_cifplayer_matinfio_cif_from_obj( crystal: any ) {
+	export function $mpds_cifplayer_matinfio_cif_from_obj( this: $, crystal: any ) {
 
 		var cif_str = "data_matinfio\n",
 			cell_abc,
@@ -172,7 +183,7 @@ namespace $ {
 
 		if( Object.keys( crystal.cell ).length == 6 ) {
 			cell_abc = crystal.cell
-			cell_mat = $mpds_cifplayer_matinfio_cell_to_vec( crystal.cell )
+			cell_mat = this.$mpds_cifplayer_matinfio_cell_to_vec( crystal.cell.a, crystal.cell.b, crystal.cell.c, crystal.cell.alpha, crystal.cell.beta, crystal.cell.gamma )
 			// cell_mat = this.cell2vec( ...( crystal.cell as [ number, number, number, number, number, number ] ) )
 		} else {
 			cell_abc = $mpds_cifplayer_matinfio_cell_from_vec( crystal.cell )
