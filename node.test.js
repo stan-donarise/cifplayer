@@ -7880,7 +7880,23 @@ var $;
         controls_target() {
             return null;
         }
+        auto() {
+            return [
+                this.controls_target_changed(),
+                this.resize(),
+                this.start_render_loop()
+            ];
+        }
         canvas() {
+            return null;
+        }
+        controls_target_changed() {
+            return null;
+        }
+        resize() {
+            return null;
+        }
+        start_render_loop() {
             return null;
         }
     }
@@ -8558,11 +8574,8 @@ var $;
                 return next;
             return "";
         }
-        atom_pos_scale() {
-            return 100;
-        }
         atom_radius_scale() {
-            return 60;
+            return 0.6;
         }
         zoom_scale_step() {
             return 0.3;
@@ -8598,6 +8611,16 @@ var $;
                 b: "#009900",
                 c: "#0099FF"
             };
+        }
+        cell_lines_color() {
+            return "#DDDDDD";
+        }
+        axcolor() {
+            return [
+                this.color_a(),
+                this.color_b(),
+                this.color_c()
+            ];
         }
         style() {
             return {

@@ -7497,7 +7497,23 @@ var $;
         controls_target() {
             return null;
         }
+        auto() {
+            return [
+                this.controls_target_changed(),
+                this.resize(),
+                this.start_render_loop()
+            ];
+        }
         canvas() {
+            return null;
+        }
+        controls_target_changed() {
+            return null;
+        }
+        resize() {
+            return null;
+        }
+        start_render_loop() {
             return null;
         }
     }
@@ -7527,8 +7543,7 @@ var $;
     (function ($$) {
         const THREE = $mpds_cifplayer_lib_three;
         class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
-            auto() {
-                this.resize();
+            start_render_loop() {
                 const render_loop = () => {
                     this.rerender();
                     requestAnimationFrame(() => render_loop());
@@ -7544,7 +7559,7 @@ var $;
                 this.scene().add(obj);
                 return obj;
             }
-            object_blank(name, make) {
+            new_object(name, make) {
                 const old = this.scene()?.getObjectByName(name);
                 if (old) {
                     $mpds_cifplayer_lib_three_view_dispose_deep(old);
@@ -7560,19 +7575,20 @@ var $;
                 return scene;
             }
             camera() {
-                const camera = new THREE.PerspectiveCamera(45, 0, 0.1, 20000);
-                camera.position.set(900, 900, 1800);
+                const camera = new THREE.PerspectiveCamera(45, 0, 0.1, 200);
+                camera.position.set(9, 9, 18);
                 return camera;
             }
             controls_target() {
                 return new THREE.Vector3();
             }
+            controls_target_changed() {
+                return this.controls().target = this.controls_target();
+            }
             controls() {
-                const controls = $mol_mem_cached(() => this.controls()) ??
-                    new THREE.TrackballControls(this.camera(), this.dom_node_actual());
+                const controls = new THREE.TrackballControls(this.camera(), this.dom_node_actual());
                 controls.rotateSpeed = 7.5;
                 controls.staticMoving = true;
-                controls.target = this.controls_target();
                 return controls;
             }
             renderer() {
@@ -7614,9 +7630,6 @@ var $;
             $mol_mem_key
         ], $mpds_cifplayer_lib_three_view.prototype, "object", null);
         __decorate([
-            $mol_mem_key
-        ], $mpds_cifplayer_lib_three_view.prototype, "object_blank", null);
-        __decorate([
             $mol_mem
         ], $mpds_cifplayer_lib_three_view.prototype, "scene", null);
         __decorate([
@@ -7625,6 +7638,9 @@ var $;
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_lib_three_view.prototype, "controls_target", null);
+        __decorate([
+            $mol_mem
+        ], $mpds_cifplayer_lib_three_view.prototype, "controls_target_changed", null);
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_lib_three_view.prototype, "controls", null);
@@ -8341,11 +8357,8 @@ var $;
                 return next;
             return "";
         }
-        atom_pos_scale() {
-            return 100;
-        }
         atom_radius_scale() {
-            return 60;
+            return 0.6;
         }
         zoom_scale_step() {
             return 0.3;
@@ -8381,6 +8394,16 @@ var $;
                 b: "#009900",
                 c: "#0099FF"
             };
+        }
+        cell_lines_color() {
+            return "#DDDDDD";
+        }
+        axcolor() {
+            return [
+                this.color_a(),
+                this.color_b(),
+                this.color_c()
+            ];
         }
         style() {
             return {
@@ -9811,13 +9834,6 @@ var $;
             color_c() {
                 return this.$.$mol_lights() ? this.colors_light().c : this.colors_dark().c;
             }
-            axcolor() {
-                return [
-                    this.color_a(),
-                    this.color_b(),
-                    this.color_c(),
-                ];
-            }
             camera_distance() {
                 return this.camera().position.clone().sub(this.controls().target);
             }
@@ -9850,13 +9866,11 @@ var $;
                 const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
                 const sprite = new THREE.Sprite(material);
                 sprite.renderOrder = 1;
-                sprite.scale.set(canvas.width, 30, 1);
+                sprite.scale.set(canvas.width / 100, 0.3, 1);
                 return sprite;
             }
             axis_vectors() {
-                return this.structure_3d_data().cell_matrix.map(vec => {
-                    return new THREE.Vector3(vec[0] * this.atom_pos_scale(), vec[1] * this.atom_pos_scale(), vec[2] * this.atom_pos_scale());
-                });
+                return this.structure_3d_data().cell_matrix.map(vec => new THREE.Vector3(...vec));
             }
             controls_target() {
                 return this.centered() ? this.cell_center().clone() : new THREE.Vector3();
@@ -9872,8 +9886,8 @@ var $;
                 return id;
             }
             toogle_all_symmetry() {
-                const state = this.all_symmetry_enabled() ? false : true;
-                this.sym_checks().forEach(Check => Check.checked(state));
+                const checked = this.all_symmetry_enabled() ? false : true;
+                this.sym_checks().forEach(Check => Check.checked(checked));
             }
             all_symmetry_enabled() {
                 for (const Check of this.sym_checks()) {
@@ -9890,47 +9904,41 @@ var $;
             Toogle_all_title() {
                 return this.all_symmetry_enabled() ? 'Disable all' : 'Enable all';
             }
-            symmetric_atoms_raw(symmetry) {
+            symmetry_atoms(symmetry) {
                 const structure = this.structure_3d_data();
                 return structure.atoms.map((data) => this.spacegroup().symmetric_atom(symmetry, data, structure.cell_matrix));
             }
-            atoms() {
+            visible_atoms() {
                 const atoms = [];
                 const symmetries_enabled = this.spacegroup().symmetry_list().filter(name => this.symmetry_visible(name));
                 symmetries_enabled.forEach(symmetry => {
                     const next_symmetries = symmetries_enabled.slice(0, symmetries_enabled.indexOf(symmetry));
-                    this.symmetric_atoms_raw(symmetry).forEach((data) => {
+                    this.symmetry_atoms(symmetry).forEach((data) => {
                         for (const name of next_symmetries) {
-                            const atoms = this.symmetric_atoms_raw(name);
+                            const atoms = this.symmetry_atoms(name);
                             if (is_overlap(data, atoms, 0.01)) {
                                 return;
                             }
                         }
-                        atoms.push({
-                            ...data,
-                            x: data.x * this.atom_pos_scale(),
-                            y: data.y * this.atom_pos_scale(),
-                            z: data.z * this.atom_pos_scale()
-                        });
+                        atoms.push(data);
                     });
                 });
                 return atoms;
             }
             atom_box() {
-                const atom_box = this.Three().object_blank(`atom_box`, () => new THREE.Object3D());
-                this.atoms().forEach((data) => {
+                const atom_box = this.Three().new_object(`atom_box`, () => new THREE.Object3D());
+                this.visible_atoms().forEach((data) => {
                     const atom = new THREE.Mesh(new THREE.SphereGeometry(data.r * this.atom_radius_scale(), 10, 8), new THREE.MeshLambertMaterial({ color: data.c }));
                     atom.position.set(data.x, data.y, data.z);
-                    atom.name = 'atom';
                     atom_box.add(atom);
                 });
                 return atom_box;
             }
             overlay_box() {
-                const overlay_box = this.Three().object_blank(`overlay_box`, () => new THREE.Object3D());
+                const overlay_box = this.Three().new_object(`overlay_box`, () => new THREE.Object3D());
                 if (!this.overlay())
                     return;
-                this.atoms().forEach((data) => {
+                this.visible_atoms().forEach((data) => {
                     const label = this.create_sprite(data.overlays[this.overlay()]);
                     label.position.set(data.x, data.y, data.z);
                     overlay_box.add(label);
@@ -9956,17 +9964,14 @@ var $;
                 return origin;
             }
             axes_box() {
-                const axes = this.Three().object_blank('axes_box', () => new THREE.Object3D());
+                const axes_box = this.Three().new_object('axes_box', () => new THREE.Object3D());
                 const origin = new THREE.Vector3(0, 0, 0);
-                const arrows = this.axis_vectors().map(([x, y, z], i) => new THREE.ArrowHelper(new THREE.Vector3(x, y, z).normalize(), origin, Math.sqrt(x * x + y * y + z * z), this.axcolor()[i], 75, 10));
-                arrows.forEach(arrow => axes.add(arrow));
-                return axes;
-            }
-            cell_lines_color() {
-                return 0xDDDDDD;
+                const arrows = this.axis_vectors().map((axis, i) => new THREE.ArrowHelper(axis.clone().normalize(), origin, axis.length(), this.axcolor()[i], 0.75, 0.1));
+                arrows.forEach(arrow => axes_box.add(arrow));
+                return axes_box;
             }
             cell_box() {
-                const cell_box = this.Three().object_blank('cell_box', () => new THREE.Object3D());
+                const cell_box = this.Three().new_object('cell_box', () => new THREE.Object3D());
                 if (!this.structure_3d_data().cell_matrix?.length)
                     return;
                 const color = this.cell_lines_color();
@@ -9990,7 +9995,7 @@ var $;
                 add_line(bc, c);
                 add_line(bc, abc);
                 if (this.centered()) {
-                    const axes_helper = new THREE.AxesHelper(200);
+                    const axes_helper = new THREE.AxesHelper(2);
                     axes_helper.position.fromArray(this.cell_center().toArray());
                     cell_box.add(axes_helper);
                 }
@@ -10032,9 +10037,6 @@ var $;
         ], $mpds_cifplayer_player.prototype, "color_c", null);
         __decorate([
             $mol_mem
-        ], $mpds_cifplayer_player.prototype, "axcolor", null);
-        __decorate([
-            $mol_mem
         ], $mpds_cifplayer_player.prototype, "camera_distance", null);
         __decorate([
             $mol_mem
@@ -10074,10 +10076,10 @@ var $;
         ], $mpds_cifplayer_player.prototype, "Toogle_all_title", null);
         __decorate([
             $mol_mem_key
-        ], $mpds_cifplayer_player.prototype, "symmetric_atoms_raw", null);
+        ], $mpds_cifplayer_player.prototype, "symmetry_atoms", null);
         __decorate([
             $mol_mem
-        ], $mpds_cifplayer_player.prototype, "atoms", null);
+        ], $mpds_cifplayer_player.prototype, "visible_atoms", null);
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "atom_box", null);
@@ -10096,9 +10098,6 @@ var $;
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "axes_box", null);
-        __decorate([
-            $mol_mem
-        ], $mpds_cifplayer_player.prototype, "cell_lines_color", null);
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "cell_box", null);
@@ -12154,7 +12153,7 @@ var $;
                     : [this.Menu(), this.Start()];
             }
             files_read(next) {
-                const data = $mol_wire_sync($mol_blob_text)(next[0]);
+                const data = $mol_wire_sync(this.$).$mol_blob_text(next[0]);
                 this.str(data);
             }
             drop_file(transfer) {

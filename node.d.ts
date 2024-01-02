@@ -2364,7 +2364,11 @@ declare namespace $ {
         camera(): any;
         controls(): any;
         controls_target(): any;
+        auto(): readonly any[];
         canvas(): any;
+        controls_target_changed(): any;
+        resize(): any;
+        start_render_loop(): any;
     }
 }
 
@@ -2594,13 +2598,14 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
         str(next?: any): string;
-        atom_pos_scale(): number;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
         auto(): readonly any[];
         sub(): readonly any[];
         colors_light(): Record<string, any>;
         colors_dark(): Record<string, any>;
+        cell_lines_color(): string;
+        axcolor(): readonly any[];
         style(): Record<string, any>;
         attr(): Record<string, any>;
         dir_light(): any;

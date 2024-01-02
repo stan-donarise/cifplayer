@@ -2300,7 +2300,11 @@ declare namespace $ {
         camera(): any;
         controls(): any;
         controls_target(): any;
+        auto(): readonly any[];
         canvas(): any;
+        controls_target_changed(): any;
+        resize(): any;
+        start_render_loop(): any;
     }
 }
 
@@ -2311,13 +2315,14 @@ declare namespace $.$$ {
     const THREE: typeof import("../build");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
-        auto(): void;
+        start_render_loop(): void;
         object<T extends InstanceType<THREE["Object3D"]>>(name: string, make: () => T): T;
-        object_blank<T extends InstanceType<THREE["Object3D"]>>(name: string, make: () => T): T;
+        new_object<T extends InstanceType<THREE["Object3D"]>>(name: string, make: () => T): T;
         scene(): any;
         camera(): any;
         controls_target(): any;
-        controls(): InstanceType<THREE["TrackballControls"]>;
+        controls_target_changed(): any;
+        controls(): any;
         renderer(): any;
         canvas(): any;
         rerender(): void;
@@ -2555,13 +2560,14 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
         str(next?: any): string;
-        atom_pos_scale(): number;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
         auto(): readonly any[];
         sub(): readonly any[];
         colors_light(): Record<string, any>;
         colors_dark(): Record<string, any>;
+        cell_lines_color(): string;
+        axcolor(): readonly any[];
         style(): Record<string, any>;
         attr(): Record<string, any>;
         dir_light(): any;
@@ -3059,7 +3065,6 @@ declare namespace $.$$ {
         color_a(): string;
         color_b(): string;
         color_c(): string;
-        axcolor(): string[];
         camera_distance(): any;
         zoom_up(): void;
         zoom_down(): void;
@@ -3086,15 +3091,14 @@ declare namespace $.$$ {
         all_symmetry_enabled(): boolean;
         symmetry_visible(id: any, next?: any): boolean;
         Toogle_all_title(): string;
-        symmetric_atoms_raw(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[];
-        atoms(): any[];
+        symmetry_atoms(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[];
+        visible_atoms(): any[];
         atom_box(): any;
         overlay_box(): any;
         dir_light(): InstanceType<THREE["DirectionalLight"]>;
         ambient_light(): InstanceType<THREE["AmbientLight"]>;
         cell_center(): any;
         axes_box(): any;
-        cell_lines_color(): number;
         cell_box(): any;
     }
     export {};
