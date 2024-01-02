@@ -240,9 +240,9 @@ namespace $.$$ {
 
 			const atom_datas = this.visible_atoms()
 
-			this.overlay_box().children.forEach( ( label, i ) => {
+			this.overlay_box().children.forEach( ( label: InstanceType< THREE["Object3D"] >, i: number ) => {
 
-				label.children.forEach( sprite => label.remove( sprite ) )
+				label.children.forEach( ( sprite: InstanceType< THREE["Object3D"] > ) => label.remove( sprite ) )
 				
 				if( overlay ) {
 					const sprite = this.create_sprite( String( atom_datas[ i ].overlays[ overlay ] ) )
@@ -255,7 +255,7 @@ namespace $.$$ {
 		overlay_box() {
 			const overlay_box = this.Three().new_object( `overlay_box`, ()=> new THREE.Object3D() )
 
-			this.visible_atoms().forEach( ( data: any ) => {
+			this.visible_atoms().forEach( ( data ) => {
 				const label = new THREE.Object3D()
 				label.position.set( data.x, data.y, data.z )
 
