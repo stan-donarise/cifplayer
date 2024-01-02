@@ -398,7 +398,7 @@ namespace $.$$ {
 			const atoms = this.atom_box().children
 			const labels = this.overlay_box().children
 
-			atoms.forEach( ( atom, i ) => {
+			atoms.forEach( ( atom, i: number ) => {
 				this.tweens.add( new TWEEN.Tween( atom.position ).to( atom_datas[ i ], 250 ).start() )
 				this.tweens.add( new TWEEN.Tween( labels[ i ].position ).to( atom_datas[ i ], 250 ).start() )
 			} )
