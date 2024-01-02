@@ -13074,7 +13074,7 @@ var $;
         spreads() {
             return {
                 app: this.App(),
-                phonos: this.Phonons(),
+                phonons: this.Phonons(),
                 comparison: this.Comparison()
             };
         }
