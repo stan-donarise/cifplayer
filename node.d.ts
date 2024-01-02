@@ -2364,6 +2364,7 @@ declare namespace $ {
         camera(): any;
         controls(): any;
         controls_target(): any;
+        on_render(): any;
         auto(): readonly any[];
         canvas(): any;
         controls_target_changed(): any;
@@ -2600,6 +2601,8 @@ declare namespace $ {
         str(next?: any): string;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
+        vibrate(next?: any): any;
+        unvibrate(): any;
         auto(): readonly any[];
         sub(): readonly any[];
         colors_light(): Record<string, any>;
@@ -2614,7 +2617,9 @@ declare namespace $ {
         overlay_box(): any;
         cell_box(): any;
         axes_box(): any;
+        overlay_changed(): any;
         controls_target(): any;
+        on_render(): any;
         scene(): any;
         controls(): any;
         camera(): any;
@@ -3157,8 +3162,11 @@ declare namespace $ {
         Upload_native(): $$.$mol_button_open_native;
         Upload(): $mol_button_open;
         Data_text(): $$.$mol_textarea;
+        menu_body(): readonly any[];
         Menu(): $mol_page;
         str(next?: any): string;
+        vibrate(next?: any): any;
+        unvibrate(): any;
         Player(): $mpds_cifplayer_player;
         Start_message(): $$.$mol_text;
         paste_example(next?: any): any;

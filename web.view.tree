@@ -427,6 +427,7 @@ $mpds_cifplayer_lib_three_view $mol_view
 	camera null
 	controls null
 	controls_target null
+	on_render null
 	auto /
 		<= controls_target_changed null
 		<= resize null
@@ -518,6 +519,8 @@ $mpds_cifplayer_player $mol_view
 	str? \
 	atom_radius_scale 0.6
 	zoom_scale_step 0.3
+	vibrate? null
+	unvibrate null
 	auto /
 		<= dir_light null
 		<= ambient_light null
@@ -525,12 +528,14 @@ $mpds_cifplayer_player $mol_view
 		<= overlay_box null
 		<= cell_box null
 		<= axes_box null
+		<= overlay_changed null
 	sub /
 		<= Three $mpds_cifplayer_lib_three_view
 			scene => scene
 			controls => controls
 			controls_target <= controls_target null
 			camera => camera
+			on_render <= on_render null
 		<= Left_panel $mol_view
 			sub /
 				<= Info $mol_view
@@ -885,7 +890,7 @@ $mpds_cifplayer_app $mol_drop
 				<= Source $mol_link_source
 					uri \https://github.com/tilde-lab/cifplayer
 				<= Lights $mol_lights_toggle
-			body /
+			body <= menu_body /
 				<= Upload $mol_button_open
 					Icon => Upload_icon
 					Native => Upload_native
@@ -898,6 +903,8 @@ $mpds_cifplayer_app $mol_drop
 					hint \Paste here...
 		<= Player $mpds_cifplayer_player
 			str <= str? \
+			vibrate? => vibrate?
+			unvibrate => unvibrate
 	Start $mol_view
 		sub /
 			<= Start_message $mol_text

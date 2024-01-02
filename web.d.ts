@@ -2300,6 +2300,7 @@ declare namespace $ {
         camera(): any;
         controls(): any;
         controls_target(): any;
+        on_render(): any;
         auto(): readonly any[];
         canvas(): any;
         controls_target_changed(): any;
@@ -2562,6 +2563,8 @@ declare namespace $ {
         str(next?: any): string;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
+        vibrate(next?: any): any;
+        unvibrate(): any;
         auto(): readonly any[];
         sub(): readonly any[];
         colors_light(): Record<string, any>;
@@ -2576,7 +2579,9 @@ declare namespace $ {
         overlay_box(): any;
         cell_box(): any;
         axes_box(): any;
+        overlay_changed(): any;
         controls_target(): any;
+        on_render(): any;
         scene(): any;
         controls(): any;
         camera(): any;
@@ -2631,6 +2636,10 @@ declare namespace $ {
         color_b(): string;
         color_c(): string;
     }
+}
+
+declare namespace $ {
+    const $mpds_cifplayer_lib_tween: typeof import("../tween/build/index");
 }
 
 declare namespace $ {
@@ -2988,6 +2997,23 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_promise<Result = void>(): Promise<Result> & {
+        done: (res: Result | PromiseLike<Result>) => void;
+        fail: (error?: any) => void;
+    };
+}
+
+declare namespace $ {
+    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void> & {
+        done: (res: void | PromiseLike<void>) => void;
+        fail: (error?: any) => void;
+    } & {
+        destructor: () => void;
+    };
+    function $mol_wait_timeout(this: $, timeout: number): void;
+}
+
+declare namespace $ {
     function $mpds_cifplayer_matinfio_cell_to_matrix(this: $, cell: $mpds_cifplayer_matinfio_internal_obj['cell']): number[][];
     function $mpds_cifplayer_matinfio_cell_params_from_matrix(matrix: number[]): number[];
 }
@@ -3092,14 +3118,19 @@ declare namespace $.$$ {
         symmetry_visible(id: any, next?: any): boolean;
         Toogle_all_title(): string;
         symmetry_atoms(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[];
-        visible_atoms(): any[];
+        visible_atoms(): $mpds_cifplayer_matinfio_internal_obj_atom[];
         atom_box(): any;
+        overlay_changed(): void;
         overlay_box(): any;
         dir_light(): InstanceType<THREE["DirectionalLight"]>;
         ambient_light(): InstanceType<THREE["AmbientLight"]>;
         cell_center(): any;
         axes_box(): any;
         cell_box(): any;
+        tweens: any;
+        on_render(): void;
+        vibrate(phonon: number[][]): void;
+        unvibrate(): void;
     }
     export {};
 }
@@ -3304,23 +3335,6 @@ declare namespace $ {
         Fallback(): $$.$mol_link;
         uri_change(next?: any): any;
     }
-}
-
-declare namespace $ {
-    function $mol_promise<Result = void>(): Promise<Result> & {
-        done: (res: Result | PromiseLike<Result>) => void;
-        fail: (error?: any) => void;
-    };
-}
-
-declare namespace $ {
-    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void> & {
-        done: (res: void | PromiseLike<void>) => void;
-        fail: (error?: any) => void;
-    } & {
-        destructor: () => void;
-    };
-    function $mol_wait_timeout(this: $, timeout: number): void;
 }
 
 declare namespace $.$$ {
@@ -3587,8 +3601,11 @@ declare namespace $ {
         Upload_native(): $$.$mol_button_open_native;
         Upload(): $mol_button_open;
         Data_text(): $$.$mol_textarea;
+        menu_body(): readonly any[];
         Menu(): $mol_page;
         str(next?: any): string;
+        vibrate(next?: any): void;
+        unvibrate(): void;
         Player(): $$.$mpds_cifplayer_player;
         Start_message(): $$.$mol_text;
         paste_example(next?: any): any;

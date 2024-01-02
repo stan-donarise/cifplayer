@@ -7895,6 +7895,9 @@ var $;
         controls_target() {
             return null;
         }
+        on_render() {
+            return null;
+        }
         auto() {
             return [
                 this.controls_target_changed(),
@@ -8595,6 +8598,14 @@ var $;
         zoom_scale_step() {
             return 0.3;
         }
+        vibrate(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        unvibrate() {
+            return null;
+        }
         auto() {
             return [
                 this.dir_light(),
@@ -8602,7 +8613,8 @@ var $;
                 this.atom_box(),
                 this.overlay_box(),
                 this.cell_box(),
-                this.axes_box()
+                this.axes_box(),
+                this.overlay_changed()
             ];
         }
         sub() {
@@ -8669,7 +8681,13 @@ var $;
         axes_box() {
             return null;
         }
+        overlay_changed() {
+            return null;
+        }
         controls_target() {
+            return null;
+        }
+        on_render() {
             return null;
         }
         scene() {
@@ -8684,6 +8702,7 @@ var $;
         Three() {
             const obj = new this.$.$mpds_cifplayer_lib_three_view();
             obj.controls_target = () => this.controls_target();
+            obj.on_render = () => this.on_render();
             return obj;
         }
         descr_a() {
@@ -8941,6 +8960,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "str", null);
+    __decorate([
+        $mol_mem
+    ], $mpds_cifplayer_player.prototype, "vibrate", null);
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "Three", null);
@@ -10959,6 +10981,12 @@ var $;
             obj.hint = () => "Paste here...";
             return obj;
         }
+        menu_body() {
+            return [
+                this.Upload(),
+                this.Data_text()
+            ];
+        }
         Menu() {
             const obj = new this.$.$mol_page();
             obj.title = () => "3d-crystals web-viewer";
@@ -10966,16 +10994,19 @@ var $;
                 this.Source(),
                 this.Lights()
             ];
-            obj.body = () => [
-                this.Upload(),
-                this.Data_text()
-            ];
+            obj.body = () => this.menu_body();
             return obj;
         }
         str(next) {
             if (next !== undefined)
                 return next;
             return "";
+        }
+        vibrate(next) {
+            return this.Player().vibrate(next);
+        }
+        unvibrate() {
+            return this.Player().unvibrate();
         }
         Player() {
             const obj = new this.$.$mpds_cifplayer_player();
@@ -11128,21 +11159,19 @@ var $;
             Menu: {
                 Body_content: {
                     gap: $mol_gap.block,
+                    maxWidth: '25rem',
                 },
                 Head: {
                     justify: {
                         content: 'flex-start'
-                    }
-                }
+                    },
+                },
             },
             Player: {
                 flex: {
                     grow: 1,
                     basis: '30rem',
                 },
-            },
-            Data_text: {
-                maxWidth: '25rem',
             },
         });
     })($$ = $.$$ || ($.$$ = {}));

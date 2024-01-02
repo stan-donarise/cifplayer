@@ -16,6 +16,8 @@
 	include \/mol/view/tree/test
 \/mpds/cifplayer/lib/three
 	include \/mpds/cifplayer/lib/three/_three.js
+\/mpds/cifplayer/lib/tween
+	include \/mpds/cifplayer/lib/tween/_tween.js
 \/mpds/cifplayer/lib/math
 	include \/mpds/cifplayer/lib/math/_math.js
 \/mpds/cifplayer/lib/spacegroups

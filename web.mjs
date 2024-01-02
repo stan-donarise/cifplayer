@@ -7497,6 +7497,9 @@ var $;
         controls_target() {
             return null;
         }
+        on_render() {
+            return null;
+        }
         auto() {
             return [
                 this.controls_target_changed(),
@@ -7575,7 +7578,7 @@ var $;
                 return scene;
             }
             camera() {
-                const camera = new THREE.PerspectiveCamera(45, 0, 0.1, 200);
+                const camera = new THREE.PerspectiveCamera(45, 0);
                 camera.position.set(9, 9, 18);
                 return camera;
             }
@@ -7602,19 +7605,22 @@ var $;
                 return this.renderer()?.domElement;
             }
             rerender() {
+                this.on_render();
                 this.renderer()?.render(this.scene(), this.camera());
                 this.controls()?.update();
             }
             size() {
-                if (!this.view_rect())
+                const rect = this.view_rect();
+                if (!rect)
                     return;
-                const { width, height } = this.view_rect();
+                const { width, height } = rect;
                 return { width, height };
             }
             resize() {
-                if (!this.size())
+                const size = this.size();
+                if (!size)
                     return;
-                const { width, height } = this.size();
+                const { width, height } = size;
                 this.camera().aspect = width / height;
                 this.camera().updateProjectionMatrix();
                 this.renderer().setSize(width, height);
@@ -8363,6 +8369,14 @@ var $;
         zoom_scale_step() {
             return 0.3;
         }
+        vibrate(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        unvibrate() {
+            return null;
+        }
         auto() {
             return [
                 this.dir_light(),
@@ -8370,7 +8384,8 @@ var $;
                 this.atom_box(),
                 this.overlay_box(),
                 this.cell_box(),
-                this.axes_box()
+                this.axes_box(),
+                this.overlay_changed()
             ];
         }
         sub() {
@@ -8437,7 +8452,13 @@ var $;
         axes_box() {
             return null;
         }
+        overlay_changed() {
+            return null;
+        }
         controls_target() {
+            return null;
+        }
+        on_render() {
             return null;
         }
         scene() {
@@ -8452,6 +8473,7 @@ var $;
         Three() {
             const obj = new this.$.$mpds_cifplayer_lib_three_view();
             obj.controls_target = () => this.controls_target();
+            obj.on_render = () => this.on_render();
             return obj;
         }
         descr_a() {
@@ -8711,6 +8733,9 @@ var $;
     ], $mpds_cifplayer_player.prototype, "str", null);
     __decorate([
         $mol_mem
+    ], $mpds_cifplayer_player.prototype, "vibrate", null);
+    __decorate([
+        $mol_mem
     ], $mpds_cifplayer_player.prototype, "Three", null);
     __decorate([
         $mol_mem
@@ -8814,6 +8839,23 @@ var $;
     $.$mpds_cifplayer_player = $mpds_cifplayer_player;
 })($ || ($ = {}));
 //mpds/cifplayer/player/-view.tree/player.view.tree.ts
+;
+
+var $node = $node || {}
+void function( module ) { var exports = module.exports = this; function require( id ) { return $node[ id.replace( /^.\// , "../mpds/cifplayer/lib/tween/" ) ] }; 
+;
+"use strict";var t,e=Object.freeze({Linear:Object.freeze({None:function(t){return t},In:function(t){return this.None(t)},Out:function(t){return this.None(t)},InOut:function(t){return this.None(t)}}),Quadratic:Object.freeze({In:function(t){return t*t},Out:function(t){return t*(2-t)},InOut:function(t){return(t*=2)<1?.5*t*t:-.5*(--t*(t-2)-1)}}),Cubic:Object.freeze({In:function(t){return t*t*t},Out:function(t){return--t*t*t+1},InOut:function(t){return(t*=2)<1?.5*t*t*t:.5*((t-=2)*t*t+2)}}),Quartic:Object.freeze({In:function(t){return t*t*t*t},Out:function(t){return 1- --t*t*t*t},InOut:function(t){return(t*=2)<1?.5*t*t*t*t:-.5*((t-=2)*t*t*t-2)}}),Quintic:Object.freeze({In:function(t){return t*t*t*t*t},Out:function(t){return--t*t*t*t*t+1},InOut:function(t){return(t*=2)<1?.5*t*t*t*t*t:.5*((t-=2)*t*t*t*t+2)}}),Sinusoidal:Object.freeze({In:function(t){return 1-Math.sin((1-t)*Math.PI/2)},Out:function(t){return Math.sin(t*Math.PI/2)},InOut:function(t){return.5*(1-Math.sin(Math.PI*(.5-t)))}}),Exponential:Object.freeze({In:function(t){return 0===t?0:Math.pow(1024,t-1)},Out:function(t){return 1===t?1:1-Math.pow(2,-10*t)},InOut:function(t){return 0===t?0:1===t?1:(t*=2)<1?.5*Math.pow(1024,t-1):.5*(2-Math.pow(2,-10*(t-1)))}}),Circular:Object.freeze({In:function(t){return 1-Math.sqrt(1-t*t)},Out:function(t){return Math.sqrt(1- --t*t)},InOut:function(t){return(t*=2)<1?-.5*(Math.sqrt(1-t*t)-1):.5*(Math.sqrt(1-(t-=2)*t)+1)}}),Elastic:Object.freeze({In:function(t){return 0===t?0:1===t?1:-Math.pow(2,10*(t-1))*Math.sin(5*(t-1.1)*Math.PI)},Out:function(t){return 0===t?0:1===t?1:Math.pow(2,-10*t)*Math.sin(5*(t-.1)*Math.PI)+1},InOut:function(t){return 0===t?0:1===t?1:(t*=2)<1?-.5*Math.pow(2,10*(t-1))*Math.sin(5*(t-1.1)*Math.PI):.5*Math.pow(2,-10*(t-1))*Math.sin(5*(t-1.1)*Math.PI)+1}}),Back:Object.freeze({In:function(t){var e=1.70158;return 1===t?1:t*t*((e+1)*t-e)},Out:function(t){var e=1.70158;return 0===t?0:--t*t*((e+1)*t+e)+1},InOut:function(t){var e=2.5949095;return(t*=2)<1?t*t*((e+1)*t-e)*.5:.5*((t-=2)*t*((e+1)*t+e)+2)}}),Bounce:Object.freeze({In:function(t){return 1-e.Bounce.Out(1-t)},Out:function(t){return t<1/2.75?7.5625*t*t:t<2/2.75?7.5625*(t-=1.5/2.75)*t+.75:t<2.5/2.75?7.5625*(t-=2.25/2.75)*t+.9375:7.5625*(t-=2.625/2.75)*t+.984375},InOut:function(t){return t<.5?.5*e.Bounce.In(2*t):.5*e.Bounce.Out(2*t-1)+.5}}),generatePow:function(t){return void 0===t&&(t=4),t=(t=t<Number.EPSILON?Number.EPSILON:t)>1e4?1e4:t,{In:function(e){return Math.pow(e,t)},Out:function(e){return 1-Math.pow(1-e,t)},InOut:function(e){return e<.5?Math.pow(2*e,t)/2:(1-Math.pow(2-2*e,t))/2+.5}}}}),i=function(){return performance.now()},n=function(){function t(){this._tweens={},this._tweensAddedDuringUpdate={}}return t.prototype.getAll=function(){var t=this;return Object.keys(this._tweens).map((function(e){return t._tweens[e]}))},t.prototype.removeAll=function(){this._tweens={}},t.prototype.add=function(t){this._tweens[t.getId()]=t,this._tweensAddedDuringUpdate[t.getId()]=t},t.prototype.remove=function(t){delete this._tweens[t.getId()],delete this._tweensAddedDuringUpdate[t.getId()]},t.prototype.update=function(t,e){void 0===t&&(t=i()),void 0===e&&(e=!1);var n=Object.keys(this._tweens);if(0===n.length)return!1;for(;n.length>0;){this._tweensAddedDuringUpdate={};for(var r=0;r<n.length;r++){var s=this._tweens[n[r]],a=!e;s&&!1===s.update(t,a)&&!e&&delete this._tweens[n[r]]}n=Object.keys(this._tweensAddedDuringUpdate)}return!0},t}(),r={Linear:function(t,e){var i=t.length-1,n=i*e,s=Math.floor(n),a=r.Utils.Linear;return e<0?a(t[0],t[1],n):e>1?a(t[i],t[i-1],i-n):a(t[s],t[s+1>i?i:s+1],n-s)},Bezier:function(t,e){for(var i=0,n=t.length-1,s=Math.pow,a=r.Utils.Bernstein,o=0;o<=n;o++)i+=s(1-e,n-o)*s(e,o)*t[o]*a(n,o);return i},CatmullRom:function(t,e){var i=t.length-1,n=i*e,s=Math.floor(n),a=r.Utils.CatmullRom;return t[0]===t[i]?(e<0&&(s=Math.floor(n=i*(1+e))),a(t[(s-1+i)%i],t[s],t[(s+1)%i],t[(s+2)%i],n-s)):e<0?t[0]-(a(t[0],t[0],t[1],t[1],-n)-t[0]):e>1?t[i]-(a(t[i],t[i],t[i-1],t[i-1],n-i)-t[i]):a(t[s?s-1:0],t[s],t[i<s+1?i:s+1],t[i<s+2?i:s+2],n-s)},Utils:{Linear:function(t,e,i){return(e-t)*i+t},Bernstein:function(t,e){var i=r.Utils.Factorial;return i(t)/i(e)/i(t-e)},Factorial:(t=[1],function(e){var i=1;if(t[e])return t[e];for(var n=e;n>1;n--)i*=n;return t[e]=i,i}),CatmullRom:function(t,e,i,n,r){var s=.5*(i-t),a=.5*(n-e),o=r*r;return(2*e-2*i+s+a)*(r*o)+(-3*e+3*i-2*s-a)*o+s*r+e}}},s=function(){function t(){}return t.nextId=function(){return t._nextId++},t._nextId=0,t}(),a=new n,o=function(){function t(t,i){void 0===i&&(i=a),this._object=t,this._group=i,this._isPaused=!1,this._pauseStart=0,this._valuesStart={},this._valuesEnd={},this._valuesStartRepeat={},this._duration=1e3,this._isDynamic=!1,this._initialRepeat=0,this._repeat=0,this._yoyo=!1,this._isPlaying=!1,this._reversed=!1,this._delayTime=0,this._startTime=0,this._easingFunction=e.Linear.None,this._interpolationFunction=r.Linear,this._chainedTweens=[],this._onStartCallbackFired=!1,this._onEveryStartCallbackFired=!1,this._id=s.nextId(),this._isChainStopped=!1,this._propertiesAreSetUp=!1,this._goToEnd=!1}return t.prototype.getId=function(){return this._id},t.prototype.isPlaying=function(){return this._isPlaying},t.prototype.isPaused=function(){return this._isPaused},t.prototype.to=function(t,e){if(void 0===e&&(e=1e3),this._isPlaying)throw new Error("Can not call Tween.to() while Tween is already started or paused. Stop the Tween first.");return this._valuesEnd=t,this._propertiesAreSetUp=!1,this._duration=e,this},t.prototype.duration=function(t){return void 0===t&&(t=1e3),this._duration=t,this},t.prototype.dynamic=function(t){return void 0===t&&(t=!1),this._isDynamic=t,this},t.prototype.start=function(t,e){if(void 0===t&&(t=i()),void 0===e&&(e=!1),this._isPlaying)return this;if(this._group&&this._group.add(this),this._repeat=this._initialRepeat,this._reversed)for(var n in this._reversed=!1,this._valuesStartRepeat)this._swapEndStartRepeatValues(n),this._valuesStart[n]=this._valuesStartRepeat[n];if(this._isPlaying=!0,this._isPaused=!1,this._onStartCallbackFired=!1,this._onEveryStartCallbackFired=!1,this._isChainStopped=!1,this._startTime=t,this._startTime+=this._delayTime,!this._propertiesAreSetUp||e){if(this._propertiesAreSetUp=!0,!this._isDynamic){var r={};for(var s in this._valuesEnd)r[s]=this._valuesEnd[s];this._valuesEnd=r}this._setupProperties(this._object,this._valuesStart,this._valuesEnd,this._valuesStartRepeat,e)}return this},t.prototype.startFromCurrentValues=function(t){return this.start(t,!0)},t.prototype._setupProperties=function(t,e,i,n,r){for(var s in i){var a=t[s],o=Array.isArray(a),u=o?"array":typeof a,h=!o&&Array.isArray(i[s]);if("undefined"!==u&&"function"!==u){if(h){if(0===(v=i[s]).length)continue;for(var p=[a],_=0,l=v.length;_<l;_+=1){var c=this._handleRelativeValue(a,v[_]);if(isNaN(c)){h=!1,console.warn("Found invalid interpolation list. Skipping.");break}p.push(c)}h&&(i[s]=p)}if("object"!==u&&!o||!a||h)(void 0===e[s]||r)&&(e[s]=a),o||(e[s]*=1),n[s]=h?i[s].slice().reverse():e[s]||0;else{e[s]=o?[]:{};var d=a;for(var f in d)e[s][f]=d[f];n[s]=o?[]:{};var v=i[s];if(!this._isDynamic){var y={};for(var f in v)y[f]=v[f];i[s]=v=y}this._setupProperties(d,e[s],v,n[s],r)}}}},t.prototype.stop=function(){return this._isChainStopped||(this._isChainStopped=!0,this.stopChainedTweens()),this._isPlaying?(this._group&&this._group.remove(this),this._isPlaying=!1,this._isPaused=!1,this._onStopCallback&&this._onStopCallback(this._object),this):this},t.prototype.end=function(){return this._goToEnd=!0,this.update(1/0),this},t.prototype.pause=function(t){return void 0===t&&(t=i()),this._isPaused||!this._isPlaying||(this._isPaused=!0,this._pauseStart=t,this._group&&this._group.remove(this)),this},t.prototype.resume=function(t){return void 0===t&&(t=i()),this._isPaused&&this._isPlaying?(this._isPaused=!1,this._startTime+=t-this._pauseStart,this._pauseStart=0,this._group&&this._group.add(this),this):this},t.prototype.stopChainedTweens=function(){for(var t=0,e=this._chainedTweens.length;t<e;t++)this._chainedTweens[t].stop();return this},t.prototype.group=function(t){return void 0===t&&(t=a),this._group=t,this},t.prototype.delay=function(t){return void 0===t&&(t=0),this._delayTime=t,this},t.prototype.repeat=function(t){return void 0===t&&(t=0),this._initialRepeat=t,this._repeat=t,this},t.prototype.repeatDelay=function(t){return this._repeatDelayTime=t,this},t.prototype.yoyo=function(t){return void 0===t&&(t=!1),this._yoyo=t,this},t.prototype.easing=function(t){return void 0===t&&(t=e.Linear.None),this._easingFunction=t,this},t.prototype.interpolation=function(t){return void 0===t&&(t=r.Linear),this._interpolationFunction=t,this},t.prototype.chain=function(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];return this._chainedTweens=t,this},t.prototype.onStart=function(t){return this._onStartCallback=t,this},t.prototype.onEveryStart=function(t){return this._onEveryStartCallback=t,this},t.prototype.onUpdate=function(t){return this._onUpdateCallback=t,this},t.prototype.onRepeat=function(t){return this._onRepeatCallback=t,this},t.prototype.onComplete=function(t){return this._onCompleteCallback=t,this},t.prototype.onStop=function(t){return this._onStopCallback=t,this},t.prototype.update=function(t,e){if(void 0===t&&(t=i()),void 0===e&&(e=!0),this._isPaused)return!0;var n,r,s=this._startTime+this._duration;if(!this._goToEnd&&!this._isPlaying){if(t>s)return!1;e&&this.start(t,!0)}if(this._goToEnd=!1,t<this._startTime)return!0;!1===this._onStartCallbackFired&&(this._onStartCallback&&this._onStartCallback(this._object),this._onStartCallbackFired=!0),!1===this._onEveryStartCallbackFired&&(this._onEveryStartCallback&&this._onEveryStartCallback(this._object),this._onEveryStartCallbackFired=!0),r=(t-this._startTime)/this._duration,r=0===this._duration||r>1?1:r;var a=this._easingFunction(r);if(this._updateProperties(this._object,this._valuesStart,this._valuesEnd,a),this._onUpdateCallback&&this._onUpdateCallback(this._object,r),1===r){if(this._repeat>0){for(n in isFinite(this._repeat)&&this._repeat--,this._valuesStartRepeat)this._yoyo||"string"!=typeof this._valuesEnd[n]||(this._valuesStartRepeat[n]=this._valuesStartRepeat[n]+parseFloat(this._valuesEnd[n])),this._yoyo&&this._swapEndStartRepeatValues(n),this._valuesStart[n]=this._valuesStartRepeat[n];return this._yoyo&&(this._reversed=!this._reversed),void 0!==this._repeatDelayTime?this._startTime=t+this._repeatDelayTime:this._startTime=t+this._delayTime,this._onRepeatCallback&&this._onRepeatCallback(this._object),this._onEveryStartCallbackFired=!1,!0}this._onCompleteCallback&&this._onCompleteCallback(this._object);for(var o=0,u=this._chainedTweens.length;o<u;o++)this._chainedTweens[o].start(this._startTime+this._duration,!1);return this._isPlaying=!1,!1}return!0},t.prototype._updateProperties=function(t,e,i,n){for(var r in i)if(void 0!==e[r]){var s=e[r]||0,a=i[r],o=Array.isArray(t[r]),u=Array.isArray(a);!o&&u?t[r]=this._interpolationFunction(a,n):"object"==typeof a&&a?this._updateProperties(t[r],s,a,n):"number"==typeof(a=this._handleRelativeValue(s,a))&&(t[r]=s+(a-s)*n)}},t.prototype._handleRelativeValue=function(t,e){return"string"!=typeof e?e:"+"===e.charAt(0)||"-"===e.charAt(0)?t+parseFloat(e):parseFloat(e)},t.prototype._swapEndStartRepeatValues=function(t){var e=this._valuesStartRepeat[t],i=this._valuesEnd[t];this._valuesStartRepeat[t]="string"==typeof i?this._valuesStartRepeat[t]+parseFloat(i):this._valuesEnd[t],this._valuesEnd[t]=e},t}(),u="21.0.0",h=s.nextId,p=a,_=p.getAll.bind(p),l=p.removeAll.bind(p),c=p.add.bind(p),d=p.remove.bind(p),f=p.update.bind(p),v={Easing:e,Group:n,Interpolation:r,now:i,Sequence:s,nextId:h,Tween:o,VERSION:u,getAll:_,removeAll:l,add:c,remove:d,update:f},y=Object.freeze({__proto__:null,Easing:e,Group:n,Interpolation:r,Sequence:s,Tween:o,VERSION:u,add:c,default:v,getAll:_,nextId:h,now:i,remove:d,removeAll:l,update:f});exports.TWEEN=y;
+
+;
+
+$node[ "../mpds/cifplayer/lib/tween/_tween" ] = $node[ "../mpds/cifplayer/lib/tween/_tween.js" ] = module.exports }.call( {} , {} )
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mpds_cifplayer_lib_tween = require('../mpds/cifplayer/lib/tween/_tween.js');
+})($ || ($ = {}));
+//mpds/cifplayer/lib/tween/tween.web.ts
 ;
 "use strict";
 var $;
@@ -9020,8 +9062,8 @@ var $;
             this.data = data;
         }
         static by_name_and_num(name, num) {
-            const spacegroup = $mpds_cifplayer_matinfio_spacegroup.by_num(num) ??
-                $mpds_cifplayer_matinfio_spacegroup.by_name(name);
+            const spacegroup = $mpds_cifplayer_matinfio_spacegroup.by_num(num)
+                ?? $mpds_cifplayer_matinfio_spacegroup.by_name(name);
             return spacegroup ? spacegroup : $mpds_cifplayer_matinfio_spacegroup.unknown();
         }
         static by_name(name) {
@@ -9110,6 +9152,43 @@ var $;
     }
 })($ || ($ = {}));
 //mpds/cifplayer/matinfio/spacegroup/spacegroup.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_promise() {
+        let done;
+        let fail;
+        const promise = new Promise((d, f) => {
+            done = d;
+            fail = f;
+        });
+        return Object.assign(promise, {
+            done,
+            fail,
+        });
+    }
+    $.$mol_promise = $mol_promise;
+})($ || ($ = {}));
+//mol/promise/promise/promise.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_wait_timeout_async(timeout) {
+        const promise = $mol_promise();
+        const task = new this.$mol_after_timeout(timeout, () => promise.done());
+        return Object.assign(promise, {
+            destructor: () => task.destructor()
+        });
+    }
+    $.$mol_wait_timeout_async = $mol_wait_timeout_async;
+    function $mol_wait_timeout(timeout) {
+        return this.$mol_wire_sync(this).$mol_wait_timeout_async(timeout);
+    }
+    $.$mol_wait_timeout = $mol_wait_timeout;
+})($ || ($ = {}));
+//mol/wait/timeout/timeout.ts
 ;
 "use strict";
 var $;
@@ -9793,6 +9872,7 @@ var $;
     var $$;
     (function ($$) {
         const THREE = $mpds_cifplayer_lib_three;
+        const TWEEN = $mpds_cifplayer_lib_tween.TWEEN;
         class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
             available_overlays() {
                 return {
@@ -9934,12 +10014,21 @@ var $;
                 });
                 return atom_box;
             }
+            overlay_changed() {
+                const overlay = this.overlay();
+                const atom_datas = this.visible_atoms();
+                this.overlay_box().children.forEach((label, i) => {
+                    label.children.forEach((sprite) => label.remove(sprite));
+                    if (overlay) {
+                        const sprite = this.create_sprite(String(atom_datas[i].overlays[overlay]));
+                        label.add(sprite);
+                    }
+                });
+            }
             overlay_box() {
                 const overlay_box = this.Three().new_object(`overlay_box`, () => new THREE.Object3D());
-                if (!this.overlay())
-                    return;
                 this.visible_atoms().forEach((data) => {
-                    const label = this.create_sprite(data.overlays[this.overlay()]);
+                    const label = new THREE.Object3D();
                     label.position.set(data.x, data.y, data.z);
                     overlay_box.add(label);
                 });
@@ -10001,6 +10090,41 @@ var $;
                 }
                 return cell_box;
             }
+            tweens = new TWEEN.Group();
+            on_render() {
+                this.tweens.update();
+            }
+            vibrate(phonon) {
+                $mol_wire_sync(this).unvibrate();
+                const atoms = this.atom_box().children;
+                const labels = this.overlay_box().children;
+                if (phonon.length !== atoms.length) {
+                    this.$.$mol_fail(new $mol_data_error(`Internal error: phonon length does not match number of atoms`));
+                }
+                atoms.forEach((atom, i) => {
+                    const start = atom.position.toArray();
+                    const [x, y, z] = phonon[i].map((v, i) => start[i] + v * 6);
+                    this.tweens.add(new TWEEN.Tween(atom.position).to({ x, y, z }, 750)
+                        .easing(TWEEN.Easing.Cubic.InOut).repeat(Infinity).yoyo(true).start());
+                    this.tweens.add(new TWEEN.Tween(labels[i].position).to({ x, y, z }, 750)
+                        .easing(TWEEN.Easing.Cubic.InOut).repeat(Infinity).yoyo(true).start());
+                });
+            }
+            unvibrate() {
+                if (this.tweens.getAll().length == 0)
+                    return;
+                this.tweens.removeAll();
+                const atom_datas = this.visible_atoms();
+                const atoms = this.atom_box().children;
+                const labels = this.overlay_box().children;
+                atoms.forEach((atom, i) => {
+                    this.tweens.add(new TWEEN.Tween(atom.position).to(atom_datas[i], 250).start());
+                    this.tweens.add(new TWEEN.Tween(labels[i].position).to(atom_datas[i], 250).start());
+                });
+                this.$.$mol_wait_timeout(250);
+                this.tweens.removeAll();
+                return;
+            }
         }
         __decorate([
             $mol_mem
@@ -10039,10 +10163,10 @@ var $;
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "camera_distance", null);
         __decorate([
-            $mol_mem
+            $mol_action
         ], $mpds_cifplayer_player.prototype, "zoom_up", null);
         __decorate([
-            $mol_mem
+            $mol_action
         ], $mpds_cifplayer_player.prototype, "zoom_down", null);
         __decorate([
             $mol_mem
@@ -10085,6 +10209,9 @@ var $;
         ], $mpds_cifplayer_player.prototype, "atom_box", null);
         __decorate([
             $mol_mem
+        ], $mpds_cifplayer_player.prototype, "overlay_changed", null);
+        __decorate([
+            $mol_mem
         ], $mpds_cifplayer_player.prototype, "overlay_box", null);
         __decorate([
             $mol_mem
@@ -10101,6 +10228,12 @@ var $;
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "cell_box", null);
+        __decorate([
+            $mol_action
+        ], $mpds_cifplayer_player.prototype, "vibrate", null);
+        __decorate([
+            $mol_action
+        ], $mpds_cifplayer_player.prototype, "unvibrate", null);
         $$.$mpds_cifplayer_player = $mpds_cifplayer_player;
         function is_overlap(check, atoms, delta) {
             for (const atom of atoms) {
@@ -10820,43 +10953,6 @@ var $;
     $.$mol_embed_native = $mol_embed_native;
 })($ || ($ = {}));
 //mol/embed/native/-view.tree/native.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_promise() {
-        let done;
-        let fail;
-        const promise = new Promise((d, f) => {
-            done = d;
-            fail = f;
-        });
-        return Object.assign(promise, {
-            done,
-            fail,
-        });
-    }
-    $.$mol_promise = $mol_promise;
-})($ || ($ = {}));
-//mol/promise/promise/promise.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wait_timeout_async(timeout) {
-        const promise = $mol_promise();
-        const task = new this.$mol_after_timeout(timeout, () => promise.done());
-        return Object.assign(promise, {
-            destructor: () => task.destructor()
-        });
-    }
-    $.$mol_wait_timeout_async = $mol_wait_timeout_async;
-    function $mol_wait_timeout(timeout) {
-        return this.$mol_wire_sync(this).$mol_wait_timeout_async(timeout);
-    }
-    $.$mol_wait_timeout = $mol_wait_timeout;
-})($ || ($ = {}));
-//mol/wait/timeout/timeout.ts
 ;
 "use strict";
 var $;
@@ -11936,6 +12032,12 @@ var $;
             obj.hint = () => "Paste here...";
             return obj;
         }
+        menu_body() {
+            return [
+                this.Upload(),
+                this.Data_text()
+            ];
+        }
         Menu() {
             const obj = new this.$.$mol_page();
             obj.title = () => "3d-crystals web-viewer";
@@ -11943,16 +12045,19 @@ var $;
                 this.Source(),
                 this.Lights()
             ];
-            obj.body = () => [
-                this.Upload(),
-                this.Data_text()
-            ];
+            obj.body = () => this.menu_body();
             return obj;
         }
         str(next) {
             if (next !== undefined)
                 return next;
             return "";
+        }
+        vibrate(next) {
+            return this.Player().vibrate(next);
+        }
+        unvibrate() {
+            return this.Player().unvibrate();
         }
         Player() {
             const obj = new this.$.$mpds_cifplayer_player();
@@ -12120,21 +12225,19 @@ var $;
             Menu: {
                 Body_content: {
                     gap: $mol_gap.block,
+                    maxWidth: '25rem',
                 },
                 Head: {
                     justify: {
                         content: 'flex-start'
-                    }
-                }
+                    },
+                },
             },
             Player: {
                 flex: {
                     grow: 1,
                     basis: '30rem',
                 },
-            },
-            Data_text: {
-                maxWidth: '25rem',
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
