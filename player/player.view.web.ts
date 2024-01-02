@@ -375,7 +375,7 @@ namespace $.$$ {
 				this.$.$mol_fail( new $mol_data_error(`Internal error: phonon length does not match number of atoms`) )
 			}
 
-			atoms.forEach( ( atom, i ) => {
+			atoms.forEach( ( atom: InstanceType< THREE["Object3D"] >, i: number ) => {
 				const start = atom.position.toArray()
 				const [ x, y, z ] = phonon[ i ].map( ( v, i ) => start[ i ] + v * 6 )
 				
@@ -398,7 +398,7 @@ namespace $.$$ {
 			const atoms = this.atom_box().children
 			const labels = this.overlay_box().children
 
-			atoms.forEach( ( atom, i: number ) => {
+			atoms.forEach( ( atom: InstanceType< THREE["Object3D"] >, i: number ) => {
 				this.tweens.add( new TWEEN.Tween( atom.position ).to( atom_datas[ i ], 250 ).start() )
 				this.tweens.add( new TWEEN.Tween( labels[ i ].position ).to( atom_datas[ i ], 250 ).start() )
 			} )
