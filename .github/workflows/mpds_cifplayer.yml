@@ -15,9 +15,9 @@ jobs:
     - uses: hyoo-ru/mam_build@master2
       with:
         package: 'mpds/cifplayer'
-        modules: 'app'
+        modules: 'demo'
 
     - uses: JamesIves/github-pages-deploy-action@4.1.7
       with:
         branch: gh-pages
-        folder: 'mpds/cifplayer/app/-'
+        folder: 'mpds/cifplayer/demo/-'
