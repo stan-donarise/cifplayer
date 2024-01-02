@@ -68,15 +68,6 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		axcolor() {
-			return [
-				this.color_a(),
-				this.color_b(),
-				this.color_c(),
-			]
-		}
-
-		@ $mol_mem
 		camera_distance() {
 			return this.camera().position.clone().sub( this.controls().target )
 		}
@@ -123,30 +114,21 @@ namespace $.$$ {
 			const material = new THREE.SpriteMaterial( { map: texture, depthTest: false } )
 			const sprite = new THREE.Sprite( material )
 			sprite.renderOrder = 1
-			sprite.scale.set( canvas.width, 30, 1 )
+			sprite.scale.set( canvas.width / 100, 0.3, 1 )
 
 			return sprite
 		}
 
 		@ $mol_mem
 		axis_vectors() {
-
-			return this.structure_3d_data().cell_matrix.map( vec => {
-
-				return new THREE.Vector3(
-					vec[ 0 ] * this.atom_pos_scale(),
-					vec[ 1 ] * this.atom_pos_scale(),
-					vec[ 2 ] * this.atom_pos_scale(),
-				)
-				
-			} )
+			return this.structure_3d_data().cell_matrix.map( vec => new THREE.Vector3( ...vec ) )
 		}
 
 		@ $mol_mem
 		controls_target() {
 			return this.centered() ? this.cell_center().clone() : new THREE.Vector3()
 		}
-
+		
 		@ $mol_mem
 		spacegroup() {
 			const { sg_name, ng_name } = this.structure_3d_data()
@@ -165,9 +147,9 @@ namespace $.$$ {
 
 		@$mol_action
 		toogle_all_symmetry() {
-			const state = this.all_symmetry_enabled() ? false : true
+			const checked = this.all_symmetry_enabled() ? false : true
 
-			this.sym_checks().forEach( Check => Check.checked( state ) )
+			this.sym_checks().forEach( Check => Check.checked( checked ) )
 		}
 
 		@ $mol_mem
@@ -184,6 +166,7 @@ namespace $.$$ {
 		@ $mol_mem_key
 		symmetry_visible(id: any, next?: any) {
 			if ( next !== undefined ) return next as never
+
 			return id == 'x,y,z' ? true : false
 		}
 
@@ -193,15 +176,17 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
-		symmetric_atoms_raw( symmetry: string ){
+		symmetry_atoms( symmetry: string ){
+
 			const structure = this.structure_3d_data()
+
 			return structure.atoms.map(
 				( data: any ) => this.spacegroup().symmetric_atom( symmetry, data, structure.cell_matrix ) 
 			)
 		}
 
 		@ $mol_mem
-		atoms(){
+		visible_atoms(){
 			const atoms: any[] = []
 
 			const symmetries_enabled = this.spacegroup().symmetry_list().filter( name => this.symmetry_visible( name ) )
@@ -210,22 +195,17 @@ namespace $.$$ {
 
 				const next_symmetries = symmetries_enabled.slice( 0, symmetries_enabled.indexOf( symmetry ) )
 
-				this.symmetric_atoms_raw( symmetry ).forEach( ( data: any ) => {
+				this.symmetry_atoms( symmetry ).forEach( ( data: any ) => {
 
 					for (const name of next_symmetries) {
 
-						const atoms = this.symmetric_atoms_raw( name )
+						const atoms = this.symmetry_atoms( name )
 						if( is_overlap( data, atoms, 0.01 ) ) {
 							return
 						}
 					}
 	
-					atoms.push( {
-						...data,
-						x: data.x * this.atom_pos_scale(), 
-						y: data.y * this.atom_pos_scale(), 
-						z: data.z * this.atom_pos_scale() 
-					} )
+					atoms.push( data )
 				} )
 
 			} )
@@ -235,16 +215,15 @@ namespace $.$$ {
 
 		@ $mol_mem
 		atom_box() {
-			const atom_box = this.Three().object_blank( `atom_box`, ()=> new THREE.Object3D() )
+			const atom_box = this.Three().new_object( `atom_box`, ()=> new THREE.Object3D() )
 
-			this.atoms().forEach( ( data: any ) => {
+			this.visible_atoms().forEach( ( data: any ) => {
 
 				const atom = new THREE.Mesh(
 					new THREE.SphereGeometry( data.r * this.atom_radius_scale(), 10, 8 ),
 					new THREE.MeshLambertMaterial( { color: data.c } )
 				)
 				atom.position.set( data.x, data.y, data.z )
-				atom.name = 'atom'
 
 				atom_box.add( atom )
 			} )
@@ -254,11 +233,11 @@ namespace $.$$ {
 
 		@ $mol_mem
 		overlay_box() {
-			const overlay_box = this.Three().object_blank( `overlay_box`, ()=> new THREE.Object3D() )
+			const overlay_box = this.Three().new_object( `overlay_box`, ()=> new THREE.Object3D() )
 
 			if( !this.overlay() ) return
 
-			this.atoms().forEach( ( data: any ) => {
+			this.visible_atoms().forEach( ( data: any ) => {
 
 				const label = this.create_sprite( data.overlays[ this.overlay() ] )
 				label.position.set( data.x, data.y, data.z )
@@ -301,34 +280,29 @@ namespace $.$$ {
 
 		@ $mol_mem
 		axes_box() {
-			const axes = this.Three().object_blank( 'axes_box', ()=> new THREE.Object3D() )
+			const axes_box = this.Three().new_object( 'axes_box', ()=> new THREE.Object3D() )
 
 			const origin = new THREE.Vector3( 0, 0, 0 )
 
-			const arrows = this.axis_vectors().map( ( [ x, y, z ], i ) => 
+			const arrows = this.axis_vectors().map( ( axis, i ) => 
 				new THREE.ArrowHelper(
-					new THREE.Vector3( x, y, z ).normalize(),
+					axis.clone().normalize(),
 					origin,
-					Math.sqrt( x * x + y * y + z * z ),
+					axis.length(),
 					this.axcolor()[ i ],
-					75,
-					10
+					0.75,
+					0.1
 				)
 			)
 
-			arrows.forEach( arrow => axes.add( arrow ) )
+			arrows.forEach( arrow => axes_box.add( arrow ) )
 
-			return axes
-		}
-
-		@ $mol_mem
-		cell_lines_color() {
-			return 0xDDDDDD	
+			return axes_box
 		}
 
 		@ $mol_mem
 		cell_box() {
-			const cell_box = this.Three().object_blank( 'cell_box', ()=> new THREE.Object3D() )
+			const cell_box = this.Three().new_object( 'cell_box', ()=> new THREE.Object3D() )
 
 			if( ! this.structure_3d_data().cell_matrix?.length ) return
 
@@ -360,7 +334,7 @@ namespace $.$$ {
 			add_line( bc, abc )
 
 			if( this.centered() ) {
-				const axes_helper = new THREE.AxesHelper( 200 )
+				const axes_helper = new THREE.AxesHelper( 2 )
 				axes_helper.position.fromArray( this.cell_center().toArray() )
 				cell_box.add( axes_helper )
 			}

@@ -10,7 +10,7 @@ namespace $.$$ {
 
 		@ $mol_action
 		files_read(next: readonly File[]) {
-			const data = $mol_wire_sync( $mol_blob_text )( next[0] )
+			const data = $mol_wire_sync( this.$ ).$mol_blob_text( next[0] )
 			this.str( data )
 		}
 

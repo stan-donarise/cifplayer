@@ -5,8 +5,7 @@ namespace $.$$ {
 
 	export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
 
-		auto() {
-			this.resize()
+		start_render_loop() {
 			const render_loop = ()=> {
 				this.rerender()
 				requestAnimationFrame( ()=> render_loop() )
@@ -14,6 +13,7 @@ namespace $.$$ {
 			render_loop()
 		}
 
+		/** Get an existing object or create a new */
 		@ $mol_mem_key
 		object< T extends InstanceType< THREE["Object3D"] > >( name: string, make: ()=> T ): T {
 			const old = this.scene()?.getObjectByName( name )
@@ -26,8 +26,8 @@ namespace $.$$ {
 			return obj as T
 		}
 
-		@ $mol_mem_key
-		object_blank< T extends InstanceType< THREE["Object3D"] > >( name: string, make: ()=> T ): T {
+		/** Remove an existing object and create a new */
+		new_object< T extends InstanceType< THREE["Object3D"] > >( name: string, make: ()=> T ): T {
 			const old = this.scene()?.getObjectByName( name )
 			if( old ) {
 				$mpds_cifplayer_lib_three_view_dispose_deep( old )
@@ -49,8 +49,8 @@ namespace $.$$ {
 
 		@ $mol_mem
 		camera() {
-			const camera = new THREE.PerspectiveCamera( 45, 0, 0.1, 20000 )
-			camera.position.set( 900, 900, 1800 )
+			const camera = new THREE.PerspectiveCamera( 45, 0, 0.1, 200 )
+			camera.position.set( 9, 9, 18 )
 			return camera
 		}
 
@@ -60,13 +60,16 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		controls(): InstanceType< THREE["TrackballControls"] > {
-			const controls = $mol_mem_cached( ()=> this.controls() ) ??
-				new THREE.TrackballControls( this.camera()!, this.dom_node_actual() as HTMLElement )
+		controls_target_changed() {
+			return this.controls().target = this.controls_target()
+		}
+
+		@ $mol_mem
+		controls() {
+			const controls = new THREE.TrackballControls( this.camera()!, this.dom_node_actual() as HTMLElement )
 
 			controls.rotateSpeed = 7.5
 			controls.staticMoving = true
-			controls.target = this.controls_target()
 
 			return controls
 		}
