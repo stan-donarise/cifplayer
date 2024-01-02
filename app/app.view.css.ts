@@ -33,12 +33,13 @@ namespace $.$$ {
 		Menu: {
 			Body_content: {
 				gap: $mol_gap.block,
+				maxWidth: '25rem',
 			},
 			Head: {
 				justify: {
 					content: 'flex-start'
-				}
-			}
+				},
+			},
 		},
 
 		Player: {
@@ -46,10 +47,6 @@ namespace $.$$ {
 				grow: 1,
 				basis: '30rem',
 			},
-		},
-
-		Data_text: {
-			maxWidth: '25rem',
 		},
 
 	} )

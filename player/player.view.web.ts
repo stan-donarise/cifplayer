@@ -3,6 +3,9 @@ namespace $.$$ {
 	const THREE = $mpds_cifplayer_lib_three
 	type THREE = typeof THREE
 
+	const TWEEN = $mpds_cifplayer_lib_tween.TWEEN
+	type TWEEN = typeof TWEEN
+
 	export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
 
 		@ $mol_mem
@@ -72,12 +75,12 @@ namespace $.$$ {
 			return this.camera().position.clone().sub( this.controls().target )
 		}
 
-		@ $mol_mem
+		@ $mol_action
 		zoom_up() {
 			this.camera().position.sub( this.camera_distance().multiplyScalar( this.zoom_scale_step() ) )
 		}
 
-		@ $mol_mem
+		@ $mol_action
 		zoom_down() {
 			this.camera().position.add( this.camera_distance().multiplyScalar( this.zoom_scale_step() ) )
 		}
@@ -187,7 +190,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		visible_atoms(){
-			const atoms: any[] = []
+			const atoms: $mpds_cifplayer_matinfio_internal_obj_atom[] = []
 
 			const symmetries_enabled = this.spacegroup().symmetry_list().filter( name => this.symmetry_visible( name ) )
 
@@ -232,14 +235,28 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
+		overlay_changed() {
+			const overlay = this.overlay()
+
+			const atom_datas = this.visible_atoms()
+
+			this.overlay_box().children.forEach( ( label, i ) => {
+
+				label.children.forEach( sprite => label.remove( sprite ) )
+				
+				if( overlay ) {
+					const sprite = this.create_sprite( String( atom_datas[ i ].overlays[ overlay ] ) )
+					label.add( sprite )
+				}
+			} )
+		}
+
+		@ $mol_mem
 		overlay_box() {
 			const overlay_box = this.Three().new_object( `overlay_box`, ()=> new THREE.Object3D() )
 
-			if( !this.overlay() ) return
-
 			this.visible_atoms().forEach( ( data: any ) => {
-
-				const label = this.create_sprite( data.overlays[ this.overlay() ] )
+				const label = new THREE.Object3D()
 				label.position.set( data.x, data.y, data.z )
 
 				overlay_box.add( label )
@@ -247,7 +264,7 @@ namespace $.$$ {
 
 			return overlay_box
 		}
-		
+
 		@ $mol_mem
 		dir_light(): InstanceType< THREE["DirectionalLight"] >  {
 			const intensity = this.$.$mol_lights() ? 1.5 : 0.5
@@ -332,7 +349,7 @@ namespace $.$$ {
 			add_line( bc, b )
 			add_line( bc, c )
 			add_line( bc, abc )
-
+			
 			if( this.centered() ) {
 				const axes_helper = new THREE.AxesHelper( 2 )
 				axes_helper.position.fromArray( this.cell_center().toArray() )
@@ -340,6 +357,57 @@ namespace $.$$ {
 			}
 			
 			return cell_box
+		}
+
+		tweens = new TWEEN.Group()
+		on_render() {
+			this.tweens.update()
+		}
+
+		@ $mol_action
+		vibrate( phonon: number[][] ) {
+			$mol_wire_sync( this ).unvibrate()
+
+			const atoms = this.atom_box().children
+			const labels = this.overlay_box().children
+
+			if( phonon.length !== atoms.length) {
+				this.$.$mol_fail( new $mol_data_error(`Internal error: phonon length does not match number of atoms`) )
+			}
+
+			atoms.forEach( ( atom, i ) => {
+				const start = atom.position.toArray()
+				const [ x, y, z ] = phonon[ i ].map( ( v, i ) => start[ i ] + v * 6 )
+				
+				this.tweens.add( new TWEEN.Tween( atom.position ).to( { x, y, z }, 750 )
+					.easing( TWEEN.Easing.Cubic.InOut ).repeat( Infinity ).yoyo( true ).start() 
+				)
+				this.tweens.add( new TWEEN.Tween( labels[ i ].position ).to( { x, y, z }, 750 )
+					.easing( TWEEN.Easing.Cubic.InOut ).repeat( Infinity ).yoyo( true ).start() 
+				)
+			} )
+		}
+
+		@ $mol_action
+		unvibrate() {
+			if( this.tweens.getAll().length == 0 ) return
+
+			this.tweens.removeAll()
+
+			const atom_datas = this.visible_atoms()
+			const atoms = this.atom_box().children
+			const labels = this.overlay_box().children
+
+			atoms.forEach( ( atom, i ) => {
+				this.tweens.add( new TWEEN.Tween( atom.position ).to( atom_datas[ i ], 250 ).start() )
+				this.tweens.add( new TWEEN.Tween( labels[ i ].position ).to( atom_datas[ i ], 250 ).start() )
+			} )
+
+			this.$.$mol_wait_timeout( 250 )
+
+			this.tweens.removeAll()
+
+			return
 		}
 
 	}

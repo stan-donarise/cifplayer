@@ -2,6 +2,8 @@ $mpds_cifplayer_player $mol_view
 	str? \
 	atom_radius_scale 0.6
 	zoom_scale_step 0.3
+	vibrate? null
+	unvibrate null
 	auto /
 		<= dir_light null
 		<= ambient_light null
@@ -9,12 +11,14 @@ $mpds_cifplayer_player $mol_view
 		<= overlay_box null
 		<= cell_box null
 		<= axes_box null
+		<= overlay_changed null
 	sub /
 		<= Three $mpds_cifplayer_lib_three_view
 			scene => scene
 			controls => controls
 			controls_target <= controls_target null
 			camera => camera
+			on_render <= on_render null
 		<= Left_panel $mol_view
 			sub /
 				<= Info $mol_view

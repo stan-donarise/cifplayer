@@ -12,7 +12,7 @@ $mpds_cifplayer_app $mol_drop
 				<= Source $mol_link_source
 					uri \https://github.com/tilde-lab/cifplayer
 				<= Lights $mol_lights_toggle
-			body /
+			body <= menu_body /
 				<= Upload $mol_button_open
 					Icon => Upload_icon
 					Native => Upload_native
@@ -25,6 +25,8 @@ $mpds_cifplayer_app $mol_drop
 					hint \Paste here...
 		<= Player $mpds_cifplayer_player
 			str <= str? \
+			vibrate? => vibrate?
+			unvibrate => unvibrate
 	Start $mol_view
 		sub /
 			<= Start_message $mol_text

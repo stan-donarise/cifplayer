@@ -5,6 +5,7 @@ $mpds_cifplayer_lib_three_view $mol_view
 	camera null
 	controls null
 	controls_target null
+	on_render null
 	auto /
 		<= controls_target_changed null
 		<= resize null

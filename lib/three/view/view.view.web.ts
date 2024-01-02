@@ -23,7 +23,7 @@ namespace $.$$ {
 			obj.name = name
 			this.scene().add( obj )
 
-			return obj as T
+			return obj
 		}
 
 		/** Remove an existing object and create a new */
@@ -38,7 +38,7 @@ namespace $.$$ {
 			obj.name = name
 			this.scene().add( obj )
 
-			return obj as T
+			return obj
 		}
 
 		@ $mol_mem
@@ -49,7 +49,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		camera() {
-			const camera = new THREE.PerspectiveCamera( 45, 0, 0.1, 200 )
+			const camera = new THREE.PerspectiveCamera( 45, 0 )
 			camera.position.set( 9, 9, 18 )
 			return camera
 		}
@@ -90,21 +90,27 @@ namespace $.$$ {
 		}
 
 		rerender() {
+			this.on_render()
+
 			this.renderer()?.render( this.scene(), this.camera() )
 			this.controls()?.update()
 		}
 
 		@ $mol_mem
 		size() {
-			if( !this.view_rect() ) return
-			const { width, height } = this.view_rect()!
+			const rect = this.view_rect()
+			if( !rect ) return
+
+			const { width, height } = rect
 			return { width, height }
 		}
 
 		@ $mol_mem
 		resize() {
-			if( !this.size() ) return
-			const { width, height } = this.size()!
+			const size = this.size()
+			if( !size ) return
+
+			const { width, height } = size
 
 			this.camera()!.aspect = width / height
 			this.camera()!.updateProjectionMatrix()
