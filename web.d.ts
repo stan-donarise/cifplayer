@@ -2494,7 +2494,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_three: typeof import("./build/index");
+    const $mpds_cifplayer_lib_three: typeof import("./_three");
 }
 
 declare namespace $ {
@@ -2517,7 +2517,7 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-    const THREE: typeof import("../build");
+    const THREE: typeof import("../_three");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_lib_three_view extends $.$mpds_cifplayer_lib_three_view {
         start_render_loop(): void;
@@ -2792,7 +2792,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_tween: typeof import("./build/index");
+    const $mpds_cifplayer_lib_tween: typeof import("./_tween");
 }
 
 declare namespace $ {
@@ -3131,8 +3131,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_spacegroups: typeof import("./build/index");
-    type $mpds_cifplayer_lib_spacegroups_info = import('../spacegroups/build/index').SpaceGroupInfo;
+    const $mpds_cifplayer_lib_spacegroups: typeof import("./_spacegroups");
+    type $mpds_cifplayer_lib_spacegroups_info = import('./_spacegroups').SpaceGroupInfo;
 }
 
 declare namespace $ {
@@ -3228,7 +3228,7 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-    const THREE: typeof import("../lib/three/build");
+    const THREE: typeof import("../lib/three/_three");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
         render(): void;
@@ -3994,7 +3994,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mpds_cifplayer_lib_cif extends $mol_object2 {
-        static all(): typeof import("./build/index");
+        static all(): typeof import("./_cif");
         static loader(): any;
     }
 }

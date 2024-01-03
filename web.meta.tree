@@ -15,13 +15,13 @@
 \/mol/view
 	include \/mol/view/tree/test
 \/mpds/cifplayer/lib/three
-	include \/mpds/cifplayer/lib/three/_three.js
+	require \/mpds/cifplayer/lib/three/_three.js
 \/mpds/cifplayer/lib/tween
-	include \/mpds/cifplayer/lib/tween/_tween.js
+	require \/mpds/cifplayer/lib/tween/_tween.js
 \/mpds/cifplayer/lib/math
-	include \/mpds/cifplayer/lib/math/_math.js
+	require \/mpds/cifplayer/lib/math/_math.js
 \/mpds/cifplayer/lib/spacegroups
-	include \/mpds/cifplayer/lib/spacegroups/_spacegroups.js
+	require \/mpds/cifplayer/lib/spacegroups/_spacegroups.js
 \/mpds/cifplayer/player
 	deploy \/mpds/cifplayer/player/spacegroup.tree
 \/mpds/cifplayer/comparison
