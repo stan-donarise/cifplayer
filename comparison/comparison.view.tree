@@ -45,7 +45,7 @@ $mpds_cifplayer_comparison $mol_book2_catalog
 			<= Player_page* $mol_page
 				title <= cif_title*
 				Body_content <= Player* $mpds_cifplayer_player
-					str <= cif_value*?
+					data <= cif_value*?
 	nasty_cif_section* /
 		<= Reference* $mol_labeler
 			title \Reference
