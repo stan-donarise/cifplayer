@@ -62,13 +62,16 @@ namespace $ {
 		static log = this.$.$mpds_cifplayer_matinfio_log
 
 		/** Guessing what to do */
-		static detect_format( str: string ) {
-			if( str.indexOf( "_cell_angle_gamma " ) > 0 && str.indexOf( "loop_" ) > 0 )
-				return 'CIF'
-			else if( str.indexOf( '"immutable_id"' ) > 0 && str.indexOf( '"cartesian_site_positions"' ) > 0 && str.indexOf( '"lattice_vectors"' ) > 0 )
-				return 'OPTIMADE'
+		static detect_format( data: any ) {
 
-			var lines = str.toString().replace( /(\r\n|\r)/gm, "\n" ).split( "\n" )
+			if( typeof data === 'object' ) return 'OPTIMADE'
+
+			if( data.indexOf( "_cell_angle_gamma " ) > 0 && data.indexOf( "loop_" ) > 0 )
+				return 'CIF'
+			else if( data.indexOf( '"immutable_id"' ) > 0 && data.indexOf( '"cartesian_site_positions"' ) > 0 && data.indexOf( '"lattice_vectors"' ) > 0 )
+				return 'OPTIMADE_str'
+
+			var lines = data.toString().replace( /(\r\n|\r)/gm, "\n" ).split( "\n" )
 
 			for( var i = 6; i < 9; i++ ) {
 				if( !lines[ i ] ) break

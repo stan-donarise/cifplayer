@@ -4,7 +4,7 @@ namespace $ {
 
 		@ $mol_mem
 		static all() {
-			return require( '../mpds/cifplayer/lib/cif/cif.js' ) as typeof import( '../cif/build/index' )
+			return require( '../mpds/cifplayer/lib/cif/cif.js' ) as typeof import( './build/index' )
 		}
 
 		@ $mol_mem

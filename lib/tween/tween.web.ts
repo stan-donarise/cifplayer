@@ -1,5 +1,5 @@
 namespace $ {
 
-	export const $mpds_cifplayer_lib_tween = require( '../mpds/cifplayer/lib/tween/_tween.js' ) as typeof import( '../tween/build/index' )
+	export const $mpds_cifplayer_lib_tween = require( '../mpds/cifplayer/lib/tween/_tween.js' ) as typeof import( './build/index' )
 
 }

@@ -21,10 +21,10 @@ $mpds_cifplayer_app $mol_drop
 						<= Upload_native
 						\Choose file
 				<= Data_text $mol_textarea
-					value? <=> str?
+					value? <=> data_str?
 					hint \Paste here...
 		<= Player $mpds_cifplayer_player
-			str <= str? \
+			data <= data_str? \
 			vibrate? => vibrate?
 			unvibrate => unvibrate
 	Start $mol_view

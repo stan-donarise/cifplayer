@@ -3,7 +3,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		pages(): readonly any[] {
-			return this.str()
+			return this.data_str()
 				? super.pages()
 				: [ this.Menu(), this.Start() ]
 		}
@@ -11,7 +11,7 @@ namespace $.$$ {
 		@ $mol_action
 		files_read(next: readonly File[]) {
 			const data = $mol_wire_sync( this.$ ).$mol_blob_text( next[0] )
-			this.str( data )
+			this.data_str( data )
 		}
 
 		@ $mol_action
@@ -21,7 +21,7 @@ namespace $.$$ {
 
 		@ $mol_action
 		paste_example() {
-			this.str( this.data_example() )
+			this.data_str( this.data_example() )
 		}
 
 		data_example() {

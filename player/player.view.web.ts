@@ -87,7 +87,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		structure_3d_data() {
-			return new $mpds_cifplayer_matinfio( this.str() ).player()
+			return new $mpds_cifplayer_matinfio( this.data() ).player()
 		}
 
 		@ $mol_mem_key

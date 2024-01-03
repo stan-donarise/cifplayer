@@ -1,5 +1,5 @@
 $mpds_cifplayer_player $mol_view
-	str? \
+	data? null
 	atom_radius_scale 0.6
 	zoom_scale_step 0.3
 	vibrate? null
