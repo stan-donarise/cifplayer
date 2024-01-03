@@ -9,6 +9,12 @@ namespace $.$$ {
 	export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
 
 		@ $mol_mem
+		render(): void {
+			super.render()
+			this.structure_3d_data() //for bubbling errors into view
+		}
+
+		@ $mol_mem
 		available_overlays() {
 			return {
 				...super.available_overlays(),
@@ -124,12 +130,23 @@ namespace $.$$ {
 
 		@ $mol_mem
 		axis_vectors() {
-			return this.structure_3d_data().cell_matrix.map( vec => new THREE.Vector3( ...vec ) )
+			return this.structure_3d_data().cell_matrix?.map( vec => new THREE.Vector3( ...vec ) )
 		}
 
 		@ $mol_mem
 		controls_target() {
-			return this.centered() ? this.cell_center().clone() : new THREE.Vector3()
+			const cell_center = this.cell_center()
+
+			if( !cell_center ) {
+				const atoms = this.structure_3d_data().atoms
+
+				return atoms.reduce(( acc: InstanceType< THREE["Vector3"] >, atom ) => {
+					const { x, y, z } = atom
+					return acc.add( new THREE.Vector3( x, y, z ) )
+				}, new THREE.Vector3() ).divideScalar( atoms.length )
+			}
+
+			return this.centered() ? cell_center.clone() : new THREE.Vector3()
 		}
 		
 		@ $mol_mem
@@ -182,14 +199,20 @@ namespace $.$$ {
 		symmetry_atoms( symmetry: string ){
 
 			const structure = this.structure_3d_data()
+			const cell_matrix = structure.cell_matrix
+			if( !cell_matrix ) return
 
 			return structure.atoms.map(
-				( data: any ) => this.spacegroup().symmetric_atom( symmetry, data, structure.cell_matrix ) 
+				( data: any ) => this.spacegroup().symmetric_atom( symmetry, data, cell_matrix ) 
 			)
 		}
 
 		@ $mol_mem
 		visible_atoms(){
+			const structure = this.structure_3d_data()
+
+			if( !structure.cell_matrix ) return structure.atoms
+			
 			const atoms: $mpds_cifplayer_matinfio_internal_obj_atom[] = []
 
 			const symmetries_enabled = this.spacegroup().symmetry_list().filter( name => this.symmetry_visible( name ) )
@@ -198,11 +221,11 @@ namespace $.$$ {
 
 				const next_symmetries = symmetries_enabled.slice( 0, symmetries_enabled.indexOf( symmetry ) )
 
-				this.symmetry_atoms( symmetry ).forEach( ( data: any ) => {
+				this.symmetry_atoms( symmetry )!.forEach( ( data: any ) => {
 
 					for (const name of next_symmetries) {
 
-						const atoms = this.symmetry_atoms( name )
+						const atoms = this.symmetry_atoms( name )!
 						if( is_overlap( data, atoms, 0.01 ) ) {
 							return
 						}
@@ -288,8 +311,10 @@ namespace $.$$ {
 
 		@ $mol_mem
 		cell_center() {
-			const [ a, b, c ] = this.axis_vectors()
+			const axis = this.axis_vectors()
+			if( !axis ) return
 
+			const [ a, b, c ] = axis
 			const origin = a.clone().add( b ).add( c ).multiplyScalar( 0.5 )
 
 			return origin
@@ -299,9 +324,12 @@ namespace $.$$ {
 		axes_box() {
 			const axes_box = this.Three().new_object( 'axes_box', ()=> new THREE.Object3D() )
 
+			const axis = this.axis_vectors()
+			if( !axis ) return
+
 			const origin = new THREE.Vector3( 0, 0, 0 )
 
-			const arrows = this.axis_vectors().map( ( axis, i ) => 
+			const arrows = axis.map( ( axis, i ) => 
 				new THREE.ArrowHelper(
 					axis.clone().normalize(),
 					origin,
@@ -321,6 +349,9 @@ namespace $.$$ {
 		cell_box() {
 			const cell_box = this.Three().new_object( 'cell_box', ()=> new THREE.Object3D() )
 
+			const axis = this.axis_vectors()
+			if( !axis ) return
+
 			if( ! this.structure_3d_data().cell_matrix?.length ) return
 
 			const color = this.cell_lines_color()
@@ -331,7 +362,7 @@ namespace $.$$ {
 				cell_box.add( new THREE.Line( geometry, material ) )
 			}
 
-			const [ a, b, c ] = this.axis_vectors()
+			const [ a, b, c ] = axis
 
 			const ab = a.clone().add( b )
 			const ac = a.clone().add( c )
@@ -350,9 +381,10 @@ namespace $.$$ {
 			add_line( bc, c )
 			add_line( bc, abc )
 			
-			if( this.centered() ) {
+			const cell_center = this.cell_center()
+			if( this.centered() && cell_center ) {
 				const axes_helper = new THREE.AxesHelper( 2 )
-				axes_helper.position.fromArray( this.cell_center().toArray() )
+				axes_helper.position.fromArray( cell_center.toArray() )
 				cell_box.add( axes_helper )
 			}
 			
@@ -408,6 +440,12 @@ namespace $.$$ {
 			this.tweens.removeAll()
 
 			return
+		}
+
+		@ $mol_mem
+		left_panel(): readonly any[] {
+			console.log('this.structure_3d_data()', this.structure_3d_data())
+			return this.structure_3d_data().cell_matrix ? super.left_panel() : []
 		}
 
 	}

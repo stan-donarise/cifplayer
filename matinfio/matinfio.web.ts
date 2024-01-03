@@ -39,8 +39,8 @@ namespace $ {
 	}
 
 	export type $mpds_cifplayer_matinfio_internal_obj = {
-		cell_matrix: number[][],
-		cell: {
+		cell_matrix?: number[][],
+		cell?: {
 			a: number,
 			b: number,
 			c: number,
@@ -66,7 +66,7 @@ namespace $ {
 
 			if( typeof data === 'object' ) return 'OPTIMADE'
 
-			if( data.indexOf( "_cell_angle_gamma " ) > 0 && data.indexOf( "loop_" ) > 0 )
+			if( data.indexOf( "_atom_site" ) > 0 && data.indexOf( "loop_" ) > 0 )
 				return 'CIF'
 			else if( data.indexOf( '"immutable_id"' ) > 0 && data.indexOf( '"cartesian_site_positions"' ) > 0 && data.indexOf( '"lattice_vectors"' ) > 0 )
 				return 'OPTIMADE_str'

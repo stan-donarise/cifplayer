@@ -7,7 +7,7 @@ namespace $ {
 	}
 
 	/** Crystalline cell parameters to 3x3 matrix */
-	export function $mpds_cifplayer_matinfio_cell_to_matrix( this : $, cell: $mpds_cifplayer_matinfio_internal_obj['cell'] ): number[][] {
+	export function $mpds_cifplayer_matinfio_cell_to_matrix( this : $, cell: NonNullable< $mpds_cifplayer_matinfio_internal_obj['cell'] > ): number[][] {
 		const { a, b, c, alpha, beta, gamma } = cell
 		if( !a || !b || !c || !alpha || !beta || !gamma ) {
 			return this.$mol_fail( new $mol_data_error('Error: invalid cell definition') )

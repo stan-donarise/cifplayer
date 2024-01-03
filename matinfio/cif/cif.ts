@@ -32,8 +32,20 @@ namespace $ {
 			'_atom_site_fract_x',
 			'_atom_site_fract_y',
 			'_atom_site_fract_z',
+			"_atom_site_Cartn_x",
+			"_atom_site_Cartn_y",
+			"_atom_site_Cartn_z",
 		]
-		const atom_props = [ 'label', 'symbol', 'x', 'y', 'z' ]
+		const atom_props = [ 
+			'label', 
+			'symbol', 
+			'x', 
+			'y', 
+			'z',
+			'x',
+			'y',
+			'z',
+		]
 		const chem_element_idxs = [ 0, 1 ]
 		let overlayed_idxs = []
 
@@ -106,6 +118,7 @@ namespace $ {
 					symops_active = true
 				} else if( startswith( cur_line, '_' ) ) {
 					atprop_seq.push( cur_line )
+					if( cur_line == '_atom_site_Cartn_x' ) cur_structure.cartesian = true
 				} else {
 					if( symops_active ) {
 						symops.push( cur_line.replace( /"/g, '' ).replace( /'/g, '' ) )
@@ -128,6 +141,7 @@ namespace $ {
 						if( overlayed_idxs.indexOf( atom_index ) > -1 ) atom.overlays[ loop_vals[ atom_index ] ] = line_data[ j ]
 						else atom[ atom_props[ atom_index ] ] = line_data[ j ]
 					}
+
 					if( atom.x !== undefined && atom.y !== undefined && atom.z !== undefined ) { // NB zero coord // TODO multiple relative loops with props
 						if( atom.label ) {
 							atom.overlays.label = atom.label
@@ -159,11 +173,10 @@ namespace $ {
 				symops = []
 			}
 		}
-		if( cur_structure.cell.gamma ) {
-			cur_structure.info = data_info
-			if( symops.length > 1 ) cur_structure.symops = symops
-			structures.push( cur_structure )
-		}
+
+		cur_structure.info = data_info
+		if( symops.length > 1 ) cur_structure.symops = symops
+		structures.push( cur_structure )
 
 		if( !structures.length ) return this.$mol_fail( new $mol_data_error('Error: unexpected CIF format') )
 		

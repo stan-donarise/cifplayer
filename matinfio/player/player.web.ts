@@ -5,10 +5,9 @@ namespace $ {
 	/** Prepare internal repr for visualization in three.js */
 	export function $mpds_cifplayer_matinfio_player_from_obj( this: $, crystal: $mpds_cifplayer_matinfio_internal_obj ) {
 		let cell_matrix
-		let cell
 		let descr: any = false
 
-		if( Object.keys( crystal.cell ).length == 6 ) { // for CIF
+		if( crystal.cell && Object.keys( crystal.cell ).length == 6 ) { // for CIF
 			cell_matrix = this.$mpds_cifplayer_matinfio_cell_to_matrix( crystal.cell )
 			descr = crystal.cell
 			var symlabel = ( crystal.sg_name || crystal.ng_name ) ? ( ( crystal.sg_name ? crystal.sg_name : "" ) + ( crystal.ng_name ? ( " (" + crystal.ng_name + ")" ) : "" ) ) : false
@@ -22,8 +21,8 @@ namespace $ {
 
 		const render = {
 			atoms: [] as any[],
-			cell: cell,
 			cell_matrix: cell_matrix,
+			cell: descr,
 			descr: descr,
 			overlayed: {} as Record< string, string >,
 			sg_name: crystal.sg_name,
@@ -74,14 +73,11 @@ namespace $ {
 				// OPTIMADE has cartesian positions
 				// POSCAR may have either of two
 				const cpos = crystal.cartesian ? pos : math.multiply( pos, cell_matrix )
-				const fpos = crystal.cartesian ? math.divide( pos, cell_matrix ) : pos
+				const fpos = !crystal.cartesian ? pos : cell_matrix ? math.divide( pos, cell_matrix ) : null
+				const fract = fpos ? { 'x': fpos[ 0 ], 'y': fpos[ 1 ], 'z': fpos[ 2 ] } : null
 				
 				render.atoms.push( { 
-					'fract': {
-						'x': fpos[ 0 ],
-						'y': fpos[ 1 ],
-						'z': fpos[ 2 ],
-					},
+					'fract': fract,
 					'x': cpos[ 0 ],
 					'y': cpos[ 1 ],
 					'z': cpos[ 2 ],

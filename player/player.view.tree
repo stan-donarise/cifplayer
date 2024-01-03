@@ -20,7 +20,7 @@ $mpds_cifplayer_player $mol_view
 			camera => camera
 			on_render <= on_render null
 		<= Left_panel $mol_view
-			sub /
+			sub <= left_panel /
 				<= Info $mol_view
 					sub <= info_sub /
 						<= Descr_a $mol_paragraph
