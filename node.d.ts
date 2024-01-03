@@ -153,7 +153,7 @@ declare namespace $ {
     let $mol_dev_format_head: symbol;
     let $mol_dev_format_body: symbol;
     function $mol_dev_format_native(obj: any): any;
-    function $mol_dev_format_auto(obj: any): any;
+    function $mol_dev_format_auto(obj: any): any[];
     function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
     function $mol_dev_format_span(style: object, ...content: any[]): any[];
     let $mol_dev_format_div: (style: object, ...content: any[]) => any[];
@@ -2750,7 +2750,7 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
-        str(next?: any): string;
+        data(next?: any): any;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
         vibrate(next?: any): any;
@@ -3316,7 +3316,7 @@ declare namespace $ {
         Data_text(): $$.$mol_textarea;
         menu_body(): readonly any[];
         Menu(): $mol_page;
-        str(next?: any): string;
+        data_str(next?: any): string;
         vibrate(next?: any): any;
         unvibrate(): any;
         Player(): $mpds_cifplayer_player;

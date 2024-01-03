@@ -615,7 +615,7 @@ $mol_switch $mol_check_list
 	value? \
 
 $mpds_cifplayer_player $mol_view
-	str? \
+	data? null
 	atom_radius_scale 0.6
 	zoom_scale_step 0.3
 	vibrate? null
@@ -998,10 +998,10 @@ $mpds_cifplayer_app $mol_drop
 						<= Upload_native
 						\Choose file
 				<= Data_text $mol_textarea
-					value? <=> str?
+					value? <=> data_str?
 					hint \Paste here...
 		<= Player $mpds_cifplayer_player
-			str <= str? \
+			data <= data_str? \
 			vibrate? => vibrate?
 			unvibrate => unvibrate
 	Start $mol_view
@@ -1131,7 +1131,7 @@ $mpds_cifplayer_comparison $mol_book2_catalog
 			<= Player_page* $mol_page
 				title <= cif_title*
 				Body_content <= Player* $mpds_cifplayer_player
-					str <= cif_value*?
+					data <= cif_value*?
 	nasty_cif_section* /
 		<= Reference* $mol_labeler
 			title \Reference

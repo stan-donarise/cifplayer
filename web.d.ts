@@ -144,7 +144,7 @@ declare namespace $ {
     let $mol_dev_format_head: symbol;
     let $mol_dev_format_body: symbol;
     function $mol_dev_format_native(obj: any): any;
-    function $mol_dev_format_auto(obj: any): any;
+    function $mol_dev_format_auto(obj: any): any[];
     function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
     function $mol_dev_format_span(style: object, ...content: any[]): any[];
     let $mol_dev_format_div: (style: object, ...content: any[]) => any[];
@@ -2494,7 +2494,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_three: typeof import("../three/build/index");
+    const $mpds_cifplayer_lib_three: typeof import("./build/index");
 }
 
 declare namespace $ {
@@ -2712,7 +2712,7 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $mpds_cifplayer_player extends $mol_view {
-        str(next?: any): string;
+        data(next?: any): any;
         atom_radius_scale(): number;
         zoom_scale_step(): number;
         vibrate(next?: any): any;
@@ -2791,7 +2791,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_tween: typeof import("../tween/build/index");
+    const $mpds_cifplayer_lib_tween: typeof import("./build/index");
 }
 
 declare namespace $ {
@@ -3095,7 +3095,7 @@ declare namespace $ {
                 (message?: any, ...optionalParams: any[]): void;
             };
         };
-        static detect_format(str: string): "CIF" | "OPTIMADE" | "POSCAR" | "unknown";
+        static detect_format(data: any): "OPTIMADE" | "CIF" | "OPTIMADE_str" | "POSCAR" | "unknown";
         readonly source: {
             readonly data: any;
             readonly format: Format;
@@ -3130,7 +3130,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mpds_cifplayer_lib_spacegroups: typeof import("../spacegroups/build/index");
+    const $mpds_cifplayer_lib_spacegroups: typeof import("./build/index");
     type $mpds_cifplayer_lib_spacegroups_info = import('../spacegroups/build/index').SpaceGroupInfo;
 }
 
@@ -3755,7 +3755,7 @@ declare namespace $ {
         Data_text(): $$.$mol_textarea;
         menu_body(): readonly any[];
         Menu(): $mol_page;
-        str(next?: any): string;
+        data_str(next?: any): string;
         vibrate(next?: any): void;
         unvibrate(): void;
         Player(): $$.$mpds_cifplayer_player;
@@ -3991,7 +3991,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mpds_cifplayer_lib_cif extends $mol_object2 {
-        static all(): typeof import("../cif/build/index");
+        static all(): typeof import("./build/index");
         static loader(): any;
     }
 }

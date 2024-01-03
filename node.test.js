@@ -406,9 +406,6 @@ var $;
     function $mol_dev_format_auto(obj) {
         if (obj == null)
             return $.$mol_dev_format_shade(String(obj));
-        if (typeof obj === 'object' && $.$mol_dev_format_head in obj) {
-            return obj[$.$mol_dev_format_head]();
-        }
         return [
             'object',
             {
@@ -742,7 +739,12 @@ var $;
                 [$mol_wire_cursor.fresh]: '🟢',
                 [$mol_wire_cursor.final]: '🔵',
             }[this.cursor] ?? this.cursor.toString();
-            return $mol_dev_format_div({}, $mol_dev_format_native(this), $mol_dev_format_shade(cursor + ' '), $mol_dev_format_auto(this.cache));
+            return $mol_dev_format_div({}, $mol_owning_check(this, this.cache)
+                ? $mol_dev_format_auto({
+                    [$mol_dev_format_head]: () => $mol_dev_format_shade(cursor),
+                    [$mol_dev_format_body]: () => $mol_dev_format_native(this),
+                })
+                : $mol_dev_format_shade($mol_dev_format_native(this), cursor), $mol_dev_format_auto(this.cache));
         }
         get $() {
             return (this.host ?? this.task)['$'];
@@ -1723,17 +1725,18 @@ var $;
             const field = task.name + '()';
             let dict = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
             const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
-            const id = `${prefix}.${task.name}(${$mol_key(key).replace(/^"|"$/g, "'")})`;
+            const key_str = $mol_key(key);
             if (dict) {
-                const existen = dict.get(id);
+                const existen = dict.get(key_str);
                 if (existen)
                     return existen;
             }
             else {
                 dict = (host ?? task)[field] = new Map();
             }
+            const id = `${prefix}.${task.name}(${key_str.replace(/^"|"$/g, "'")})`;
             const fiber = new $mol_wire_atom(id, task, host, [key]);
-            dict.set(id, fiber);
+            dict.set(key_str, fiber);
             return fiber;
         }
         static watching = new Set();
@@ -1788,7 +1791,7 @@ var $;
             }
             else {
                 ;
-                (this.host ?? this.task)[this.field()].delete(this[Symbol.toStringTag]);
+                (this.host ?? this.task)[this.field()].delete($mol_key(this.args[0]));
             }
         }
         put(next) {
@@ -9347,10 +9350,10 @@ var $;
 var $;
 (function ($) {
     class $mpds_cifplayer_player extends $mol_view {
-        str(next) {
+        data(next) {
             if (next !== undefined)
                 return next;
-            return "";
+            return null;
         }
         atom_radius_scale() {
             return 0.6;
@@ -9719,7 +9722,7 @@ var $;
     }
     __decorate([
         $mol_mem
-    ], $mpds_cifplayer_player.prototype, "str", null);
+    ], $mpds_cifplayer_player.prototype, "data", null);
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_player.prototype, "vibrate", null);
@@ -11737,7 +11740,7 @@ var $;
         }
         Data_text() {
             const obj = new this.$.$mol_textarea();
-            obj.value = (next) => this.str(next);
+            obj.value = (next) => this.data_str(next);
             obj.hint = () => "Paste here...";
             return obj;
         }
@@ -11757,7 +11760,7 @@ var $;
             obj.body = () => this.menu_body();
             return obj;
         }
-        str(next) {
+        data_str(next) {
             if (next !== undefined)
                 return next;
             return "";
@@ -11770,7 +11773,7 @@ var $;
         }
         Player() {
             const obj = new this.$.$mpds_cifplayer_player();
-            obj.str = () => this.str();
+            obj.data = () => this.data_str();
             return obj;
         }
         Start_message() {
@@ -11819,7 +11822,7 @@ var $;
     ], $mpds_cifplayer_app.prototype, "Menu", null);
     __decorate([
         $mol_mem
-    ], $mpds_cifplayer_app.prototype, "str", null);
+    ], $mpds_cifplayer_app.prototype, "data_str", null);
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_app.prototype, "Player", null);
@@ -11997,7 +12000,7 @@ var $;
     (function ($$) {
         class $mpds_cifplayer_phonons extends $.$mpds_cifplayer_phonons {
             set_example() {
-                this.str('# Copyright Material Phases Data System, Switzerland & NIMS, Japan, 2024\ndata_S1822639\n_cell_length_a    3.666000\n_cell_length_b    3.666000\n_cell_length_c    3.666000\n_cell_angle_alpha 90.000000\n_cell_angle_beta  90.000000\n_cell_angle_gamma 90.000000\n_symmetry_Int_Tables_number    221\n_symmetry_space_group_name_H-M Pm-3m\n_space_group_crystal_system    cubic\n_pauling_file_chemical_formula ScSn\n_pauling_file_object_repr      S-MPDS\n_pauling_file_object_version   1.2.0\n_pauling_file_entry            S1822639\n_pauling_file_entry_reference  https://mpds.io/entry/S1822639\n_pauling_file_phase            ScSn/221/cP2\n_pauling_file_phase_reference  https://mpds.io/phase/ScSn/221/cP2\n_pauling_file_editors_comments\n;\n atom coordinates, structure type assigned\n;\nloop_\n _symmetry_equiv_pos_site_id\n _symmetry_equiv_pos_as_xyz\n 1 -x,-y,-z\n 2 -x,-y,z\n 3 -x,-z,-y\n 4 -x,-z,y\n 5 -x,y,-z\n 6 -x,y,z\n 7 -x,z,-y\n 8 -x,z,y\n 9 -y,-x,-z\n 10 -y,-x,z\n 11 -y,-z,-x\n 12 -y,-z,x\n 13 -y,x,-z\n 14 -y,x,z\n 15 -y,z,-x\n 16 -y,z,x\n 17 -z,-x,-y\n 18 -z,-x,y\n 19 -z,-y,-x\n 20 -z,-y,x\n 21 -z,x,-y\n 22 -z,x,y\n 23 -z,y,-x\n 24 -z,y,x\n 25 x,-y,-z\n 26 x,-y,z\n 27 x,-z,-y\n 28 x,-z,y\n 29 x,y,-z\n 30 x,y,z\n 31 x,z,-y\n 32 x,z,y\n 33 y,-x,-z\n 34 y,-x,z\n 35 y,-z,-x\n 36 y,-z,x\n 37 y,x,-z\n 38 y,x,z\n 39 y,z,-x\n 40 y,z,x\n 41 z,-x,-y\n 42 z,-x,y\n 43 z,-y,-x\n 44 z,-y,x\n 45 z,x,-y\n 46 z,x,y\n 47 z,y,-x\n 48 z,y,x\nloop_\n _atom_site_label\n _atom_site_type_symbol\n _atom_site_atomic_num\n _atom_site_periodic_num\n _atom_site_linus_pauling_num\n _atom_site_fract_x\n _atom_site_fract_y\n _atom_site_fract_z\n _atom_site_occupancy\n _atom_site_Wyckoff_symbol\n _pauling_file_site_symmetry\n Sn_a      Sn     50   91    1  0.5000  0.5000  0.5000  1.0000  1b  m-3m\n Sc_a      Sc     21   14    1  0.0000  0.0000  0.0000  1.0000  1a  m-3m\n#\n# end of data item S1822639\n#\n');
+                this.data_str('# Copyright Material Phases Data System, Switzerland & NIMS, Japan, 2024\ndata_S1822639\n_cell_length_a    3.666000\n_cell_length_b    3.666000\n_cell_length_c    3.666000\n_cell_angle_alpha 90.000000\n_cell_angle_beta  90.000000\n_cell_angle_gamma 90.000000\n_symmetry_Int_Tables_number    221\n_symmetry_space_group_name_H-M Pm-3m\n_space_group_crystal_system    cubic\n_pauling_file_chemical_formula ScSn\n_pauling_file_object_repr      S-MPDS\n_pauling_file_object_version   1.2.0\n_pauling_file_entry            S1822639\n_pauling_file_entry_reference  https://mpds.io/entry/S1822639\n_pauling_file_phase            ScSn/221/cP2\n_pauling_file_phase_reference  https://mpds.io/phase/ScSn/221/cP2\n_pauling_file_editors_comments\n;\n atom coordinates, structure type assigned\n;\nloop_\n _symmetry_equiv_pos_site_id\n _symmetry_equiv_pos_as_xyz\n 1 -x,-y,-z\n 2 -x,-y,z\n 3 -x,-z,-y\n 4 -x,-z,y\n 5 -x,y,-z\n 6 -x,y,z\n 7 -x,z,-y\n 8 -x,z,y\n 9 -y,-x,-z\n 10 -y,-x,z\n 11 -y,-z,-x\n 12 -y,-z,x\n 13 -y,x,-z\n 14 -y,x,z\n 15 -y,z,-x\n 16 -y,z,x\n 17 -z,-x,-y\n 18 -z,-x,y\n 19 -z,-y,-x\n 20 -z,-y,x\n 21 -z,x,-y\n 22 -z,x,y\n 23 -z,y,-x\n 24 -z,y,x\n 25 x,-y,-z\n 26 x,-y,z\n 27 x,-z,-y\n 28 x,-z,y\n 29 x,y,-z\n 30 x,y,z\n 31 x,z,-y\n 32 x,z,y\n 33 y,-x,-z\n 34 y,-x,z\n 35 y,-z,-x\n 36 y,-z,x\n 37 y,x,-z\n 38 y,x,z\n 39 y,z,-x\n 40 y,z,x\n 41 z,-x,-y\n 42 z,-x,y\n 43 z,-y,-x\n 44 z,-y,x\n 45 z,x,-y\n 46 z,x,y\n 47 z,y,-x\n 48 z,y,x\nloop_\n _atom_site_label\n _atom_site_type_symbol\n _atom_site_atomic_num\n _atom_site_periodic_num\n _atom_site_linus_pauling_num\n _atom_site_fract_x\n _atom_site_fract_y\n _atom_site_fract_z\n _atom_site_occupancy\n _atom_site_Wyckoff_symbol\n _pauling_file_site_symmetry\n Sn_a      Sn     50   91    1  0.5000  0.5000  0.5000  1.0000  1b  m-3m\n Sc_a      Sc     21   14    1  0.0000  0.0000  0.0000  1.0000  1a  m-3m\n#\n# end of data item S1822639\n#\n');
             }
             phonon(next) {
                 if (next === '')
@@ -12888,7 +12891,7 @@ var $;
         }
         Player(id) {
             const obj = new this.$.$mpds_cifplayer_player();
-            obj.str = () => this.cif_value(id);
+            obj.data = () => this.cif_value(id);
             return obj;
         }
         Player_page(id) {
