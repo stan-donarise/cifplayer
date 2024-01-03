@@ -2767,6 +2767,7 @@ declare namespace $ {
         centered(next?: any): boolean;
         Center_icon(): $mol_icon_image_filter_center_focus;
         Center(): $mol_check_icon;
+        left_panel(): readonly any[];
         Left_panel(): $mol_view;
         fullscreen(next?: any): boolean;
         Expand_icon(): $mol_icon_arrow_expand_all;
@@ -3067,8 +3068,8 @@ declare namespace $ {
         overlays: Record<string, string | number>;
     };
     export type $mpds_cifplayer_matinfio_internal_obj = {
-        cell_matrix: number[][];
-        cell: {
+        cell_matrix?: number[][];
+        cell?: {
             a: number;
             b: number;
             c: number;
@@ -3104,8 +3105,8 @@ declare namespace $ {
         internal_obj(): $mpds_cifplayer_matinfio_internal_obj;
         player(): {
             atoms: any[];
-            cell: undefined;
-            cell_matrix: number[][];
+            cell_matrix: number[][] | undefined;
+            cell: any;
             descr: any;
             overlayed: Record<string, string>;
             sg_name: string;
@@ -3166,7 +3167,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mpds_cifplayer_matinfio_cell_to_matrix(this: $, cell: $mpds_cifplayer_matinfio_internal_obj['cell']): number[][];
+    function $mpds_cifplayer_matinfio_cell_to_matrix(this: $, cell: NonNullable<$mpds_cifplayer_matinfio_internal_obj['cell']>): number[][];
     function $mpds_cifplayer_matinfio_cell_params_from_matrix(matrix: number[]): number[];
 }
 
@@ -3202,8 +3203,8 @@ declare namespace $ {
 declare namespace $ {
     function $mpds_cifplayer_matinfio_player_from_obj(this: $, crystal: $mpds_cifplayer_matinfio_internal_obj): {
         atoms: any[];
-        cell: undefined;
-        cell_matrix: number[][];
+        cell_matrix: number[][] | undefined;
+        cell: any;
         descr: any;
         overlayed: Record<string, string>;
         sg_name: string;
@@ -3230,6 +3231,7 @@ declare namespace $.$$ {
     const THREE: typeof import("../lib/three/build");
     type THREE = typeof THREE;
     export class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
+        render(): void;
         available_overlays(): {
             [x: string]: any;
         };
@@ -3248,8 +3250,8 @@ declare namespace $.$$ {
         zoom_down(): void;
         structure_3d_data(): {
             atoms: any[];
-            cell: undefined;
-            cell_matrix: number[][];
+            cell_matrix: number[][] | undefined;
+            cell: any;
             descr: any;
             overlayed: Record<string, string>;
             sg_name: string;
@@ -3260,7 +3262,7 @@ declare namespace $.$$ {
         };
         text_canvas(text: string): HTMLCanvasElement;
         create_sprite(text: string): any;
-        axis_vectors(): any[];
+        axis_vectors(): any[] | undefined;
         controls_target(): any;
         spacegroup(): $mpds_cifplayer_matinfio_spacegroup;
         sym_checks(): $mol_check_box[];
@@ -3269,8 +3271,8 @@ declare namespace $.$$ {
         all_symmetry_enabled(): boolean;
         symmetry_visible(id: any, next?: any): boolean;
         Toogle_all_title(): string;
-        symmetry_atoms(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[];
-        visible_atoms(): $mpds_cifplayer_matinfio_internal_obj_atom[];
+        symmetry_atoms(symmetry: string): $mpds_cifplayer_matinfio_internal_obj_atom[] | undefined;
+        visible_atoms(): any[];
         atom_box(): any;
         overlay_changed(): void;
         overlay_box(): any;
@@ -3283,6 +3285,7 @@ declare namespace $.$$ {
         on_render(): void;
         vibrate(phonon: number[][]): void;
         unvibrate(): void;
+        left_panel(): readonly any[];
     }
     export {};
 }

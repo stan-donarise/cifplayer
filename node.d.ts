@@ -2805,6 +2805,7 @@ declare namespace $ {
         centered(next?: any): boolean;
         Center_icon(): $mol_icon_image_filter_center_focus;
         Center(): $mol_check_icon;
+        left_panel(): readonly any[];
         Left_panel(): $mol_view;
         fullscreen(next?: any): boolean;
         Expand_icon(): $mol_icon_arrow_expand_all;

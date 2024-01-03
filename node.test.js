@@ -9610,13 +9610,16 @@ var $;
             obj.Icon = () => this.Center_icon();
             return obj;
         }
-        Left_panel() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
+        left_panel() {
+            return [
                 this.Info(),
                 this.Symlabel(),
                 this.Center()
             ];
+        }
+        Left_panel() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.left_panel();
             return obj;
         }
         fullscreen(next) {
@@ -12664,6 +12667,7 @@ var $;
         }
         other_cif_paths() {
             return [
+                "/mpds/cifplayer/comparison/cifs/data_image0.cif",
                 "/mpds/cifplayer/comparison/cifs/example.cif",
                 "/mpds/cifplayer/comparison/cifs/H20.cif"
             ];
