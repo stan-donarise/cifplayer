@@ -3695,6 +3695,7 @@ declare namespace $.$$ {
             cell: number;
         }): string;
         uri_base(): string;
+        uri_base_abs(): URL;
         uri_resolve(uri: string): string;
         code_syntax(): $mol_syntax2<{
             'code-indent': RegExp;
@@ -4004,17 +4005,17 @@ declare namespace $.$$ {
 
 declare namespace $.$$ {
     class $mpds_cifplayer_comparison extends $.$mpds_cifplayer_comparison {
-        cif_pages(id: any): readonly any[];
+        cif_pages(id: string): readonly any[];
         cif_spreads(): Record<string, any>;
-        cif_title(id: any): string;
+        cif_title(id: string): string;
         nasty_cif_csv(): readonly any[];
-        nasty_cif_reference(id: any): string;
-        nasty_cif_problem(id: any): string;
-        nasty_cif_section(id: any): readonly any[];
-        cif_value(id: any, next?: string): string;
-        matinfio_obj(id: any): Record<string, any>;
-        crystcif_obj(id: any): Record<string, any>;
-        cif_loader3_obj(id: any): Record<string, any>;
+        nasty_cif_reference(id: string): string;
+        nasty_cif_problem(id: string): string;
+        nasty_cif_section(id: string): readonly any[];
+        cif_value(id: string, next?: string): string;
+        matinfio_obj(id: string): Record<string, any>;
+        crystcif_obj(id: string): Record<string, any>;
+        cif_loader3_obj(id: string): Record<string, any>;
     }
 }
 

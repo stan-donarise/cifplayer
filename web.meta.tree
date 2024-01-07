@@ -24,6 +24,8 @@
 	require \/mpds/cifplayer/lib/spacegroups/_spacegroups.js
 \/mpds/cifplayer/player
 	deploy \/mpds/cifplayer/player/spacegroup.tree
+\/mpds/cifplayer/lib/cif
+	require \/mpds/cifplayer/lib/cif/_cif.js
 \/mpds/cifplayer/comparison
 	deploy \/mpds/cifplayer/comparison/cifs/data_image0.cif
 	deploy \/mpds/cifplayer/comparison/cifs/example.cif
