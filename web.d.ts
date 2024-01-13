@@ -143,7 +143,7 @@ declare namespace $ {
     }): void;
     let $mol_dev_format_head: symbol;
     let $mol_dev_format_body: symbol;
-    function $mol_dev_format_native(obj: any): any;
+    function $mol_dev_format_native(obj: any): any[];
     function $mol_dev_format_auto(obj: any): any[];
     function $mol_dev_format_element(element: string, style: object, ...content: any[]): any[];
     function $mol_dev_format_span(style: object, ...content: any[]): any[];
@@ -2575,6 +2575,7 @@ declare namespace $ {
         Anchor(): $$.$mol_check;
         keydown(event?: any): any;
         trigger_enabled(): boolean;
+        clicks(next?: any): any;
         trigger_content(): readonly $mol_view_content[];
         hint(): string;
         Trigger(): $$.$mol_check;
@@ -3824,202 +3825,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_icon_file extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_file_compare extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_dump_list extends $mol_view {
-        values(): readonly any[];
-        sub(): readonly any[];
-        dump_value(id: any): any;
-        dump_expanded(id: any, next?: any): boolean;
-        prototypes(): boolean;
-        preview_show(): boolean;
-        Dump(id: any): $$.$mol_dump_value;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_dump_list extends $.$mol_dump_list {
-        sub(): $mol_dump_value[];
-        dump_value(index: number): any;
-        expand_all(event?: Event): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_expander extends $mol_list {
-        rows(): readonly any[];
-        expanded(next?: any): boolean;
-        expandable(): boolean;
-        label(): readonly any[];
-        Trigger(): $$.$mol_check_expand;
-        Tools(): any;
-        Label(): $mol_view;
-        content(): readonly any[];
-        Content(): $$.$mol_list;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_expander extends $.$mol_expander {
-        rows(): $mol_view[];
-        expandable(): boolean;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_dump_value extends $mol_view {
-        value(next?: any): any;
-        preview_show(next?: any): boolean;
-        sub(): readonly any[];
-        simple(): string;
-        Simple(): $$.$mol_text_code;
-        expanded(next?: any): boolean;
-        expandable(): boolean;
-        expand_all(next?: any): any;
-        expand_title(): string;
-        Expand_title(): $$.$mol_text_code;
-        Expand_head(): $$.$mol_check_expand;
-        preview_dom(): any;
-        preview(): any;
-        Preview_dom(): $mol_view;
-        Preview(): $mol_view;
-        row_values(id: any): readonly any[];
-        prototypes(): boolean;
-        Row(id: any): $$.$mol_dump_list;
-        expand_content(): readonly any[];
-        Expand(): $$.$mol_expander;
-    }
-}
-
-declare namespace $ {
-    function $mol_try<Result>(handler2: () => Result): Result | Error;
-}
-
-declare namespace $.$$ {
-    class $mol_dump_value extends $.$mol_dump_value {
-        sub(): $mol_text_code[] | $mol_expander[];
-        simple(): string;
-        expand_title(): any;
-        rows_values(): any[][];
-        preview_dom(): Element | null;
-        expand_content(): ($mol_view | $mol_dump_list)[];
-        expandable(): boolean;
-        row_values(index: number): any[];
-        expand_all(event?: Event): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_labeler extends $mol_list {
-        rows(): readonly any[];
-        label(): readonly $mol_view_content[];
-        Label(): $mol_view;
-        content(): readonly any[];
-        Content(): $mol_view;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mpds_cifplayer_comparison extends $mol_book2_catalog {
-        plugins(): readonly any[];
-        menu_title(): string;
-        spreads(): Record<string, any>;
-        param(): string;
-        Placeholder(): any;
-        menu_tools(): readonly any[];
-        Cif_spread(id: any): $$.$mol_book2;
-        nasty_cif_section(id: any): readonly any[];
-        cif_paths(): readonly any[];
-        other_cif_paths(): readonly any[];
-        good_cif_paths(): readonly any[];
-        bad_cif_paths(): readonly any[];
-        Theme(): $$.$mol_theme_auto;
-        cif_spreads(): Record<string, any>;
-        Comparison_icon(): $mol_icon_file_compare;
-        comparison_on(next?: any): boolean;
-        Comparison_toggle(): $mol_check_icon;
-        Lights(): $$.$mol_lights_toggle;
-        cif_title(id: any): string;
-        matinfio_obj(id: any): Record<string, any>;
-        matinfio_expanded(id: any, next?: any): boolean;
-        Matinfio_dump(id: any): $$.$mol_dump_value;
-        Matinfio_label(id: any): $mol_labeler;
-        cif_loader3_obj(id: any): Record<string, any>;
-        cif_loader3_expanded(id: any, next?: any): boolean;
-        Cif_loader3_dump(id: any): $$.$mol_dump_value;
-        Cif_loader3_label(id: any): $mol_labeler;
-        crystcif_obj(id: any): Record<string, any>;
-        crystcif_expanded(id: any, next?: any): boolean;
-        Crystcif_dump(id: any): $$.$mol_dump_value;
-        Crystcif_label(id: any): $mol_labeler;
-        Row(id: any): $mol_view;
-        cif_value(id: any, next?: any): string;
-        Cif_textarea(id: any): $$.$mol_textarea;
-        Cif_text(id: any): $$.$mol_list;
-        Cif_page(id: any): $mol_page;
-        Player(id: any): $$.$mpds_cifplayer_player;
-        Player_page(id: any): $mol_page;
-        cif_pages(id: any): readonly any[];
-        nasty_cif_reference(id: any): string;
-        Reference(id: any): $mol_labeler;
-        nasty_cif_problem(id: any): string;
-        Problem(id: any): $mol_labeler;
-    }
-}
-
-declare namespace $ {
-    function $mol_csv_parse(text: string, delimiter?: string): Record<string, any>[];
-}
-
-declare namespace $ {
-    class $mpds_cifplayer_lib_cif extends $mol_object2 {
-        static all(): typeof import("./_cif");
-        static loader(): any;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $.$$ {
-    class $mpds_cifplayer_comparison extends $.$mpds_cifplayer_comparison {
-        cif_pages(id: string): readonly any[];
-        cif_spreads(): Record<string, any>;
-        cif_title(id: string): string;
-        nasty_cif_csv(): readonly any[];
-        nasty_cif_reference(id: string): string;
-        nasty_cif_problem(id: string): string;
-        nasty_cif_section(id: string): readonly any[];
-        cif_value(id: string, next?: string): string;
-        matinfio_obj(id: string): Record<string, any>;
-        crystcif_obj(id: string): Record<string, any>;
-        cif_loader3_obj(id: string): Record<string, any>;
-    }
-}
-
-declare namespace $ {
     class $mpds_cifplayer_demo extends $mol_book2_catalog {
         plugins(): readonly any[];
         menu_title(): string;
@@ -4028,7 +3833,6 @@ declare namespace $ {
         Theme(): $$.$mol_theme_auto;
         App(): $$.$mpds_cifplayer_app;
         Phonons(): $$.$mpds_cifplayer_phonons;
-        Comparison(): $$.$mpds_cifplayer_comparison;
     }
 }
 

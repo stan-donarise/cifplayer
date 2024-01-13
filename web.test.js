@@ -2171,8 +2171,8 @@ var $;
                 $mol_mem_key
             ], $mol_view_test_block.prototype, "element", null);
             var x = $mol_view_test_block.Root(0);
-            $mol_assert_equal(x.dom_node().id, '$mol_view_test_block.Root<0>');
-            $mol_assert_equal(x.element(0).dom_node().id, '$mol_view_test_block.Root<0>.element<0>');
+            $mol_assert_equal(x.dom_node().id, '$mol_view_test_block.Root(0)');
+            $mol_assert_equal(x.element(0).dom_node().id, '$mol_view_test_block.Root(0).element(0)');
         },
         'caching ref to dom node'($) {
             var x = new class extends $mol_view {
@@ -3988,60 +3988,5 @@ var $;
     });
 })($ || ($ = {}));
 //mol/diff/path/path.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        'return result without errors'() {
-            $mol_assert_equal($mol_try(() => false), false);
-        },
-    });
-})($ || ($ = {}));
-//mol/try/try.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_csv_serial(data, delimiter = ',') {
-        const fields = new Set();
-        for (const item of data) {
-            for (const field of Object.keys(item)) {
-                fields.add(field);
-            }
-        }
-        const rows = [[...fields]];
-        for (const item of data) {
-            const row = [];
-            rows.push(row);
-            for (const field of fields) {
-                const val = String(item[field] ?? '');
-                row.push('"' + val.replace(/"/g, '""') + '"');
-            }
-        }
-        return rows.map(row => row.join(delimiter)).join('\n');
-    }
-    $.$mol_csv_serial = $mol_csv_serial;
-})($ || ($ = {}));
-//mol/csv/serial/serial.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        'serial & parse'() {
-            const data = [
-                { foo: '123', bar: '456' },
-                { foo: 'x"xx', bar: 'y"y"y' },
-            ];
-            $mol_assert_like($mol_csv_parse($mol_csv_serial(data)), data);
-        },
-        'parse & serial'() {
-            const csv = 'foo,bar\n"123","456"\n"x""xx","y""y""y"';
-            $mol_assert_like($mol_csv_serial($mol_csv_parse(csv)), csv);
-        },
-    });
-})($ || ($ = {}));
-//mol/csv/csv.test.ts
 
 //# sourceMappingURL=web.test.js.map

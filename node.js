@@ -400,8 +400,6 @@ var $;
     function $mol_dev_format_native(obj) {
         if (typeof obj === 'undefined')
             return $.$mol_dev_format_shade('undefined');
-        if (typeof obj !== 'object' && typeof obj !== 'function')
-            return obj;
         return [
             'object',
             {
@@ -1019,11 +1017,11 @@ var $;
         return true;
     }
     function compare_buffer(left, right) {
-        if (left instanceof DataView)
-            return compare_buffer(new Uint8Array(left.buffer, left.byteOffset, left.byteLength), new Uint8Array(right.buffer, left.byteOffset, left.byteLength));
         const len = left.byteLength;
         if (len !== right.byteLength)
             return false;
+        if (left instanceof DataView)
+            return compare_buffer(new Uint8Array(left.buffer, left.byteOffset, left.byteLength), new Uint8Array(right.buffer, left.byteOffset, left.byteLength));
         for (let i = 0; i < len; ++i) {
             if (left[i] !== right[i])
                 return false;
@@ -2749,7 +2747,7 @@ var $;
             }
         }
         dom_id() {
-            return this.toString();
+            return this.toString().replace(/</g, '(').replace(/>/g, ')');
         }
         dom_node_external(next) {
             const node = next ?? $mol_dom_context.document.createElementNS(this.dom_name_space(), this.dom_name());
@@ -3026,6 +3024,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mol_view.prototype, "view_rect", null);
+    __decorate([
+        $mol_memo.method
+    ], $mol_view.prototype, "dom_id", null);
     __decorate([
         $mol_mem
     ], $mol_view.prototype, "dom_node", null);
@@ -8781,6 +8782,7 @@ var $;
                         : this.symbols_alt()[$mol_keyboard_code[event.keyCode]];
                 if (!symbol)
                     return;
+                event.preventDefault();
                 document.execCommand('insertText', false, symbol);
             }
             clickable(next) {
@@ -8805,8 +8807,8 @@ var $;
                             break;
                         default: return;
                     }
+                    event.preventDefault();
                 }
-                event.preventDefault();
             }
             row_numb(index) {
                 return index;
@@ -8985,6 +8987,11 @@ var $;
         trigger_enabled() {
             return true;
         }
+        clicks(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         trigger_content() {
             return [
                 this.title()
@@ -8999,6 +9006,7 @@ var $;
             obj.minimal_height = () => 40;
             obj.enabled = () => this.trigger_enabled();
             obj.checked = (next) => this.showed(next);
+            obj.clicks = (next) => this.clicks(next);
             obj.sub = () => this.trigger_content();
             obj.hint = () => this.hint();
             return obj;
@@ -9007,6 +9015,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mol_pick.prototype, "keydown", null);
+    __decorate([
+        $mol_mem
+    ], $mol_pick.prototype, "clicks", null);
     __decorate([
         $mol_mem
     ], $mol_pick.prototype, "Trigger", null);
@@ -11421,7 +11432,7 @@ var $;
                 });
             }
             param() {
-                return this.toString().replace(/^.*?\)\./, '').replace(/[()]/g, '');
+                return this.toString().replace(/^.*?[\)>]\./, '').replace(/[(<>)]/g, '');
             }
             header_level(index) {
                 return this.flow_tokens()[index].chunks[0].length;
@@ -12078,1004 +12089,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_file extends $mol_icon {
-        path() {
-            return "M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V8L14,2H6Z";
-        }
-    }
-    $.$mol_icon_file = $mol_icon_file;
-})($ || ($ = {}));
-//mol/icon/file/-view.tree/file.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_file_compare extends $mol_icon {
-        path() {
-            return "M10,18H6V16H10V18M10,14H6V12H10V14M10,1V2H6C4.89,2 4,2.89 4,4V20C4,21.1 4.9,22 6,22H10V23H12V1H10M20,8V20C20,21.11 19.11,22 18,22H14V20H18V11H14V9H18.5L14,4.5V2L20,8M16,14H14V12H16V14M16,18H14V16H16V18Z";
-        }
-    }
-    $.$mol_icon_file_compare = $mol_icon_file_compare;
-})($ || ($ = {}));
-//mol/icon/file/compare/-view.tree/compare.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_dump_list extends $mol_view {
-        values() {
-            return [];
-        }
-        sub() {
-            return [
-                this.Dump("0")
-            ];
-        }
-        dump_value(id) {
-            return null;
-        }
-        dump_expanded(id, next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        prototypes() {
-            return false;
-        }
-        preview_show() {
-            return true;
-        }
-        Dump(id) {
-            const obj = new this.$.$mol_dump_value();
-            obj.value = () => this.dump_value(id);
-            obj.expanded = (next) => this.dump_expanded(id, next);
-            obj.prototypes = () => this.prototypes();
-            obj.preview_show = () => this.preview_show();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_dump_list.prototype, "dump_expanded", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_dump_list.prototype, "Dump", null);
-    $.$mol_dump_list = $mol_dump_list;
-})($ || ($ = {}));
-//mol/dump/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_dump_list extends $.$mol_dump_list {
-            sub() {
-                return this.values().map((_, index) => this.Dump(index));
-            }
-            dump_value(index) {
-                return this.values()[index];
-            }
-            expand_all(event) {
-                this.Dump(1).expanded(true);
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_dump_list.prototype, "sub", null);
-        $$.$mol_dump_list = $mol_dump_list;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/dump/list/list.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/dump/list/list.view.css", "[mol_dump_list] {\n\talign-items: flex-start;\n\tgap: var(--mol_gap_space);\n}\n\n[mol_dump_list_dump]:first-child {\n\tposition: sticky;\n\ttop: 0;\n}\n");
-})($ || ($ = {}));
-//mol/dump/list/-css/list.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_expander extends $mol_list {
-        rows() {
-            return [
-                this.Label(),
-                this.Content()
-            ];
-        }
-        expanded(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        expandable() {
-            return true;
-        }
-        label() {
-            return [
-                this.title()
-            ];
-        }
-        Trigger() {
-            const obj = new this.$.$mol_check_expand();
-            obj.checked = (next) => this.expanded(next);
-            obj.expandable = () => this.expandable();
-            obj.label = () => this.label();
-            return obj;
-        }
-        Tools() {
-            return null;
-        }
-        Label() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
-                this.Trigger(),
-                this.Tools()
-            ];
-            return obj;
-        }
-        content() {
-            return [];
-        }
-        Content() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.content();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_expander.prototype, "expanded", null);
-    __decorate([
-        $mol_mem
-    ], $mol_expander.prototype, "Trigger", null);
-    __decorate([
-        $mol_mem
-    ], $mol_expander.prototype, "Label", null);
-    __decorate([
-        $mol_mem
-    ], $mol_expander.prototype, "Content", null);
-    $.$mol_expander = $mol_expander;
-})($ || ($ = {}));
-//mol/expander/-view.tree/expander.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_expander extends $.$mol_expander {
-            rows() {
-                return [
-                    this.Label(),
-                    ...this.expanded() ? [this.Content()] : []
-                ];
-            }
-            expandable() {
-                return this.content().length > 0;
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_expander.prototype, "rows", null);
-        $$.$mol_expander = $mol_expander;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/expander/expander.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/expander/expander.view.css", "[mol_expander] {\n\tflex-direction: column;\n}\n\n[mol_expander_label] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_expander_trigger] {\n\tflex: auto;\n\tposition: relative;\n}\n");
-})($ || ($ = {}));
-//mol/expander/-css/expander.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_dump_value extends $mol_view {
-        value(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        preview_show(next) {
-            if (next !== undefined)
-                return next;
-            return true;
-        }
-        sub() {
-            return [
-                this.Simple(),
-                this.Expand()
-            ];
-        }
-        simple() {
-            return "";
-        }
-        Simple() {
-            const obj = new this.$.$mol_text_code();
-            obj.text = () => this.simple();
-            return obj;
-        }
-        expanded(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        expandable() {
-            return true;
-        }
-        expand_all(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        expand_title() {
-            return "";
-        }
-        Expand_title() {
-            const obj = new this.$.$mol_text_code();
-            obj.text = () => this.expand_title();
-            return obj;
-        }
-        Expand_head() {
-            const obj = new this.$.$mol_check_expand();
-            obj.minimal_height = () => 24;
-            obj.minimal_width = () => 24;
-            obj.expanded = (next) => this.expanded(next);
-            obj.expandable = () => this.expandable();
-            obj.clicks = (next) => this.expand_all(next);
-            obj.label = () => [
-                this.Expand_title()
-            ];
-            return obj;
-        }
-        preview_dom() {
-            return null;
-        }
-        preview() {
-            return null;
-        }
-        Preview_dom() {
-            const obj = new this.$.$mol_view();
-            obj.dom_node = () => this.preview_dom();
-            obj.render = () => this.preview();
-            return obj;
-        }
-        Preview() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
-                this.Preview_dom()
-            ];
-            return obj;
-        }
-        row_values(id) {
-            return [];
-        }
-        prototypes() {
-            return false;
-        }
-        Row(id) {
-            const obj = new this.$.$mol_dump_list();
-            obj.values = () => this.row_values(id);
-            obj.prototypes = () => this.prototypes();
-            obj.preview_show = () => this.preview_show();
-            return obj;
-        }
-        expand_content() {
-            return [
-                this.Preview(),
-                this.Row("0")
-            ];
-        }
-        Expand() {
-            const obj = new this.$.$mol_expander();
-            obj.expanded = (next) => this.expanded(next);
-            obj.Trigger = () => this.Expand_head();
-            obj.content = () => this.expand_content();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "value", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "preview_show", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Simple", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "expanded", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "expand_all", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Expand_title", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Expand_head", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Preview_dom", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Preview", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_dump_value.prototype, "Row", null);
-    __decorate([
-        $mol_mem
-    ], $mol_dump_value.prototype, "Expand", null);
-    $.$mol_dump_value = $mol_dump_value;
-})($ || ($ = {}));
-//mol/dump/value/-view.tree/value.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_try(handler) {
-        try {
-            return handler();
-        }
-        catch (error) {
-            return error;
-        }
-    }
-    $.$mol_try = $mol_try;
-})($ || ($ = {}));
-//mol/try/try.node.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_dump_value extends $.$mol_dump_value {
-            sub() {
-                const value = this.value();
-                if (!value)
-                    return [this.Simple()];
-                if (typeof value === 'object')
-                    return [this.Expand()];
-                if (typeof value === 'function')
-                    return [this.Expand()];
-                return [this.Simple()];
-            }
-            simple() {
-                const value = this.value();
-                return value ? String(value) : JSON.stringify(value) ?? 'undefined';
-            }
-            expand_title() {
-                const value = this.value();
-                if (typeof value === 'function') {
-                    const name = Reflect.getOwnPropertyDescriptor(value, 'name')?.value;
-                    const source = Function.prototype.toString.call(value);
-                    const args = source.match(/^[^{=>]*?\(([\s\S]*?)\)/)?.[1] ?? source.match(/^([$\w]+)\s+=>/)?.[1] ?? '';
-                    if (name)
-                        return name + '(' + args + ')';
-                }
-                if (value instanceof RegExp)
-                    return String(value);
-                if (value instanceof Date)
-                    return value.toISOString();
-                const kind = Reflect.getOwnPropertyDescriptor(value, Symbol.toStringTag)?.value
-                    ?? value.constructor.name
-                    ?? 'Object';
-                if (value instanceof Node) {
-                    try {
-                        switch (value.nodeType) {
-                            case value.TEXT_NODE: return kind + ' ' + value.nodeValue?.trim();
-                            case value.ELEMENT_NODE: return `<${value.localName}> ${value.id}`;
-                            case value.DOCUMENT_NODE: return kind + ' ' + value.baseURI;
-                        }
-                    }
-                    catch { }
-                }
-                return kind;
-            }
-            rows_values() {
-                let value = this.value();
-                const res = [];
-                if (value instanceof Map) {
-                    for (const [key, val] of value) {
-                        res.push([key, '▶', val]);
-                    }
-                }
-                if (value instanceof Set) {
-                    for (const val of value) {
-                        res.push([val]);
-                    }
-                }
-                if (value instanceof Function) {
-                    let source = Function.prototype.toString.call(value)
-                        .replace(/^.*?\{\r?\n?/, '')
-                        .replace(/}$/, '')
-                        .trimEnd();
-                    const indent = source.match(/^\s*/)[0];
-                    source = source.replace(new RegExp(`^${indent}`, 'gm'), '\t');
-                    res.push([source]);
-                }
-                if (value instanceof Element) {
-                    try {
-                        for (const kid of value.childNodes) {
-                            res.push([kid]);
-                        }
-                        for (const attr of value.attributes) {
-                            if (attr.nodeName === 'id')
-                                continue;
-                            res.push([attr.nodeName, '=', attr.nodeValue]);
-                        }
-                    }
-                    catch { }
-                }
-                if (value && (typeof value === 'object' || typeof value === 'function')) {
-                    for (const key of Reflect.ownKeys(value)) {
-                        const prefix = String(key) + '∶';
-                        const descr = Reflect.getOwnPropertyDescriptor(value, key);
-                        if ('value' in descr) {
-                            const line = [prefix, descr.value];
-                            res.push(line);
-                        }
-                        else {
-                            res.push([prefix, descr.get, descr.set]);
-                        }
-                    }
-                    if (this.prototypes()) {
-                        res.push(['__proto__:', Reflect.getPrototypeOf(value)]);
-                    }
-                }
-                return res;
-            }
-            preview_dom() {
-                const value = this.value();
-                if (value instanceof Element) {
-                    if ($mol_try(() => value.localName) instanceof Error)
-                        return null;
-                    if (value.isConnected)
-                        return null;
-                    return value;
-                }
-                return null;
-            }
-            expand_content() {
-                return [
-                    ...this.preview_show() && this.preview_dom() ? [this.Preview()] : [],
-                    ...this.rows_values().map((_, index) => this.Row(index)),
-                ];
-            }
-            expandable() {
-                return this.expand_content().length > 0;
-            }
-            row_values(index) {
-                return this.rows_values()[index];
-            }
-            expand_all(event) {
-                this.expanded(true);
-                for (const row of this.expand_content()) {
-                    if (!(row instanceof $mol_dump_list))
-                        continue;
-                    if (row.values()[0] === '__proto__:')
-                        continue;
-                    row.expand_all(event);
-                }
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "sub", null);
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "simple", null);
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "expand_title", null);
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "rows_values", null);
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "preview_dom", null);
-        __decorate([
-            $mol_mem
-        ], $mol_dump_value.prototype, "expand_content", null);
-        $$.$mol_dump_value = $mol_dump_value;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/dump/value/value.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/dump/value/value.view.css", "[mol_dump_value] {\n\tmin-height: 2.5rem;\n\tmin-width: 2.5rem;\n}\n\n[mol_dump_value_simple] {\n\tpadding: 0;\n}\n\n[mol_dump_value_expand_content] {\n\tpadding-left: 1.5rem;\n\talign-items: flex-start;\n}\n\n[mol_dump_value_expand_title_rows],\n[mol_dump_value_simple_rows],\n[mol_dump_value_expand_head] {\n\tpadding: 0;\n\tgap: 0;\n}\n");
-})($ || ($ = {}));
-//mol/dump/value/-css/value.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_labeler extends $mol_list {
-        rows() {
-            return [
-                this.Label(),
-                this.Content()
-            ];
-        }
-        label() {
-            return [
-                this.title()
-            ];
-        }
-        Label() {
-            const obj = new this.$.$mol_view();
-            obj.minimal_height = () => 32;
-            obj.sub = () => this.label();
-            return obj;
-        }
-        content() {
-            return [];
-        }
-        Content() {
-            const obj = new this.$.$mol_view();
-            obj.minimal_height = () => 24;
-            obj.sub = () => this.content();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_labeler.prototype, "Label", null);
-    __decorate([
-        $mol_mem
-    ], $mol_labeler.prototype, "Content", null);
-    $.$mol_labeler = $mol_labeler;
-})($ || ($ = {}));
-//mol/labeler/-view.tree/labeler.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tmin-height: 2rem;\n\tcolor: var(--mol_theme_shade);\n\tpadding: .5rem .75rem 0;\n\tgap: 0 var(--mol_gap_block);\n\tflex-wrap: wrap;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n\tpadding: var(--mol_gap_text);\n}\n");
-})($ || ($ = {}));
-//mol/labeler/-css/labeler.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mpds_cifplayer_comparison extends $mol_book2_catalog {
-        plugins() {
-            return [
-                this.Theme()
-            ];
-        }
-        menu_title() {
-            return "Parsers comparison";
-        }
-        spreads() {
-            return this.cif_spreads();
-        }
-        param() {
-            return "cif_path";
-        }
-        Placeholder() {
-            return null;
-        }
-        menu_tools() {
-            return [
-                this.Comparison_toggle(),
-                this.Lights()
-            ];
-        }
-        Cif_spread(id) {
-            const obj = new this.$.$mol_book2();
-            obj.menu_title = () => this.cif_title(id);
-            obj.pages = () => this.cif_pages(id);
-            return obj;
-        }
-        nasty_cif_section(id) {
-            return [
-                this.Reference(id),
-                this.Problem(id)
-            ];
-        }
-        cif_paths() {
-            return [
-                ...this.other_cif_paths(),
-                ...this.good_cif_paths(),
-                ...this.bad_cif_paths()
-            ];
-        }
-        other_cif_paths() {
-            return [
-                "/mpds/cifplayer/comparison/cifs/data_image0.cif",
-                "/mpds/cifplayer/comparison/cifs/example.cif",
-                "/mpds/cifplayer/comparison/cifs/H20.cif"
-            ];
-        }
-        good_cif_paths() {
-            return [
-                "/mpds/cifplayer/comparison/cifs/good/1923795.cif",
-                "/mpds/cifplayer/comparison/cifs/good/1LIN.cif",
-                "/mpds/cifplayer/comparison/cifs/good/As.cif",
-                "/mpds/cifplayer/comparison/cifs/good/B.cif",
-                "/mpds/cifplayer/comparison/cifs/good/brownmillerite_SrFeO3.cif",
-                "/mpds/cifplayer/comparison/cifs/good/bvparm2009.cif",
-                "/mpds/cifplayer/comparison/cifs/good/calcite.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Cr_bromides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Cr_chlorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Cr_fluorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Cr_oxides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/CsSnF3.cif",
-                "/mpds/cifplayer/comparison/cifs/good/FeCr_sigma.cif",
-                "/mpds/cifplayer/comparison/cifs/good/fevo_2nd_cisst_prec.cryst.out0.cif",
-                "/mpds/cifplayer/comparison/cifs/good/fullerene_test.cif",
-                "/mpds/cifplayer/comparison/cifs/good/gold.cif",
-                "/mpds/cifplayer/comparison/cifs/good/gold2.cif",
-                "/mpds/cifplayer/comparison/cifs/good/ICSD_162930.cif",
-                "/mpds/cifplayer/comparison/cifs/good/icsd_181799.cif",
-                "/mpds/cifplayer/comparison/cifs/good/icsd_641380.cif",
-                "/mpds/cifplayer/comparison/cifs/good/lg3009.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Li8H8.cif",
-                "/mpds/cifplayer/comparison/cifs/good/LSCF_alloy.cif",
-                "/mpds/cifplayer/comparison/cifs/good/maleic.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Mo_bromides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Mo_chlorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Mo_fluorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Mo_oxides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/mp-19261_conventional_sidorenkite.cif",
-                "/mpds/cifplayer/comparison/cifs/good/N.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Nb.cif",
-                "/mpds/cifplayer/comparison/cifs/good/pseudo-perovskite.cif",
-                "/mpds/cifplayer/comparison/cifs/good/quartz-slab.cif",
-                "/mpds/cifplayer/comparison/cifs/good/quartz.cif",
-                "/mpds/cifplayer/comparison/cifs/good/quartz4.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Sb.cif",
-                "/mpds/cifplayer/comparison/cifs/good/sho62.cif",
-                "/mpds/cifplayer/comparison/cifs/good/sho62_2.cif",
-                "/mpds/cifplayer/comparison/cifs/good/sho62_3.cif",
-                "/mpds/cifplayer/comparison/cifs/good/sto140b3pw_dft.cryst.out_-1.cif",
-                "/mpds/cifplayer/comparison/cifs/good/szo221.cif",
-                "/mpds/cifplayer/comparison/cifs/good/szo221_5.cif",
-                "/mpds/cifplayer/comparison/cifs/good/szo221_6.cif",
-                "/mpds/cifplayer/comparison/cifs/good/szo221_7.cif",
-                "/mpds/cifplayer/comparison/cifs/good/szo221_8.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Takagi.cif",
-                "/mpds/cifplayer/comparison/cifs/good/test.cif",
-                "/mpds/cifplayer/comparison/cifs/good/vasprun.xml_-1.cif",
-                "/mpds/cifplayer/comparison/cifs/good/wh5004.cif",
-                "/mpds/cifplayer/comparison/cifs/good/W_bromides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/W_chlorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/W_fluorides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/W_oxides.cif",
-                "/mpds/cifplayer/comparison/cifs/good/Xe.cif",
-                "/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_1.cif",
-                "/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_2.cif",
-                "/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_3.cif",
-                "/mpds/cifplayer/comparison/cifs/good/y4h4srhfo3_62_pbe0_9hf_rot_go_4.cif"
-            ];
-        }
-        bad_cif_paths() {
-            return [
-                "/mpds/cifplayer/comparison/cifs/bad/000.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/001.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/002.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/003.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/004.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/005.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/006.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/007.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/008.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/009.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/010.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/011.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/012.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/013.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/014.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/015.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/016.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/017.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/018.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/019.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/020.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/021.cif",
-                "/mpds/cifplayer/comparison/cifs/bad/022.cif"
-            ];
-        }
-        Theme() {
-            const obj = new this.$.$mol_theme_auto();
-            return obj;
-        }
-        cif_spreads() {
-            return {};
-        }
-        Comparison_icon() {
-            const obj = new this.$.$mol_icon_file_compare();
-            return obj;
-        }
-        comparison_on(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        Comparison_toggle() {
-            const obj = new this.$.$mol_check_icon();
-            obj.Icon = () => this.Comparison_icon();
-            obj.checked = (next) => this.comparison_on(next);
-            return obj;
-        }
-        Lights() {
-            const obj = new this.$.$mol_lights_toggle();
-            return obj;
-        }
-        cif_title(id) {
-            return "";
-        }
-        matinfio_obj(id) {
-            return {};
-        }
-        matinfio_expanded(id, next) {
-            if (next !== undefined)
-                return next;
-            return true;
-        }
-        Matinfio_dump(id) {
-            const obj = new this.$.$mol_dump_value();
-            obj.value = () => this.matinfio_obj(id);
-            obj.expanded = (next) => this.matinfio_expanded(id, next);
-            return obj;
-        }
-        Matinfio_label(id) {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "matinfio";
-            obj.content = () => [
-                this.Matinfio_dump(id)
-            ];
-            return obj;
-        }
-        cif_loader3_obj(id) {
-            return {};
-        }
-        cif_loader3_expanded(id, next) {
-            if (next !== undefined)
-                return next;
-            return true;
-        }
-        Cif_loader3_dump(id) {
-            const obj = new this.$.$mol_dump_value();
-            obj.value = () => this.cif_loader3_obj(id);
-            obj.expanded = (next) => this.cif_loader3_expanded(id, next);
-            return obj;
-        }
-        Cif_loader3_label(id) {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "CIFLoader3";
-            obj.content = () => [
-                this.Cif_loader3_dump(id)
-            ];
-            return obj;
-        }
-        crystcif_obj(id) {
-            return {};
-        }
-        crystcif_expanded(id, next) {
-            if (next !== undefined)
-                return next;
-            return true;
-        }
-        Crystcif_dump(id) {
-            const obj = new this.$.$mol_dump_value();
-            obj.value = () => this.crystcif_obj(id);
-            obj.expanded = (next) => this.crystcif_expanded(id, next);
-            return obj;
-        }
-        Crystcif_label(id) {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "crystcif-parse";
-            obj.content = () => [
-                this.Crystcif_dump(id)
-            ];
-            return obj;
-        }
-        Row(id) {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
-                this.Matinfio_label(id),
-                this.Cif_loader3_label(id),
-                this.Crystcif_label(id)
-            ];
-            return obj;
-        }
-        cif_value(id, next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        Cif_textarea(id) {
-            const obj = new this.$.$mol_textarea();
-            obj.value = (next) => this.cif_value(id, next);
-            return obj;
-        }
-        Cif_text(id) {
-            const obj = new this.$.$mol_list();
-            obj.title = () => "Text";
-            obj.sub = () => [
-                ...this.nasty_cif_section(id),
-                this.Cif_textarea(id)
-            ];
-            return obj;
-        }
-        Cif_page(id) {
-            const obj = new this.$.$mol_page();
-            obj.title = () => this.cif_title(id);
-            obj.body = () => [
-                this.Row(id),
-                this.Cif_text(id)
-            ];
-            return obj;
-        }
-        Player(id) {
-            const obj = new this.$.$mpds_cifplayer_player();
-            obj.data = () => this.cif_value(id);
-            return obj;
-        }
-        Player_page(id) {
-            const obj = new this.$.$mol_page();
-            obj.title = () => this.cif_title(id);
-            obj.Body_content = () => this.Player(id);
-            return obj;
-        }
-        cif_pages(id) {
-            return [
-                this.Cif_page(id),
-                this.Player_page(id)
-            ];
-        }
-        nasty_cif_reference(id) {
-            return "";
-        }
-        Reference(id) {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Reference";
-            obj.content = () => [
-                this.nasty_cif_reference(id)
-            ];
-            return obj;
-        }
-        nasty_cif_problem(id) {
-            return "";
-        }
-        Problem(id) {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Problem";
-            obj.content = () => [
-                this.nasty_cif_problem(id)
-            ];
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_spread", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "Theme", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "Comparison_icon", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "comparison_on", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "Comparison_toggle", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_comparison.prototype, "Lights", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "matinfio_expanded", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Matinfio_dump", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Matinfio_label", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "cif_loader3_expanded", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_loader3_dump", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_loader3_label", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "crystcif_expanded", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Crystcif_dump", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Crystcif_label", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Row", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "cif_value", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_textarea", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_text", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Cif_page", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Player", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Player_page", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Reference", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_comparison.prototype, "Problem", null);
-    $.$mpds_cifplayer_comparison = $mpds_cifplayer_comparison;
-})($ || ($ = {}));
-//mpds/cifplayer/comparison/-view.tree/comparison.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        $mol_style_define($mpds_cifplayer_comparison, {
-            contain: 'none',
-            Menu: {
-                flex: {
-                    basis: '20rem',
-                },
-            },
-            Player_page: {
-                flex: {
-                    grow: 1,
-                    basis: '30rem',
-                },
-                Body: {
-                    contain: 'none',
-                    transform: 'none',
-                },
-            },
-            Row: {
-                padding: {
-                    bottom: '2rem',
-                },
-            },
-            Cif_page: {
-                Head: {
-                    flex: {
-                        direction: 'column',
-                    },
-                },
-            },
-        });
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mpds/cifplayer/comparison/comparison.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mpds_cifplayer_demo extends $mol_book2_catalog {
         plugins() {
             return [
@@ -13091,8 +12104,7 @@ var $;
         spreads() {
             return {
                 app: this.App(),
-                phonons: this.Phonons(),
-                comparison: this.Comparison()
+                phonons: this.Phonons()
             };
         }
         Theme() {
@@ -13109,10 +12121,6 @@ var $;
             obj.title = () => "Phonons example";
             return obj;
         }
-        Comparison() {
-            const obj = new this.$.$mpds_cifplayer_comparison();
-            return obj;
-        }
     }
     __decorate([
         $mol_mem
@@ -13123,9 +12131,6 @@ var $;
     __decorate([
         $mol_mem
     ], $mpds_cifplayer_demo.prototype, "Phonons", null);
-    __decorate([
-        $mol_mem
-    ], $mpds_cifplayer_demo.prototype, "Comparison", null);
     $.$mpds_cifplayer_demo = $mpds_cifplayer_demo;
 })($ || ($ = {}));
 //mpds/cifplayer/demo/-view.tree/demo.view.tree.ts
