@@ -9495,6 +9495,7 @@ var $;
         }
         available_overlays() {
             return {
+                "": "display none",
                 S: "elements"
             };
         }
