@@ -219,6 +219,7 @@
     "$mol_switch",
     "$mol_check_list",
     "$mol_state_session",
+    "$mol_card",
     "$mol_text_text",
     "$mol_text_list",
     "$mol_grid",
