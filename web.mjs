@@ -9226,9 +9226,10 @@ var $;
             super();
             this.data = data;
         }
-        static by_name_and_num(name, num) {
-            const spacegroup = $mpds_cifplayer_matinfio_spacegroup.by_num(num)
-                ?? $mpds_cifplayer_matinfio_spacegroup.by_name(name);
+        static by_name_or_num(name, num) {
+            const spacegroup = num
+                ? $mpds_cifplayer_matinfio_spacegroup.by_num(num)
+                : name ? $mpds_cifplayer_matinfio_spacegroup.by_name(name) : null;
             return spacegroup ? spacegroup : $mpds_cifplayer_matinfio_spacegroup.unknown();
         }
         static by_name(name) {
@@ -9266,9 +9267,6 @@ var $;
     __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_matinfio_spacegroup.prototype, "symmetric_atoms", null);
-    __decorate([
-        $mol_mem_key
-    ], $mpds_cifplayer_matinfio_spacegroup, "by_name_and_num", null);
     __decorate([
         $mol_mem_key
     ], $mpds_cifplayer_matinfio_spacegroup, "by_name", null);
@@ -9387,11 +9385,8 @@ var $;
     }
     $.$mpds_cifplayer_matinfio_cell_to_matrix = $mpds_cifplayer_matinfio_cell_to_matrix;
     function $mpds_cifplayer_matinfio_cell_params_from_matrix(matrix) {
-        const norms = [];
+        const norms = matrix.map(vec => math.norm(vec));
         const angles = [];
-        matrix.forEach(function (vec) {
-            norms.push(math.norm(vec));
-        });
         let j = -1;
         let k = -2;
         for (let i = 0; i < 3; i++) {
@@ -9491,9 +9486,12 @@ var $;
                 }
                 continue;
             }
-            else if (fingerprt.startsWith('_symmetry_space_group_name_h-m') || fingerprt.startsWith('_space_group.patterson_name_h-m')) {
+            else if (fingerprt.startsWith('_symmetry_space_group_name_h-m')
+                || fingerprt.startsWith('_space_group.patterson_name_h-m')
+                || fingerprt.startsWith('_space_group_name_h-m_alt')) {
                 loop_active = false;
-                cur_structure.sg_name = lines[i].trim().substr(31).replace(/"/g, '').replace(/'/g, '');
+                const match = cur_line.match(/"(.*)"|'(.*)'/);
+                cur_structure.sg_name = match?.[1] || match?.[2];
                 continue;
             }
             else if (fingerprt.startsWith('_space_group.it_number') || fingerprt.startsWith('_space_group_it_number') || fingerprt.startsWith('_symmetry_int_tables_number')) {
@@ -9825,6 +9823,15 @@ var $;
         }
         else {
             cell_matrix = crystal.cell_matrix;
+            const params = $mpds_cifplayer_matinfio_cell_params_from_matrix(cell_matrix);
+            descr = {
+                'a': params[0],
+                'b': params[1],
+                'c': params[2],
+                'alpha': params[3],
+                'beta': params[4],
+                'gamma': params[5],
+            };
         }
         if (!crystal.atoms.length)
             this.$mpds_cifplayer_matinfio_log.warning("Note: no atomic coordinates supplied");
@@ -9946,6 +9953,13 @@ var $;
 
 ;
 "use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mpds/cifplayer/player/player.view.css", "[mpds_cifplayer_player][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tcolor: var(--mol_theme_text);\n    background-image: none;\n\tpadding-top: 6rem;\n    align-items: flex-start;\n    justify-content: center;\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
 
 ;
 "use strict";
@@ -10051,8 +10065,8 @@ var $;
         const TWEEN = $mpds_cifplayer_lib_tween.TWEEN;
         class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
             render() {
-                super.render();
                 this.structure_3d_data();
+                super.render();
             }
             available_overlays() {
                 return {
@@ -10145,7 +10159,7 @@ var $;
             }
             spacegroup() {
                 const { sg_name, ng_name } = this.structure_3d_data();
-                return $mpds_cifplayer_matinfio_spacegroup.by_name_and_num(sg_name, ng_name);
+                return $mpds_cifplayer_matinfio_spacegroup.by_name_or_num(sg_name, ng_name);
             }
             sym_checks() {
                 return this.spacegroup().symmetry_list().map(name => this.Sym_check(name));

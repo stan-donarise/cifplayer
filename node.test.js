@@ -9260,6 +9260,13 @@ var $;
 
 ;
 "use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mpds/cifplayer/player/player.view.css", "[mpds_cifplayer_player][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tcolor: var(--mol_theme_text);\n    background-image: none;\n\tpadding-top: 6rem;\n    align-items: flex-start;\n    justify-content: center;\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
 
 ;
 "use strict";
