@@ -3802,6 +3802,9 @@ var $;
                 default: return 0;
             }
         }
+        open(...modes) {
+            return 0;
+        }
     }
     __decorate([
         $mol_mem
@@ -8973,12 +8976,12 @@ var $;
 			(obj.sub) = () => ((this.overlays_sub()));
 			return obj;
 		}
-		message(next){
-			if(next !== undefined) return next;
+		message(){
 			return "";
 		}
 		Message_card(){
 			const obj = new this.$.$mol_card();
+			(obj.theme) = () => ("$mol_theme_special");
 			(obj.title) = () => ((this.message()));
 			return obj;
 		}
@@ -9106,7 +9109,6 @@ var $;
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "overlay"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Switch_overlay"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Overlays"));
-	($mol_mem(($.$mpds_cifplayer_player.prototype), "message"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Message_card"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Message"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "data"));
@@ -10127,14 +10129,17 @@ var $;
                 height: '2rem',
             },
             Message: {
-                background: {
-                    color: $mol_theme.back,
-                },
                 position: 'absolute',
                 zIndex: 1,
                 top: '6rem',
-                left: '50%',
-                transform: 'translateX(-50%)',
+                left: 0,
+                right: 0,
+            },
+            Message_card: {
+                background: {
+                    color: $mol_theme.back,
+                },
+                margin: 'auto',
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -10150,6 +10155,12 @@ var $;
         const TWEEN = $mpds_cifplayer_lib_tween.TWEEN;
         class $mpds_cifplayer_player extends $.$mpds_cifplayer_player {
             available_overlays() {
+                try {
+                    this.structure_3d_data();
+                }
+                catch (error) {
+                    return {};
+                }
                 return {
                     ...super.available_overlays(),
                     ...this.structure_3d_data().overlayed
@@ -10201,16 +10212,17 @@ var $;
             message_visible() {
                 return this.message() ? super.message_visible() : [];
             }
-            structure_3d_data() {
+            message() {
                 try {
-                    this.message('');
-                    return new $mpds_cifplayer_matinfio(this.data()).player();
+                    this.structure_3d_data();
+                    return '';
                 }
                 catch (error) {
-                    const message = error.message || error;
-                    this.message(message);
-                    return {};
+                    return error.message || error;
                 }
+            }
+            structure_3d_data() {
+                return new $mpds_cifplayer_matinfio(this.data()).player();
             }
             text_canvas(text) {
                 const canvas = document.createElement('canvas');
@@ -10436,6 +10448,12 @@ var $;
                 return;
             }
             left_panel() {
+                try {
+                    this.structure_3d_data();
+                }
+                catch (error) {
+                    return [];
+                }
                 return this.structure_3d_data().cell_matrix ? super.left_panel() : [];
             }
         }
@@ -10484,6 +10502,9 @@ var $;
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "message_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mpds_cifplayer_player.prototype, "message", null);
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "structure_3d_data", null);
