@@ -9192,6 +9192,8 @@ var $;
     class $mpds_cifplayer_matinfio extends $mol_object2 {
         static log = this.$.$mpds_cifplayer_matinfio_log;
         static detect_format(data) {
+            if (!data)
+                throw new Error("Crystal data is empty");
             if (typeof data === 'object')
                 return 'OPTIMADE';
             if (data.indexOf("_atom_site") > 0 && data.indexOf("loop_") > 0)
