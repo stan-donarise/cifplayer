@@ -8643,6 +8643,9 @@ var $;
 			(obj.bubble_content) = () => ([(this?.Toogle_all()), (this?.Sym_list())]);
 			return obj;
 		}
+		symlabel_visible(){
+			return [(this?.Symlabel())];
+		}
 		centered(next){
 			if(next !== undefined) return next;
 			return true;
@@ -8660,7 +8663,7 @@ var $;
 		left_panel(){
 			return [
 				(this?.Info()), 
-				(this?.Symlabel()), 
+				...(this.symlabel_visible()), 
 				(this?.Center())
 			];
 		}
@@ -10453,8 +10456,13 @@ var $;
 		Upload_native(){
 			return (this?.Upload()?.Native());
 		}
+		files_read(next){
+			if(next !== undefined) return next;
+			return null;
+		}
 		Upload(){
 			const obj = new this.$.$mol_button_open();
+			(obj.files) = (next) => ((this?.files_read(next)));
 			(obj.sub) = () => ([
 				(this?.Upload_icon()), 
 				(this?.Upload_native()), 
@@ -10528,6 +10536,7 @@ var $;
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Book"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Source"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Lights"));
+	($mol_mem(($.$mpds_cifplayer_app.prototype), "files_read"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Upload"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Data_text"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Menu"));

@@ -587,7 +587,7 @@ $mpds_cifplayer_player $mol_view
 							title <= descr_beta \β=
 						<= Descr_gamma $mol_paragraph
 							title <= descr_gamma \γ=
-				<= Symlabel $mol_pick
+				^ symlabel_visible / <= Symlabel $mol_pick
 					trigger_content /
 						<= Sym_icon $mol_icon_eye_check
 						<= symlabel \SG
@@ -911,6 +911,7 @@ $mpds_cifplayer_app $mol_drop
 				<= Upload $mol_button_open
 					Icon => Upload_icon
 					Native => Upload_native
+					files? <=> files_read? null
 					sub /
 						<= Upload_icon
 						<= Upload_native

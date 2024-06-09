@@ -8367,6 +8367,9 @@ var $;
 			(obj.bubble_content) = () => ([(this?.Toogle_all()), (this?.Sym_list())]);
 			return obj;
 		}
+		symlabel_visible(){
+			return [(this?.Symlabel())];
+		}
 		centered(next){
 			if(next !== undefined) return next;
 			return true;
@@ -8384,7 +8387,7 @@ var $;
 		left_panel(){
 			return [
 				(this?.Info()), 
-				(this?.Symlabel()), 
+				...(this.symlabel_visible()), 
 				(this?.Center())
 			];
 		}
@@ -9753,11 +9756,10 @@ var $;
                 };
             }
             symlabel() {
-                return this.structure_3d_data().mpds_data
-                    ? ''
-                    : (this.structure_3d_data().descr.symlabel)
-                        ? 'SG ' + this.structure_3d_data().descr.symlabel
-                        : '';
+                const data = this.structure_3d_data();
+                if (data.mpds_data)
+                    return '';
+                return data.descr.symlabel ? `SG  ${data.descr.symlabel}` : '';
             }
             descr_a() {
                 return `a=${parseFloat(this.structure_3d_data().descr.a).toFixed(3)}Å`;
@@ -9852,7 +9854,7 @@ var $;
                 return $mpds_cifplayer_matinfio_spacegroup.by_name_or_num(sg_name, ng_name);
             }
             sym_checks() {
-                return this.spacegroup().symmetry_list().map(name => this.Sym_check(name));
+                return this.symmetry_list().map(name => this.Sym_check(name));
             }
             sym_name(id) {
                 return id;
@@ -9883,12 +9885,15 @@ var $;
                     return;
                 return structure.atoms.map((data) => this.spacegroup().symmetric_atom(symmetry, data, cell_matrix));
             }
+            symmetry_list() {
+                return this.spacegroup().symmetry_list();
+            }
             visible_atoms() {
                 const structure = this.structure_3d_data();
                 if (!structure.cell_matrix)
                     return structure.atoms;
                 const atoms = [];
-                const symmetries_enabled = this.spacegroup().symmetry_list().filter(name => this.symmetry_visible(name));
+                const symmetries_enabled = this.symmetry_list().filter(name => this.symmetry_visible(name));
                 symmetries_enabled.forEach(symmetry => {
                     const next_symmetries = symmetries_enabled.slice(0, symmetries_enabled.indexOf(symmetry));
                     this.symmetry_atoms(symmetry).forEach((data) => {
@@ -10042,7 +10047,14 @@ var $;
                 catch (error) {
                     return [];
                 }
-                return this.structure_3d_data().cell_matrix ? super.left_panel() : [];
+                if (!this.structure_3d_data().cell_matrix)
+                    return [];
+                return super.left_panel();
+            }
+            symlabel_visible() {
+                return (this.symmetry_list().length > 1) || this.symlabel()
+                    ? super.symlabel_visible()
+                    : [];
             }
         }
         __decorate([
@@ -10128,6 +10140,9 @@ var $;
         ], $mpds_cifplayer_player.prototype, "symmetry_atoms", null);
         __decorate([
             $mol_mem
+        ], $mpds_cifplayer_player.prototype, "symmetry_list", null);
+        __decorate([
+            $mol_mem
         ], $mpds_cifplayer_player.prototype, "visible_atoms", null);
         __decorate([
             $mol_mem
@@ -10162,6 +10177,9 @@ var $;
         __decorate([
             $mol_mem
         ], $mpds_cifplayer_player.prototype, "left_panel", null);
+        __decorate([
+            $mol_mem
+        ], $mpds_cifplayer_player.prototype, "symlabel_visible", null);
         $$.$mpds_cifplayer_player = $mpds_cifplayer_player;
         $mol_view_component($mpds_cifplayer_player);
         function is_overlap(check, atoms, delta) {
@@ -11589,8 +11607,13 @@ var $;
 		Upload_native(){
 			return (this?.Upload()?.Native());
 		}
+		files_read(next){
+			if(next !== undefined) return next;
+			return null;
+		}
 		Upload(){
 			const obj = new this.$.$mol_button_open();
+			(obj.files) = (next) => ((this?.files_read(next)));
 			(obj.sub) = () => ([
 				(this?.Upload_icon()), 
 				(this?.Upload_native()), 
@@ -11664,6 +11687,7 @@ var $;
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Book"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Source"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Lights"));
+	($mol_mem(($.$mpds_cifplayer_app.prototype), "files_read"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Upload"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Data_text"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Menu"));
