@@ -8126,6 +8126,203 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$mol_icon_minus) = class $mol_icon_minus extends ($.$mol_icon) {
+		path(){
+			return "M19,13H5V11H19V13Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_icon_plus) = class $mol_icon_plus extends ($.$mol_icon) {
+		path(){
+			return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_number) = class $mol_number extends ($.$mol_view) {
+		precision(){
+			return 1;
+		}
+		type(){
+			return "tel";
+		}
+		value_string(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		hint(){
+			return " ";
+		}
+		string_enabled(){
+			return (this?.enabled());
+		}
+		submit(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		String(){
+			const obj = new this.$.$mol_string();
+			(obj.type) = () => ((this?.type()));
+			(obj.value) = (next) => ((this?.value_string(next)));
+			(obj.hint) = () => ((this?.hint()));
+			(obj.enabled) = () => ((this?.string_enabled()));
+			(obj.submit) = (next) => ((this?.submit(next)));
+			return obj;
+		}
+		event_dec(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		dec_enabled(){
+			return (this?.enabled());
+		}
+		dec_icon(){
+			const obj = new this.$.$mol_icon_minus();
+			return obj;
+		}
+		Dec(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.event_click) = (next) => ((this?.event_dec(next)));
+			(obj.enabled) = () => ((this?.dec_enabled()));
+			(obj.sub) = () => ([(this?.dec_icon())]);
+			return obj;
+		}
+		event_inc(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		inc_enabled(){
+			return (this?.enabled());
+		}
+		inc_icon(){
+			const obj = new this.$.$mol_icon_plus();
+			return obj;
+		}
+		Inc(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.event_click) = (next) => ((this?.event_inc(next)));
+			(obj.enabled) = () => ((this?.inc_enabled()));
+			(obj.sub) = () => ([(this?.inc_icon())]);
+			return obj;
+		}
+		precision_view(){
+			return (this?.precision());
+		}
+		precision_change(){
+			return (this?.precision());
+		}
+		value_min(){
+			return -Infinity;
+		}
+		value_max(){
+			return +Infinity;
+		}
+		value(next){
+			if(next !== undefined) return next;
+			return +NaN;
+		}
+		enabled(){
+			return true;
+		}
+		sub(){
+			return [
+				(this?.String()), 
+				(this?.Dec()), 
+				(this?.Inc())
+			];
+		}
+	};
+	($mol_mem(($.$mol_number.prototype), "value_string"));
+	($mol_mem(($.$mol_number.prototype), "submit"));
+	($mol_mem(($.$mol_number.prototype), "String"));
+	($mol_mem(($.$mol_number.prototype), "event_dec"));
+	($mol_mem(($.$mol_number.prototype), "dec_icon"));
+	($mol_mem(($.$mol_number.prototype), "Dec"));
+	($mol_mem(($.$mol_number.prototype), "event_inc"));
+	($mol_mem(($.$mol_number.prototype), "inc_icon"));
+	($mol_mem(($.$mol_number.prototype), "Inc"));
+	($mol_mem(($.$mol_number.prototype), "value"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/number/number.css", "[mol_number] {\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tposition: relative;\n\talign-items: stretch;\n\tmax-width: 100%;\n}\n\n[mol_number_string] {\n\tappearance: textfield;\n\tflex: 1 1 7rem;\n\twidth: 7rem;\n}\n\n[mol_number_string]::-webkit-inner-spin-button {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_number extends $.$mol_number {
+            value_limited(next) {
+                if (next === undefined)
+                    return this.value();
+                if (next === '')
+                    return this.value(Number.NaN);
+                const min = this.value_min();
+                const max = this.value_max();
+                const val = Number(next);
+                if (val < min)
+                    return this.value(min);
+                if (val > max)
+                    return this.value(max);
+                return this.value(val);
+            }
+            event_dec(next) {
+                this.value_limited((this.value_limited() || 0) - this.precision_change());
+            }
+            event_inc(next) {
+                this.value_limited((this.value_limited() || 0) + this.precision_change());
+            }
+            value_string(next) {
+                const next_num = this.value_limited(next);
+                const precisionView = this.precision_view();
+                if (next_num === 0)
+                    return '0';
+                if (!next_num)
+                    return '';
+                if (precisionView >= 1) {
+                    return (next_num / precisionView).toFixed();
+                }
+                else {
+                    const fixedNumber = Math.log10(1 / precisionView);
+                    return next_num.toFixed(Math.ceil(fixedNumber));
+                }
+            }
+            dec_enabled() {
+                return this.enabled() && (!((this.value() || 0) <= this.value_min()));
+            }
+            inc_enabled() {
+                return this.enabled() && (!((this.value() || 0) >= this.value_max()));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "dec_enabled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "inc_enabled", null);
+        $$.$mol_number = $mol_number;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$mol_icon_image) = class $mol_icon_image extends ($.$mol_icon) {
 		path(){
 			return "M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z";
@@ -8486,17 +8683,29 @@ var $;
 
 ;
 	($.$mpds_cifplayer_player) = class $mpds_cifplayer_player extends ($.$mol_view) {
+		spread_a(next){
+			if(next !== undefined) return next;
+			return 1;
+		}
+		spread_b(next){
+			if(next !== undefined) return next;
+			return 1;
+		}
+		spread_c(next){
+			if(next !== undefined) return next;
+			return 1;
+		}
 		dir_light(){
 			return null;
 		}
 		ambient_light(){
 			return null;
 		}
-		atom_box(){
-			return null;
+		atom_boxes(){
+			return [];
 		}
-		overlay_box(){
-			return null;
+		overlay_boxes(){
+			return [];
 		}
 		cell_box(){
 			return null;
@@ -8646,6 +8855,70 @@ var $;
 		symlabel_visible(){
 			return [(this?.Symlabel())];
 		}
+		spread_cell_label(){
+			return "1×1×1";
+		}
+		Spread_label_a(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("a");
+			return obj;
+		}
+		spread_limit_a(){
+			return 1;
+		}
+		Spread_a(){
+			const obj = new this.$.$mol_number();
+			(obj.value) = (next) => ((this?.spread_a(next)));
+			(obj.hint) = () => ("1");
+			(obj.value_min) = () => (1);
+			(obj.value_max) = () => ((this?.spread_limit_a()));
+			return obj;
+		}
+		Spread_label_b(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("b");
+			return obj;
+		}
+		spread_limit_b(){
+			return 1;
+		}
+		Spread_b(){
+			const obj = new this.$.$mol_number();
+			(obj.value) = (next) => ((this?.spread_b(next)));
+			(obj.hint) = () => ("1");
+			(obj.value_min) = () => (1);
+			(obj.value_max) = () => ((this?.spread_limit_b()));
+			return obj;
+		}
+		Spread_label_c(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("c");
+			return obj;
+		}
+		spread_limit_c(){
+			return 1;
+		}
+		Spread_c(){
+			const obj = new this.$.$mol_number();
+			(obj.value) = (next) => ((this?.spread_c(next)));
+			(obj.hint) = () => ("1");
+			(obj.value_min) = () => (1);
+			(obj.value_max) = () => ((this?.spread_limit_c()));
+			return obj;
+		}
+		Spread_cells(){
+			const obj = new this.$.$mol_pick();
+			(obj.trigger_content) = () => ([(this?.spread_cell_label())]);
+			(obj.bubble_content) = () => ([
+				(this?.Spread_label_a()), 
+				(this?.Spread_a()), 
+				(this?.Spread_label_b()), 
+				(this?.Spread_b()), 
+				(this?.Spread_label_c()), 
+				(this?.Spread_c())
+			]);
+			return obj;
+		}
 		centered(next){
 			if(next !== undefined) return next;
 			return true;
@@ -8664,6 +8937,7 @@ var $;
 			return [
 				(this?.Info()), 
 				...(this.symlabel_visible()), 
+				(this?.Spread_cells()), 
 				(this?.Center())
 			];
 		}
@@ -8792,16 +9066,32 @@ var $;
 		unvibrate(){
 			return null;
 		}
+		spread_cells(){
+			return [
+				(this?.spread_a()), 
+				(this?.spread_b()), 
+				(this?.spread_c())
+			];
+		}
+		spread_cells_limit(){
+			return 50;
+		}
 		auto(){
 			return [
 				(this?.dir_light()), 
 				(this?.ambient_light()), 
-				(this?.atom_box()), 
-				(this?.overlay_box()), 
+				...(this.atom_boxes()), 
+				...(this.overlay_boxes()), 
 				(this?.cell_box()), 
 				(this?.axes_box()), 
 				(this?.overlay_changed())
 			];
+		}
+		atom_box(id){
+			return null;
+		}
+		overlay_box(id){
+			return null;
 		}
 		sub(){
 			return [
@@ -8848,6 +9138,9 @@ var $;
 			return {...(super.attr()), "fullscreen": (this?.fullscreen())};
 		}
 	};
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "spread_a"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "spread_b"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "spread_c"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Three"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Descr_a"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Descr_b"));
@@ -8864,6 +9157,13 @@ var $;
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Sym_checks"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Sym_list"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Symlabel"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_label_a"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_a"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_label_b"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_b"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_label_c"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_c"));
+	($mol_mem(($.$mpds_cifplayer_player.prototype), "Spread_cells"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "centered"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Center_icon"));
 	($mol_mem(($.$mpds_cifplayer_player.prototype), "Center"));
@@ -8909,6 +9209,7 @@ var $;
             background: {
                 color: $mol_theme.back,
             },
+            position: 'relative',
             '@': {
                 fullscreen: {
                     'true': {
@@ -8929,6 +9230,24 @@ var $;
             },
             Descr_c: {
                 color: $mol_style_func.vary('--color_c')
+            },
+            Spread_label_a: {
+                color: $mol_style_func.vary('--color_a'),
+                padding: $mol_gap.text,
+            },
+            Spread_label_b: {
+                color: $mol_style_func.vary('--color_b'),
+                padding: $mol_gap.text,
+            },
+            Spread_label_c: {
+                color: $mol_style_func.vary('--color_c'),
+                padding: $mol_gap.text,
+            },
+            Spread_cells: {
+                Bubble: {
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto',
+                },
             },
             Left_panel: {
                 position: 'absolute',
@@ -10476,14 +10795,16 @@ var $;
 			(obj.hint) = () => ("or paste here...");
 			return obj;
 		}
-		menu_body(){
-			return [(this?.Upload()), (this?.Data_text())];
+		Body(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this?.Upload()), (this?.Data_text())]);
+			return obj;
 		}
 		Menu(){
 			const obj = new this.$.$mol_page();
 			(obj.title) = () => ("Crystal structure web-viewer");
 			(obj.tools) = () => ([(this?.Source()), (this?.Lights())]);
-			(obj.body) = () => ((this?.menu_body()));
+			(obj.body) = () => ([(this?.Body())]);
 			return obj;
 		}
 		data_str(next){
@@ -10539,6 +10860,7 @@ var $;
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "files_read"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Upload"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Data_text"));
+	($mol_mem(($.$mpds_cifplayer_app.prototype), "Body"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Menu"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "data_str"));
 	($mol_mem(($.$mpds_cifplayer_app.prototype), "Player"));
@@ -10626,11 +10948,20 @@ var $;
                 Body_content: {
                     gap: $mol_gap.block,
                     maxWidth: '25rem',
+                    flex: {
+                        direction: 'row',
+                    },
                 },
                 Head: {
                     justify: {
                         content: 'flex-start'
                     },
+                },
+            },
+            Body: {
+                flex: {
+                    direction: 'column',
+                    grow: 1,
                 },
             },
             Player: {
