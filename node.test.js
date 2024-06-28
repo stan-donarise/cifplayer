@@ -9269,6 +9269,8 @@ var $;
                 },
             },
             Left_panel: {
+                userSelect: 'none',
+                pointerEvents: 'none',
                 position: 'absolute',
                 zIndex: 1,
                 flex: {
