@@ -9279,6 +9279,7 @@ var $;
                 padding: $mol_gap.text,
             },
             Spread_cells: {
+                pointerEvents: 'auto',
                 Bubble: {
                     display: 'grid',
                     gridTemplateColumns: 'auto auto',
@@ -9302,6 +9303,12 @@ var $;
                 flex: {
                     direction: 'column',
                 },
+            },
+            Symlabel: {
+                pointerEvents: 'auto',
+            },
+            Center: {
+                pointerEvents: 'auto',
             },
             Toogle_all: {
                 boxShadow: `0 0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.5)`,
