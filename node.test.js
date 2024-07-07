@@ -8716,6 +8716,13 @@ var $;
 			if(next !== undefined) return next;
 			return 1;
 		}
+		Theme(){
+			const obj = new this.$.$mol_theme_auto();
+			return obj;
+		}
+		external_theme_auto(){
+			return null;
+		}
 		dir_light(){
 			return null;
 		}
@@ -9018,12 +9025,15 @@ var $;
 			const obj = new this.$.$mol_lights_toggle();
 			return obj;
 		}
+		lights_toggle(){
+			return [(this?.Lights())];
+		}
 		Tools(){
 			const obj = new this.$.$mol_view();
 			(obj.sub) = () => ([
 				(this?.Fullscreen()), 
 				(this?.Zoom_section()), 
-				(this?.Lights())
+				...(this.lights_toggle())
 			]);
 			return obj;
 		}
@@ -9105,8 +9115,12 @@ var $;
 		spread_cells_limit(){
 			return 50;
 		}
+		plugins(){
+			return [(this?.Theme())];
+		}
 		auto(){
 			return [
+				(this?.external_theme_auto()), 
 				(this?.dir_light()), 
 				(this?.ambient_light()), 
 				...(this.atom_boxes()), 
@@ -9170,6 +9184,7 @@ var $;
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_a"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_b"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_c"));
+	($mol_mem(($.$optimade_cifplayer_player.prototype), "Theme"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Three"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Descr_a"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Descr_b"));
