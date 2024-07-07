@@ -8716,10 +8716,6 @@ var $;
 			if(next !== undefined) return next;
 			return 1;
 		}
-		Theme(){
-			const obj = new this.$.$mol_theme_auto();
-			return obj;
-		}
 		dir_light(){
 			return null;
 		}
@@ -9109,9 +9105,6 @@ var $;
 		spread_cells_limit(){
 			return 50;
 		}
-		plugins(){
-			return [(this?.Theme())];
-		}
 		auto(){
 			return [
 				(this?.dir_light()), 
@@ -9177,7 +9170,6 @@ var $;
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_a"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_b"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "spread_c"));
-	($mol_mem(($.$optimade_cifplayer_player.prototype), "Theme"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Three"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Descr_a"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Descr_b"));
