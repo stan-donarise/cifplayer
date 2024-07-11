@@ -10435,7 +10435,7 @@ var $;
                 this.dir_light().position.copy(this.camera().position);
             }
             vibration_start(phonon) {
-                this.$.$mol_wire_sync(this).vibration_end();
+                this.vibration_end();
                 const labels = this.overlay_box([0, 0, 0]).children;
                 if (phonon.length !== labels.length) {
                     this.$.$mol_fail(new $mol_data_error(`Phonon length does not match number of atoms`));
@@ -10480,10 +10480,10 @@ var $;
                 const phonon = this.phonon();
                 if (next) {
                     if (phonon)
-                        this.$.$mol_wire_sync(this).vibration_start(phonon);
+                        this.vibration_start(phonon);
                 }
                 else {
-                    this.$.$mol_wire_sync(this).vibration_end();
+                    this.vibration_end();
                 }
                 return next ?? false;
             }
@@ -10497,8 +10497,8 @@ var $;
             }
             vibration_restart() {
                 this.cell_translations();
-                this.$.$mol_wire_sync(this).vibration_active(false);
-                this.$.$mol_wire_sync(this).vibration_active(true);
+                this.vibration_active(false);
+                this.vibration_active(true);
             }
             left_panel() {
                 if (this.externals()?.skip_panel)
