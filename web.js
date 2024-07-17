@@ -9152,16 +9152,11 @@ var $;
         for (let i = 0; i < crystal.atoms.length; i++) {
             const atom = crystal.atoms[i];
             const pos = [atom.x, atom.y, atom.z];
-            let cpos = pos;
-            let fpos = null;
-            if (!crystal.cartesian) {
-                fpos = pos.map(fract_cord_norm);
-                cpos = math.multiply(fpos, cell_matrix);
-            }
-            else if (cell_matrix) {
-                fpos = math.divide(pos, cell_matrix).map(fract_cord_norm);
-            }
-            const pos_hash = (fpos ?? cpos).map(c => c.toFixed(2)).join(',');
+            const fpos = crystal.cartesian
+                ? cell_matrix ? math.divide(pos, cell_matrix).map(fract_cord_norm) : null
+                : pos.map(fract_cord_norm);
+            const cpos = fpos ? math.multiply(fpos, cell_matrix) : pos;
+            const pos_hash = cpos.map(c => Math.round(c / $optimade_cifplayer_matinfio.pos_overlap_limit)).join(',');
             if (in_pos.get(pos_hash)?.length > 0) {
                 const first = in_pos.get(pos_hash)[0];
                 for (let oprop in first.overlays) {
@@ -9239,6 +9234,7 @@ var $;
         warning: console.warn,
     };
     class $optimade_cifplayer_matinfio extends $mol_object2 {
+        static pos_overlap_limit = 0.1;
         static log = this.$.$optimade_cifplayer_matinfio_log;
         static detect_format(data) {
             if (!data)
@@ -10299,7 +10295,7 @@ var $;
                     this.symmetry_atoms(symmetry).forEach(data => {
                         for (const name of next_symmetries) {
                             const atoms = this.symmetry_atoms(name);
-                            if (is_overlap(data, atoms, 0.01)) {
+                            if (is_overlap(data, atoms, $optimade_cifplayer_matinfio.pos_overlap_limit)) {
                                 return;
                             }
                         }
