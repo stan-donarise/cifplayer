@@ -9148,54 +9148,66 @@ var $;
             mpds_data: crystal.mpds_data,
             mpds_demo: crystal.mpds_demo
         };
-        const pos2els = {};
-        const hashes = {};
+        const in_pos = new Map;
         for (let i = 0; i < crystal.atoms.length; i++) {
-            const pos = [crystal.atoms[i].x, crystal.atoms[i].y, crystal.atoms[i].z];
-            const hash = pos.map(function (item) { return item.toFixed(2); }).join(',');
-            if (hashes.hasOwnProperty(hash)) {
-                var update = "";
-                for (let oprop in render.atoms[hashes[hash]].overlays) {
+            const atom = crystal.atoms[i];
+            const pos = [atom.x, atom.y, atom.z];
+            let cpos = pos;
+            let fpos = null;
+            if (!crystal.cartesian) {
+                fpos = pos.map(fract_cord_norm);
+                cpos = math.multiply(fpos, cell_matrix);
+            }
+            else if (cell_matrix) {
+                fpos = math.divide(pos, cell_matrix).map(fract_cord_norm);
+            }
+            const pos_hash = (fpos ?? cpos).map(c => c.toFixed(2)).join(',');
+            if (in_pos.get(pos_hash)?.length > 0) {
+                const first = in_pos.get(pos_hash)[0];
+                for (let oprop in first.overlays) {
                     if (oprop == 'S') {
-                        if (pos2els[hash].indexOf(crystal.atoms[i].symbol) == -1) {
-                            update = " " + crystal.atoms[i].symbol;
-                            pos2els[hash].push(crystal.atoms[i].symbol);
+                        if (in_pos.get(pos_hash)?.every(a => a.symbol != atom.symbol)) {
+                            first.overlays[oprop] += ' ' + atom.symbol;
                         }
                     }
-                    else if (oprop == 'N')
-                        update = ", " + (i + 1);
-                    else if (oprop == '_atom_site_occupancy')
-                        update = "+" + crystal.atoms[i].overlays[oprop];
-                    else
-                        update = " " + crystal.atoms[i].overlays[oprop];
-                    render.atoms[hashes[hash]].overlays[oprop] += update;
+                    else if (oprop == 'N') {
+                        first.overlays[oprop] += ', ' + (i + 1);
+                    }
+                    else if (oprop == '_atom_site_occupancy') {
+                        first.overlays[oprop] += '+' + atom.overlays[oprop];
+                    }
+                    else {
+                        first.overlays[oprop] += ' ' + atom.overlays[oprop];
+                    }
                 }
+                continue;
             }
-            else {
-                const color = $optimade_cifplayer_matinfio_chemical_elements.JmolColors[crystal.atoms[i].symbol] || '#FFFF00';
-                const radius = $optimade_cifplayer_matinfio_chemical_elements.AseRadii[crystal.atoms[i].symbol] || 0.66;
-                const overlays = {
-                    "S": crystal.atoms[i].symbol,
-                    "N": i + 1,
-                };
-                for (let oprop in crystal.atoms[i].overlays) {
-                    overlays[oprop] = crystal.atoms[i].overlays[oprop];
-                }
-                const cpos = crystal.cartesian ? pos : math.multiply(pos, cell_matrix);
-                const fpos = !crystal.cartesian ? pos : cell_matrix ? math.divide(pos, cell_matrix) : null;
-                const fract = fpos ? { 'x': fpos[0], 'y': fpos[1], 'z': fpos[2] } : null;
-                render.atoms.push({
-                    'fract': fract,
-                    'x': cpos[0],
-                    'y': cpos[1],
-                    'z': cpos[2],
-                    'c': color,
-                    'r': radius,
-                    'overlays': overlays
-                });
-                hashes[hash] = render.atoms.length - 1;
-                pos2els[hash] = [crystal.atoms[i].symbol];
+            const overlays = {
+                "S": atom.symbol,
+                "N": i + 1,
+            };
+            for (let oprop in atom.overlays) {
+                overlays[oprop] = atom.overlays[oprop];
             }
+            const color = $optimade_cifplayer_matinfio_chemical_elements.JmolColors[atom.symbol] || '#FFFF00';
+            const radius = $optimade_cifplayer_matinfio_chemical_elements.AseRadii[atom.symbol] || 0.66;
+            const atom_result = {
+                fract: fpos ? {
+                    x: fpos[0],
+                    y: fpos[1],
+                    z: fpos[2],
+                } : null,
+                x: cpos[0],
+                y: cpos[1],
+                z: cpos[2],
+                c: color,
+                r: radius,
+                overlays,
+                symbol: atom.symbol,
+                label: atom.label,
+            };
+            render.atoms.push(atom_result);
+            in_pos.get(pos_hash)?.push(atom_result) ?? in_pos.set(pos_hash, [atom_result]);
         }
         for (let oprop in crystal.atoms.at(-1).overlays) {
             render.overlayed[oprop] = $optimade_cifplayer_matinfio_custom_atom_loop_props[oprop];
@@ -9203,6 +9215,10 @@ var $;
         return render;
     }
     $.$optimade_cifplayer_matinfio_player_from_obj = $optimade_cifplayer_matinfio_player_from_obj;
+    function fract_cord_norm(cord) {
+        const res = cord % 1;
+        return res > 0 ? res : res + 1;
+    }
 })($ || ($ = {}));
 
 ;
@@ -9399,10 +9415,8 @@ var $;
         return res;
     }
     function fract_cord_norm(cord) {
-        let res = cord % 1;
-        if (res < 0)
-            res = res + 1;
-        return res;
+        const res = cord % 1;
+        return res > 0 ? res : res + 1;
     }
 })($ || ($ = {}));
 
