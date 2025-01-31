@@ -13135,6 +13135,7 @@ var $;
                 flex: {
                     direction: 'column',
                     grow: 1,
+                    shrink: 1,
                 },
             },
             Player: {
