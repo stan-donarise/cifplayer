@@ -10755,7 +10755,7 @@ var $;
                     return '';
                 }
                 catch (error) {
-                    $mol_fail_log(error);
+                    this.$.$mol_fail_log(error);
                     return error.message || error;
                 }
             }
