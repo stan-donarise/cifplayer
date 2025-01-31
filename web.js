@@ -7789,6 +7789,23 @@ var $;
 })($ || ($ = {}));
 
 ;
+"use strict";
+var $;
+(function ($) {
+    $.$optimade_cifplayer_theme = $mol_style_prop('optimade_cifplayer_theme', [
+        'error',
+        'warning',
+    ]);
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("optimade/cifplayer/theme/theme.css", "[mol_theme=\"$mol_theme_light\"] {\n\t--optimade_cifplayer_theme_error: hsl(0, 87%, 69%);\n\t--optimade_cifplayer_theme_warning: hsl(290, 61%, 80%);\n}\n\n[mol_theme=\"$mol_theme_dark\"] {\n\t--optimade_cifplayer_theme_error: hsl(0, 59%, 26%);\n\t--optimade_cifplayer_theme_warning: hsl(290, 53%, 28%);\n}\n");
+})($ || ($ = {}));
+
+;
 
 var $node = $node || {}
 void function( module ) { var exports = module.exports = this; function require( id ) { return $node[ id.replace( /^.\// , "../optimade/cifplayer/lib/three/" ) ] }; 
@@ -9259,22 +9276,24 @@ var $;
 			(obj.sub) = () => ((this.overlays_sub()));
 			return obj;
 		}
-		message(){
+		error(){
 			return "";
 		}
-		Message_card(){
+		Error_card(){
 			const obj = new this.$.$mol_card();
-			(obj.theme) = () => ("$mol_theme_special");
-			(obj.title) = () => ((this.message()));
+			(obj.title) = () => ((this.error()));
 			return obj;
 		}
-		Message(){
-			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ([(this.Message_card())]);
+		warning(){
+			return "";
+		}
+		Warning_card(){
+			const obj = new this.$.$mol_card();
+			(obj.title) = () => ((this.warning()));
 			return obj;
 		}
 		message_visible(){
-			return [(this.Message())];
+			return [(this.Error_card()), (this.Warning_card())];
 		}
 		color_a(){
 			return "";
@@ -9442,8 +9461,8 @@ var $;
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "overlay"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Switch_overlay"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Overlays"));
-	($mol_mem(($.$optimade_cifplayer_player.prototype), "Message_card"));
-	($mol_mem(($.$optimade_cifplayer_player.prototype), "Message"));
+	($mol_mem(($.$optimade_cifplayer_player.prototype), "Error_card"));
+	($mol_mem(($.$optimade_cifplayer_player.prototype), "Warning_card"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "data"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "externals"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "fullscreen"));
@@ -9629,7 +9648,8 @@ var $;
             ng_name: parseInt(crystal.ng_name),
             info: crystal.info,
             mpds_data: crystal.mpds_data,
-            mpds_demo: crystal.mpds_demo
+            mpds_demo: crystal.mpds_demo,
+            warning: crystal.warning,
         };
         const groups = [];
         for (let i = 0; i < crystal.atoms.length; i++) {
@@ -10125,8 +10145,12 @@ var $;
                 continue;
             }
             else if (fingerprt.startsWith('_cif_error')) {
-                const error_message = cur_line.substr(12, cur_line.length - 13);
+                const error_message = cur_line.substr(11, cur_line.length - 11);
                 return this.$mol_fail(new $mol_data_error(error_message));
+            }
+            else if (fingerprt.startsWith('_cif_warning')) {
+                cur_structure.warning = cur_line.substr(13, cur_line.length - 13);
+                continue;
             }
             else if (fingerprt.startsWith('_pauling_file_entry')) {
                 cur_structure.mpds_data = true;
@@ -10490,6 +10514,19 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
+        const Message_card = {
+            position: 'absolute',
+            zIndex: 1,
+            top: '6rem',
+            width: '100%',
+            align: {
+                items: 'center'
+            },
+            background: {
+                color: 'transparent',
+            },
+            boxShadow: 'none',
+        };
         $mol_style_define($optimade_cifplayer_player, {
             background: {
                 color: $mol_theme.back,
@@ -10604,18 +10641,21 @@ var $;
                 width: '2rem',
                 height: '2rem',
             },
-            Message: {
-                position: 'absolute',
-                zIndex: 1,
-                top: '6rem',
-                left: 0,
-                right: 0,
-            },
-            Message_card: {
-                background: {
-                    color: $mol_theme.back,
+            Error_card: {
+                ...Message_card,
+                Content: {
+                    background: {
+                        color: $optimade_cifplayer_theme.error,
+                    },
                 },
-                margin: 'auto',
+            },
+            Warning_card: {
+                ...Message_card,
+                Content: {
+                    background: {
+                        color: $optimade_cifplayer_theme.warning,
+                    },
+                },
             },
             Three: {
                 cursor: 'move',
@@ -10695,9 +10735,21 @@ var $;
                 this.camera().position.add(this.camera_distance().multiplyScalar(this.zoom_scale_step()));
             }
             message_visible() {
-                return this.message() ? super.message_visible() : [];
+                if (this.error())
+                    return [this.Error_card()];
+                if (this.warning())
+                    return [this.Warning_card()];
+                return [];
             }
-            message() {
+            warning() {
+                try {
+                    return this.structure_3d_data()?.warning ?? '';
+                }
+                catch (error) {
+                    return '';
+                }
+            }
+            error() {
                 try {
                     this.structure_3d_data();
                     return '';
@@ -11101,7 +11153,10 @@ var $;
         ], $optimade_cifplayer_player.prototype, "message_visible", null);
         __decorate([
             $mol_mem
-        ], $optimade_cifplayer_player.prototype, "message", null);
+        ], $optimade_cifplayer_player.prototype, "warning", null);
+        __decorate([
+            $mol_mem
+        ], $optimade_cifplayer_player.prototype, "error", null);
         __decorate([
             $mol_mem
         ], $optimade_cifplayer_player.prototype, "structure_3d_data", null);

@@ -2864,6 +2864,13 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    const $optimade_cifplayer_theme: Record<"error" | "warning", $mol_style_func<"var", unknown>>;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     const $optimade_cifplayer_lib_three: typeof import("./_three");
 }
 
@@ -3503,6 +3510,7 @@ declare namespace $ {
         cartesian: boolean;
         mpds_demo: boolean;
         mpds_data: boolean;
+        warning?: string;
     };
     export type $optimade_cifplayer_matinfio_player_obj = {
         cell_matrix?: number[][];
@@ -3517,6 +3525,7 @@ declare namespace $ {
         info: string;
         mpds_demo: boolean;
         mpds_data: boolean;
+        warning?: string;
     };
     export class $optimade_cifplayer_matinfio extends $mol_object2 {
         static pos_overlap_limit: number;
@@ -4205,20 +4214,15 @@ declare namespace $ {
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_card__theme_optimade_cifplayer_player_47 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_card['theme'] >
-	>
-	type $mol_card__title_optimade_cifplayer_player_48 = $mol_type_enforce<
-		ReturnType< $optimade_cifplayer_player['message'] >
+	type $mol_card__title_optimade_cifplayer_player_47 = $mol_type_enforce<
+		ReturnType< $optimade_cifplayer_player['error'] >
 		,
 		ReturnType< $mol_card['title'] >
 	>
-	type $mol_view__sub_optimade_cifplayer_player_49 = $mol_type_enforce<
-		readonly(any)[]
+	type $mol_card__title_optimade_cifplayer_player_48 = $mol_type_enforce<
+		ReturnType< $optimade_cifplayer_player['warning'] >
 		,
-		ReturnType< $mol_view['sub'] >
+		ReturnType< $mol_card['title'] >
 	>
 	export class $optimade_cifplayer_player extends $mol_view {
 		translate_a( next?: number ): number
@@ -4297,9 +4301,10 @@ declare namespace $ {
 		Switch_overlay( ): $mol_switch
 		overlays_sub( ): readonly(any)[]
 		Overlays( ): $mol_view
-		message( ): string
-		Message_card( ): $mol_card
-		Message( ): $mol_view
+		error( ): string
+		Error_card( ): $mol_card
+		warning( ): string
+		Warning_card( ): $mol_card
 		message_visible( ): readonly(any)[]
 		color_a( ): string
 		color_b( ): string
@@ -4367,8 +4372,9 @@ declare namespace $.$$ {
         camera_distance(): any;
         zoom_up(): void;
         zoom_down(): void;
-        message_visible(): readonly any[];
-        message(): string;
+        message_visible(): $.$mol_card[];
+        warning(): string;
+        error(): string;
         structure_3d_data(): $optimade_cifplayer_matinfio_player_obj;
         text_canvas(text: string): HTMLCanvasElement;
         create_sprite(text: string): any;
