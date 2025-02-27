@@ -496,6 +496,20 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_promise<Result = void> extends Promise<Result> {
+        done: (value: Result | PromiseLike<Result>) => void;
+        fail: (reason?: any) => void;
+        constructor(executor?: (done: (value: Result | PromiseLike<Result>) => void, fail: (reason?: any) => void) => void);
+    }
+}
+
+declare namespace $ {
+    class $mol_promise_blocker<Result> extends $mol_promise<Result> {
+        static [Symbol.toStringTag]: string;
+    }
+}
+
+declare namespace $ {
     class $mol_decor<Value> {
         readonly value: Value;
         constructor(value: Value);
@@ -1088,9 +1102,9 @@ declare namespace $ {
 		event_scroll( next?: any ): any
 		scroll_top( next?: number ): number
 		scroll_left( next?: number ): number
-		field( ): ({ 
-			'tabIndex': ReturnType< $mol_scroll['tabindex'] >,
-		})  & ReturnType< $mol_view['field'] >
+		attr( ): ({ 
+			'tabindex': ReturnType< $mol_scroll['tabindex'] >,
+		})  & ReturnType< $mol_view['attr'] >
 		event( ): ({ 
 			scroll( next?: ReturnType< $mol_scroll['event_scroll'] > ): ReturnType< $mol_scroll['event_scroll'] >,
 		})  & ReturnType< $mol_view['event'] >
@@ -2864,13 +2878,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    const $optimade_cifplayer_theme: Record<"error" | "warning", $mol_style_func<"var", unknown>>;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     const $optimade_cifplayer_lib_three: typeof import("./_three");
 }
 
@@ -3439,7 +3446,7 @@ declare namespace $ {
     class $mol_error_mix<Cause extends {} = {}> extends AggregateError {
         readonly cause: Cause;
         name: string;
-        constructor(message: string, cause?: Cause, ...errors: Error[]);
+        constructor(message: string, cause?: Cause, ...errors: readonly Error[]);
         static [Symbol.toPrimitive](): string;
         static toString(): string;
         static make(...params: ConstructorParameters<typeof $mol_error_mix>): $mol_error_mix<{}>;
@@ -3575,13 +3582,6 @@ declare namespace $ {
         symmetric_atom(symmetry: string, atom: $optimade_cifplayer_matinfio_internal_obj_atom, cell: number[][]): $optimade_cifplayer_matinfio_internal_obj_atom;
         symmetric_atoms(atom: $optimade_cifplayer_matinfio_internal_obj_atom, cell_matrix: number[][]): $optimade_cifplayer_matinfio_internal_obj_atom[];
     }
-}
-
-declare namespace $ {
-    function $mol_promise<Result = void>(): Promise<Result> & {
-        done: (res: Result | PromiseLike<Result>) => void;
-        fail: (error?: any) => void;
-    };
 }
 
 declare namespace $ {
@@ -3939,6 +3939,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    const $optimade_cifplayer_theme: Record<"error" | "warning", $mol_style_func<"var", unknown>>;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     function $optimade_cifplayer_matinfio_cif_to_obj(this: $, str: string): $optimade_cifplayer_matinfio_internal_obj;
     function $optimade_cifplayer_matinfio_cif_from_obj(this: $, crystal: any): string;
 }
@@ -3977,9 +3984,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $.$$ {
 }
 
 declare namespace $ {
@@ -4355,6 +4359,7 @@ declare namespace $.$$ {
     const THREE: typeof import("../lib/three/_three");
     type THREE = typeof THREE;
     export class $optimade_cifplayer_player extends $.$optimade_cifplayer_player {
+        sub(): readonly any[];
         light_theme_auto(): void;
         available_overlays(): {
             [x: string]: string;
@@ -4435,6 +4440,9 @@ declare namespace $.$$ {
         translate_limit_c(): number;
     }
     export {};
+}
+
+declare namespace $.$$ {
 }
 
 declare namespace $ {
