@@ -4286,7 +4286,6 @@ declare namespace $ {
 		translate_b( next?: number ): number
 		translate_c( next?: number ): number
 		Theme( ): $mol_theme_auto
-		data_listener( ): $mol_dom_listener
 		light_theme_auto( ): any
 		dir_light( ): any
 		ambient_light( ): any
@@ -4413,7 +4412,6 @@ declare namespace $.$$ {
     const THREE: typeof import("../lib/three/_three");
     type THREE = typeof THREE;
     export class $optimade_cifplayer_player extends $.$optimade_cifplayer_player {
-        data_listener(): $mol_dom_listener;
         sub(): readonly any[];
         light_theme_auto(): void;
         available_overlays(): {
@@ -5600,6 +5598,7 @@ declare namespace $ {
 		drop_file( next?: any ): any
 		Theme( ): $mol_theme_auto
 		Book( ): $mol_book2
+		data_listener( ): $mol_dom_listener
 		Source( ): $mol_link_iconed
 		Lights( ): $mol_lights_toggle
 		Upload_icon( ): ReturnType< ReturnType< $optimade_cifplayer_app['Upload'] >['Icon'] >
@@ -5618,6 +5617,7 @@ declare namespace $ {
 		Paste_example( ): $mol_button_minor
 		receive( next?: ReturnType< $optimade_cifplayer_app['drop_file'] > ): ReturnType< $optimade_cifplayer_app['drop_file'] >
 		Sub( ): ReturnType< $optimade_cifplayer_app['Book'] >
+		auto( ): readonly(any)[]
 		pages( ): readonly(any)[]
 		Start( ): $mol_view
 	}
@@ -5627,6 +5627,7 @@ declare namespace $ {
 //# sourceMappingURL=app.web.view.tree.d.ts.map
 declare namespace $.$$ {
     class $optimade_cifplayer_app extends $.$optimade_cifplayer_app {
+        data_listener(): $mol_dom_listener;
         pages(): readonly any[];
         files_read(next: readonly File[]): void;
         drop_file(transfer: any): void;
