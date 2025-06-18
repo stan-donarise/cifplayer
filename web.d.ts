@@ -1278,7 +1278,7 @@ declare namespace $.$$ {
         pages_deep(): $mol_view[];
         title(): string;
         menu_title(): string;
-        sub(): readonly $mol_view[];
+        sub(): $mol_view[];
         bring(): void;
     }
 }
@@ -1415,6 +1415,7 @@ declare namespace $ {
 	export class $mol_speck extends $mol_view {
 		theme( ): string
 		value( ): any
+		minimal_width( ): number
 		attr( ): ({ 
 			'mol_theme': ReturnType< $mol_speck['theme'] >,
 		})  & ReturnType< $mol_view['attr'] >
@@ -3444,6 +3445,42 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
+	type $mol_image__uri_optimade_cifplayer_absolidix_embed_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_image['uri'] >
+	>
+	type $mol_button_minor__sub_optimade_cifplayer_absolidix_embed_2 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_button_minor['sub'] >
+	>
+	type $mol_button_minor__click_optimade_cifplayer_absolidix_embed_3 = $mol_type_enforce<
+		ReturnType< $optimade_cifplayer_absolidix_embed['open_popup'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	export class $optimade_cifplayer_absolidix_embed extends $mol_view {
+		Logo( ): $mol_image
+		open_popup( next?: any ): any
+		Open_popup( ): $mol_button_minor
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=embed.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $optimade_cifplayer_absolidix_embed extends $.$optimade_cifplayer_absolidix_embed {
+        open_popup(next?: any): void;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
 	type $mol_view__sub_mol_card_1 = $mol_type_enforce<
 		ReturnType< $mol_card['content'] >
 		,
@@ -4358,6 +4395,7 @@ declare namespace $ {
 		Switch_overlay( ): $mol_switch
 		overlays_sub( ): readonly(any)[]
 		Overlays( ): $mol_view
+		Absolidix( ): $optimade_cifplayer_absolidix_embed
 		error( ): string
 		Error_card( ): $mol_card
 		warning( ): string
@@ -4708,6 +4746,7 @@ declare namespace $.$$ {
         cell_expanded(id: {
             row: string[];
         }, next?: boolean): boolean;
+        sub(): readonly any[];
     }
 }
 
@@ -4727,16 +4766,14 @@ declare namespace $ {
 		ReturnType< $mol_link['sub'] >
 	>
 	export class $mol_embed_native extends $mol_scroll {
-		mime( ): string
+		uri( next?: string ): string
 		title( ): string
 		Fallback( ): $mol_link
 		uri_change( next?: any ): any
-		uri( next?: string ): string
 		dom_name( ): string
 		window( ): any
 		attr( ): ({ 
-			'data': ReturnType< $mol_embed_native['uri'] >,
-			'type': ReturnType< $mol_embed_native['mime'] >,
+			'src': ReturnType< $mol_embed_native['uri'] >,
 		})  & ReturnType< $mol_scroll['attr'] >
 		sub( ): readonly(any)[]
 		message( ): ({ 
@@ -4776,14 +4813,9 @@ declare namespace $ {
 
 	export class $mol_frame extends $mol_embed_native {
 		allow( ): string
-		uri( next?: string ): string
 		html( ): any
-		dom_name( ): string
 		attr( ): ({ 
-			'data': any,
-			'type': any,
 			'allow': ReturnType< $mol_frame['allow'] >,
-			'src': ReturnType< $mol_frame['uri'] >,
 			'srcdoc': ReturnType< $mol_frame['html'] >,
 		})  & ReturnType< $mol_embed_native['attr'] >
 		fullscreen( ): boolean

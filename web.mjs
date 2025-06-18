@@ -3865,16 +3865,14 @@ var $;
             }
             sub() {
                 const placeholders = this.placeholders();
-                const next = [...this.pages_deep(), ...placeholders];
-                const prev = $mol_mem_cached(() => this.sub()) ?? [];
-                for (let i = 1; i++;) {
+                const next = this.pages_deep().filter(Boolean);
+                const prev = $mol_mem_cached(() => this.sub())?.filter(page => !placeholders.includes(page)) ?? [];
+                for (let i = 1; i; ++i) {
                     const p = prev[prev.length - i];
                     const n = next[next.length - i];
                     if (!n)
                         break;
                     if (p === n)
-                        continue;
-                    if (placeholders.includes(n))
                         continue;
                     new this.$.$mol_after_tick(() => {
                         const b = this.dom_node();
@@ -3886,7 +3884,7 @@ var $;
                     });
                     break;
                 }
-                return next;
+                return [...next, ...placeholders];
             }
             bring() {
                 const pages = this.pages_deep();
@@ -4299,6 +4297,9 @@ var $;
 		value(){
 			return null;
 		}
+		minimal_width(){
+			return 12;
+		}
 		attr(){
 			return {...(super.attr()), "mol_theme": (this.theme())};
 		}
@@ -4315,7 +4316,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/speck/speck.view.css", "[mol_speck] {\n\tfont-size: .625rem;\n\tborder-radius: 1rem;\n\tmargin: -0.5rem -0.25rem;\n\talign-self: flex-start;\n\tmin-height: 1em;\n\tmin-width: .5em;\n\tvertical-align: sub;\n\tpadding: .25em .5em;\n\tposition: absolute;\n\tz-index: var(--mol_layer_speck);\n\ttext-align: center;\n\tline-height: 1;\n\tdisplay: inline-block;\n\twhite-space: nowrap;\n\ttext-overflow: ellipsis;\n\tuser-select: none;\n}\n");
+    $mol_style_attach("mol/speck/speck.view.css", "[mol_speck] {\n\tfont-size: .75rem;\n\tborder-radius: 1rem;\n\tmargin: -0.5rem -0.2rem;\n\talign-self: flex-start;\n\tmin-height: 1em;\n\tvertical-align: sub;\n\tpadding: 0 .2rem;\n\tposition: absolute;\n\tz-index: var(--mol_layer_speck);\n\ttext-align: center;\n\tline-height: .9;\n\tdisplay: inline-block;\n\twhite-space: nowrap;\n\ttext-overflow: ellipsis;\n\tuser-select: none;\n\tbox-shadow: 0 0 3px rgba(0,0,0,.5);\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -9112,6 +9113,81 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$optimade_cifplayer_absolidix_embed) = class $optimade_cifplayer_absolidix_embed extends ($.$mol_view) {
+		Logo(){
+			const obj = new this.$.$mol_image();
+			(obj.uri) = () => ("optimade/cifplayer/absolidix/logo/logo.svg");
+			return obj;
+		}
+		open_popup(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Open_popup(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.sub) = () => ([(this.Logo())]);
+			(obj.click) = (next) => ((this.open_popup(next)));
+			return obj;
+		}
+		sub(){
+			return [(this.Open_popup())];
+		}
+	};
+	($mol_mem(($.$optimade_cifplayer_absolidix_embed.prototype), "Logo"));
+	($mol_mem(($.$optimade_cifplayer_absolidix_embed.prototype), "open_popup"));
+	($mol_mem(($.$optimade_cifplayer_absolidix_embed.prototype), "Open_popup"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $optimade_cifplayer_absolidix_embed extends $.$optimade_cifplayer_absolidix_embed {
+            open_popup(next) {
+                const popup = window.open('/popup.html', 'transferPopup', 'width=400,height=300');
+                window.addEventListener('message', (event) => {
+                    if (event.origin === window.location.origin) {
+                        if (event.data.status === 'success') {
+                            console.log('Token transfer successful');
+                        }
+                        else {
+                            console.log('Token transfer failed');
+                        }
+                    }
+                });
+            }
+        }
+        $$.$optimade_cifplayer_absolidix_embed = $optimade_cifplayer_absolidix_embed;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($optimade_cifplayer_absolidix_embed, {
+            height: '4rem',
+            width: '4rem',
+            zIndex: 1,
+            Open_popup: {
+                padding: $mol_gap.block,
+            },
+            Logo: {
+                height: '100%',
+                width: '100%',
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$mol_card) = class $mol_card extends ($.$mol_list) {
 		status(){
 			return "";
@@ -9510,6 +9586,10 @@ var $;
 			(obj.sub) = () => ((this.overlays_sub()));
 			return obj;
 		}
+		Absolidix(){
+			const obj = new this.$.$optimade_cifplayer_absolidix_embed();
+			return obj;
+		}
 		error(){
 			return "";
 		}
@@ -9613,6 +9693,7 @@ var $;
 				(this.Left_panel()), 
 				(this.Tools()), 
 				(this.Overlays()), 
+				(this.Absolidix()), 
 				...(this.message_visible())
 			];
 		}
@@ -9695,6 +9776,7 @@ var $;
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "overlay"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Switch_overlay"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Overlays"));
+	($mol_mem(($.$optimade_cifplayer_player.prototype), "Absolidix"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Error_card"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Warning_card"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "data"));
@@ -11486,6 +11568,11 @@ var $;
                 },
                 zIndex: 1,
             },
+            Absolidix: {
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+            },
             Switch_overlay: {
                 justify: {
                     content: 'center'
@@ -11882,6 +11969,11 @@ var $;
             cell_expanded(id, next) {
                 return this.row_expanded(id.row, next);
             }
+            sub() {
+                this.head_cells();
+                this.rows();
+                return super.sub();
+            }
         }
         __decorate([
             $mol_mem
@@ -11914,8 +12006,9 @@ var $;
 
 ;
 	($.$mol_embed_native) = class $mol_embed_native extends ($.$mol_scroll) {
-		mime(){
-			return "";
+		uri(next){
+			if(next !== undefined) return next;
+			return "about:config";
 		}
 		title(){
 			return "";
@@ -11930,22 +12023,14 @@ var $;
 			if(next !== undefined) return next;
 			return null;
 		}
-		uri(next){
-			if(next !== undefined) return next;
-			return "";
-		}
 		dom_name(){
-			return "object";
+			return "iframe";
 		}
 		window(){
 			return null;
 		}
 		attr(){
-			return {
-				...(super.attr()), 
-				"data": (this.uri()), 
-				"type": (this.mime())
-			};
+			return {...(super.attr()), "src": (this.uri())};
 		}
 		sub(){
 			return [(this.Fallback())];
@@ -11954,9 +12039,9 @@ var $;
 			return {"hashchange": (next) => (this.uri_change(next))};
 		}
 	};
+	($mol_mem(($.$mol_embed_native.prototype), "uri"));
 	($mol_mem(($.$mol_embed_native.prototype), "Fallback"));
 	($mol_mem(($.$mol_embed_native.prototype), "uri_change"));
-	($mol_mem(($.$mol_embed_native.prototype), "uri"));
 
 
 ;
@@ -12036,7 +12121,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/embed/native/native.view.css", "[mol_embed_native] {\n\tmax-width: 100%;\n\tmax-height: 100vh;\n\tobject-fit: cover;\n\tdisplay: flex;\n\tflex: 1 1 auto;\n\tobject-position: top left;\n\tborder-radius: var(--mol_gap_round);\n\taspect-ratio: 4/3;\n}\n");
+    $mol_style_attach("mol/embed/native/native.view.css", "[mol_embed_native] {\n\tmax-width: 100%;\n\tmax-height: 100vh;\n\tobject-fit: cover;\n\tdisplay: flex;\n\tflex: 1 1 auto;\n\tobject-position: top left;\n\tborder-radius: var(--mol_gap_round);\n\taspect-ratio: 4/3;\n\tborder: none;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -12055,23 +12140,13 @@ var $;
 		allow(){
 			return "";
 		}
-		uri(next){
-			if(next !== undefined) return next;
-			return "about:config";
-		}
 		html(){
 			return null;
-		}
-		dom_name(){
-			return "iframe";
 		}
 		attr(){
 			return {
 				...(super.attr()), 
-				"data": null, 
-				"type": null, 
 				"allow": (this.allow()), 
-				"src": (this.uri()), 
 				"srcdoc": (this.html())
 			};
 		}
@@ -12100,7 +12175,6 @@ var $;
 			return true;
 		}
 	};
-	($mol_mem(($.$mol_frame.prototype), "uri"));
 
 
 ;
@@ -13302,9 +13376,7 @@ var $;
         class $optimade_cifplayer_app extends $.$optimade_cifplayer_app {
             data_listener() {
                 return new this.$.$mol_dom_listener(this.$.$mol_dom_context, 'message', $mol_wire_async(event => {
-                    if (event.data?.data == undefined)
-                        return;
-                    this.data_str(event.data.data);
+                    this.data_str(event.data);
                 }));
             }
             pages() {
