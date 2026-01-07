@@ -17,7 +17,8 @@ $mol_drop $mol_ghost
 		\link
 
 $mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
+	light \$mol_theme_light
+	attr * mol_theme <= theme <= dark \$mol_theme_dark
 
 $mol_scroll $mol_view
 	scroll_top? 0
@@ -61,15 +62,14 @@ $mol_link $mol_view
 
 $mol_image $mol_view
 	dom_name \img
-	field *any
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
-		decoding <= decoding \async
-		crossOrigin <= cors null
 	attr *any
 		^
+		src <= uri \
+		title <= hint
+		alt <= title \
+		loading <= loading \lazy
+		decoding <= decoding \async
+		crossOrigin <= cors null
 		width <= natural_width 0
 		height <= natural_height 0
 	event *any
@@ -87,13 +87,7 @@ $mol_link_iconed $mol_link
 	host \
 
 $mol_speck $mol_view
-	minimal_width 12
-	attr *
-		^
-		mol_theme <= theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
+	theme \$mol_theme_accent
 	sub /
 		<= value null
 
@@ -101,11 +95,12 @@ $mol_button $mol_view
 	enabled true
 	click?event null
 	event_click?event null
+	status? /
 	event *
 		^
-		click?event <=> event_activate?event null
+		click?event <=> activate?event <=> event_activate?event null
 		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
+		keydown?event <=> key_press?event <=> event_key_press?event null
 	attr *
 		^
 		disabled <= disabled false
@@ -180,13 +175,13 @@ $mol_button_open $mol_button_minor
 	sub /
 		<= Icon $mol_icon_upload
 		<= Native $mol_button_open_native
-			files?next <=> files?next /
+			files? <=> files_handled? <=> files? /File
 			accept <= accept \
 			multiple <= multiple true
 
 $mol_button_open_native $mol_view
 	dom_name \input
-	files?next /
+	files? /File
 	attr *
 		type \file
 		accept <= accept \
@@ -248,13 +243,14 @@ $mol_text_code_line $mol_paragraph
 
 $mol_list $mol_view
 	render_visible_only true
-	render_over 0
+	render_over 0.1
 	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
+		<= Gap_before $mol_view style * paddingTop <= gap_before 0
+		<= Empty $mol_view
+		<= Gap_after $mol_view style * paddingTop <= gap_after 0
 	item_height_min* 1
 	item_width_min* 1
+	view_window_shift? 0
 	view_window /
 		0
 		0
@@ -285,6 +281,7 @@ $mol_text_code $mol_stack
 	text_lines /string
 	find_pos* null
 	uri_base \
+	row_themes /string
 	sub /
 		<= Rows $mol_list
 			render_visible_only <= render_visible_only false
@@ -292,6 +289,7 @@ $mol_text_code $mol_stack
 				<= Row*0 $mol_text_code_line
 					numb_showed <= sidebar_showed
 					numb <= row_numb* 0
+					theme <= row_theme* \
 					text <= row_text* \
 					syntax <= syntax null
 					uri_resolve* <= uri_resolve* \
@@ -471,19 +469,41 @@ $mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 $mol_check_box $mol_check
 	Icon $mol_icon_tick
 
+$mol_follower $mol_ghost
+	Anchor $mol_view
+	align /number
+		-.5
+		-.5
+	offset /number
+		0
+		0
+	style *
+		^
+		transform <= transform \
+
 $mol_pop $mol_view
 	showed? false
 	align_vert \
 	align_hor \
+	align \bottom_center
 	prefer \vert
+	auto /
+		<= bubble null
 	sub /
 		<= Anchor null
 	sub_visible /
 		<= Anchor
-		<= Bubble $mol_pop_bubble
-			align <= align \bottom_center
-			content <= bubble_content /$mol_view_content
-			height_max <= height_max 9999
+		<= Follower $mol_follower
+			offset <= bubble_offset /number
+				0
+				1
+			align <= bubble_align /number
+				0
+				0
+			Anchor <= Anchor
+			Sub <= Bubble $mol_pop_bubble
+				content <= bubble_content /$mol_view_content
+				height_max <= height_max 9999
 
 $mol_pop_bubble $mol_view
 	sub <= content /$mol_view_content
@@ -492,8 +512,8 @@ $mol_pop_bubble $mol_view
 		maxHeight <= height_max 9999
 	attr *
 		^
-		mol_pop_align <= align \
 		tabindex 0
+		popover \manual
 
 $mol_pick $mol_pop
 	event *
@@ -580,14 +600,6 @@ $mol_check_list $mol_view
 
 $mol_switch $mol_check_list
 	value? \
-
-$optimade_cifplayer_absolidix_embed $mol_view
-	sub /
-		<= Open_popup $mol_button_minor
-			sub /
-				<= Logo $mol_image
-					uri \optimade/cifplayer/absolidix/logo/logo.svg
-			click? <=> open_popup? null
 
 $mol_card $mol_list
 	attr *
@@ -722,7 +734,6 @@ $optimade_cifplayer_player $mol_view
 						\
 							\display none
 						S \elements
-		<= Absolidix $optimade_cifplayer_absolidix_embed
 		^ message_visible /
 			<= Error_card $mol_card
 				title <= error \
@@ -835,8 +846,9 @@ $mol_icon_youtube $mol_icon path \M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 
 
 $mol_frame $mol_embed_native
 	attr *
-		^
+		tabindex <= tabindex
 		allow <= allow \
+		src <= uri
 		srcdoc <= html null
 	fullscreen true
 	accelerometer true
@@ -866,6 +878,8 @@ $mol_embed_youtube $mol_embed_service
 
 $mol_embed_rutube $mol_embed_service
 
+$mol_embed_vklive $mol_embed_service
+
 $mol_embed_any $mol_view
 	Image $mol_image
 		title <= title \
@@ -877,6 +891,9 @@ $mol_embed_any $mol_view
 		title <= title \
 		uri <= uri \
 	Rutube $mol_embed_rutube
+		title <= title \
+		uri <= uri \
+	Vklive $mol_embed_vklive
 		title <= title \
 		uri <= uri \
 
@@ -922,6 +939,7 @@ $mol_text $mol_list
 		arg <= header_arg* *
 	Pre* $mol_text_code
 		text <= pre_text* \
+		row_themes <= pre_themes* /string
 		highlight <= highlight \
 		uri_resolve* <= uri_resolve* \
 		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
