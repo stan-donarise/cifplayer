@@ -9804,13 +9804,6 @@ var $;
 			if(next !== undefined) return next;
 			return 1;
 		}
-		Theme(){
-			const obj = new this.$.$mol_theme_auto();
-			return obj;
-		}
-		light_theme_auto(){
-			return null;
-		}
 		dir_light(){
 			return null;
 		}
@@ -10199,12 +10192,11 @@ var $;
 		translate_cells_limit(){
 			return 50;
 		}
-		plugins(){
-			return [(this.Theme())];
+		theme(){
+			return "$mol_theme_light";
 		}
 		auto(){
 			return [
-				(this.light_theme_auto()), 
 				(this.dir_light()), 
 				(this.ambient_light()), 
 				...(this.atom_boxes()), 
@@ -10273,7 +10265,6 @@ var $;
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "translate_a"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "translate_b"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "translate_c"));
-	($mol_mem(($.$optimade_cifplayer_player.prototype), "Theme"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "vibration_active"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Three"));
 	($mol_mem(($.$optimade_cifplayer_player.prototype), "Descr_a"));
@@ -11389,8 +11380,11 @@ var $;
             sub() {
                 return this.data() ? super.sub() : [];
             }
-            light_theme_auto() {
-                this.$.$mol_lights(true);
+            lights(next) {
+                return next ?? this.$.$mol_lights();
+            }
+            theme() {
+                return this.lights() ? '$mol_theme_light' : '$mol_theme_dark';
             }
             available_overlays() {
                 try {
@@ -11429,13 +11423,13 @@ var $;
                 return `γ=${this.structure_3d_data().descr.gamma.toFixed(3)}°`;
             }
             color_a() {
-                return this.$.$mol_lights() ? this.colors_light().a : this.colors_dark().a;
+                return this.lights() ? this.colors_light().a : this.colors_dark().a;
             }
             color_b() {
-                return this.$.$mol_lights() ? this.colors_light().b : this.colors_dark().b;
+                return this.lights() ? this.colors_light().b : this.colors_dark().b;
             }
             color_c() {
-                return this.$.$mol_lights() ? this.colors_light().c : this.colors_dark().c;
+                return this.lights() ? this.colors_light().c : this.colors_dark().c;
             }
             camera_distance() {
                 return this.camera().position.clone().sub(this.controls().target);
@@ -11483,7 +11477,7 @@ var $;
                 context.font = "28px sans-serif";
                 context.textAlign = "center";
                 context.textBaseline = "middle";
-                context.fillStyle = this.$.$mol_lights() ? "#000" : "#fff";
+                context.fillStyle = this.lights() ? "#000" : "#fff";
                 context.fillText(text, canvas.width / 2, canvas.height / 2);
                 return canvas;
             }
@@ -11638,14 +11632,14 @@ var $;
                 return [this.overlay_box([0, 0, 0])];
             }
             dir_light() {
-                const intensity = this.$.$mol_lights() ? 2.2 : 0.7;
+                const intensity = this.lights() ? 2.2 : 0.7;
                 const dir_light = this.Three().object('dir_light', () => new THREE.DirectionalLight(0xffffff, intensity));
                 dir_light.intensity = intensity;
                 dir_light.position.set(1, 1.5, 2);
                 return dir_light;
             }
             ambient_light() {
-                const intensity = this.$.$mol_lights() ? 1.8 : 0.6;
+                const intensity = this.lights() ? 1.8 : 0.6;
                 const ambient_light = this.Three().object('ambient_light', () => new THREE.AmbientLight(0x999999, intensity));
                 ambient_light.intensity = intensity;
                 return ambient_light;
@@ -11817,7 +11811,7 @@ var $;
         }
         __decorate([
             $mol_mem
-        ], $optimade_cifplayer_player.prototype, "light_theme_auto", null);
+        ], $optimade_cifplayer_player.prototype, "lights", null);
         __decorate([
             $mol_mem
         ], $optimade_cifplayer_player.prototype, "available_overlays", null);
@@ -13893,7 +13887,6 @@ var $;
 			const obj = new this.$.$optimade_cifplayer_player();
 			(obj.data) = () => ((this.data_str()));
 			(obj.fullscreen) = () => (false);
-			(obj.light_theme_auto) = () => (null);
 			return obj;
 		}
 		Start_message(){
