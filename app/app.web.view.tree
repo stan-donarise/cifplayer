@@ -32,7 +32,6 @@ $optimade_cifplayer_app $mol_drop
 			vibrate? => vibrate?
 			unvibrate => unvibrate
 			fullscreen false
-			light_theme_auto null
 	Start $mol_view
 		sub /
 			<= Start_message $mol_text

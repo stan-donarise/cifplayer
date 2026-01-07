@@ -16,11 +16,9 @@ $optimade_cifplayer_player $mol_view
 		<= translate_c? 1
 	translate_cells_limit 50
 	-
-	plugins /
-		<= Theme $mol_theme_auto
+	theme \$mol_theme_light
 	-
 	auto /
-		<= light_theme_auto null
 		<= dir_light null
 		<= ambient_light null
 		^ atom_boxes /

@@ -15,8 +15,12 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		light_theme_auto() {
-			this.$.$mol_lights( true )
+		lights( next?: boolean ) {
+			return next ?? this.$.$mol_lights()
+		}
+		
+		theme() {
+			return this.lights() ? '$mol_theme_light' : '$mol_theme_dark'
 		}
 
 		@ $mol_mem
@@ -73,17 +77,17 @@ namespace $.$$ {
 
 		@ $mol_mem
 		color_a(): string {
-			return this.$.$mol_lights() ? this.colors_light().a : this.colors_dark().a
+			return this.lights() ? this.colors_light().a : this.colors_dark().a
 		}
 
 		@ $mol_mem
 		color_b(): string {
-			return this.$.$mol_lights() ? this.colors_light().b : this.colors_dark().b
+			return this.lights() ? this.colors_light().b : this.colors_dark().b
 		}
 
 		@ $mol_mem
 		color_c(): string {
-			return this.$.$mol_lights() ? this.colors_light().c : this.colors_dark().c
+			return this.lights() ? this.colors_light().c : this.colors_dark().c
 		}
 
 		@ $mol_mem
@@ -147,7 +151,7 @@ namespace $.$$ {
 			context.font = "28px sans-serif"
 			context.textAlign = "center"
 			context.textBaseline = "middle"
-			context.fillStyle = this.$.$mol_lights() ? "#000" : "#fff"
+			context.fillStyle = this.lights() ? "#000" : "#fff"
 			context.fillText( text, canvas.width / 2, canvas.height / 2 )
 
 			return canvas
@@ -387,7 +391,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		dir_light(): InstanceType< THREE["DirectionalLight"] >  {
-			const intensity = this.$.$mol_lights() ? 2.2 : 0.7
+			const intensity = this.lights() ? 2.2 : 0.7
 
 			const dir_light = this.Three().object( 'dir_light', ()=> new THREE.DirectionalLight( 0xffffff, intensity ) )
 			dir_light.intensity = intensity
@@ -398,7 +402,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		ambient_light(): InstanceType< THREE["AmbientLight"] > {
-			const intensity = this.$.$mol_lights() ? 1.8 : 0.6
+			const intensity = this.lights() ? 1.8 : 0.6
 
 			const ambient_light = this.Three().object( 'ambient_light', ()=> new THREE.AmbientLight( 0x999999, intensity ) )
 			ambient_light.intensity = intensity
